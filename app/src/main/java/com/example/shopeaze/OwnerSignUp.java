@@ -19,7 +19,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,7 +37,7 @@ public class OwnerSignUp extends Fragment {
     private FirebaseDatabase db;
     FirebaseAuth mAuth;
 
-
+    @Override
     public void onStart() {
         super.onStart();
         //new line:
@@ -74,7 +73,7 @@ public class OwnerSignUp extends Fragment {
             @Override
             public void onClick(View v){
                 NavHostFragment.findNavController(OwnerSignUp.this)
-                        .navigate(R.id.action_OwnerSignUp_to_Login);
+                        .navigate(R.id.action_OwnerSignUp_to_ownerLogin);
             }
         });
 
@@ -114,7 +113,7 @@ public class OwnerSignUp extends Fragment {
 
 
                 //Check if there are duplicate store names in the database if there are, don't create account
-                Query query = ref.child("storeowners").orderByChild("StoreName").equalTo(storeName);
+                Query query = ref.child("Users").child("StoreOwner").orderByChild("StoreName").equalTo(storeName);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -133,15 +132,14 @@ public class OwnerSignUp extends Fragment {
                                         if (task.isSuccessful()) {
                                             FirebaseUser owner = mAuth.getCurrentUser();
                                             StoreOwner storeOwner = new StoreOwner(email, password, editStoreName.getText().toString());
-                                            DatabaseReference userRef = ref.child("storeowner").child(owner.getUid());
+                                            DatabaseReference userRef = ref.child("Users").child("StoreOwner").child(owner.getUid());
                                             userRef.child("Email").setValue(email);
                                             userRef.child("StoreName").setValue(storeName);
-                                            userRef.child("Products").setValue(storeOwner.getProducts());
-                                            //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
+                                            userRef.child("Product List").setValue(storeOwner.getProducts());
                                             Toast.makeText(getActivity(), "Account Created.",
                                                     Toast.LENGTH_SHORT).show();
                                             NavHostFragment.findNavController(OwnerSignUp.this)
-                                                    .navigate(R.id.action_OwnerSignUp_to_logout);
+                                                    .navigate(R.id.action_OwnerSignUp_to_ownerLogin);
 
                                         } else {
                                             // If sign in fails, display a message to the user.
