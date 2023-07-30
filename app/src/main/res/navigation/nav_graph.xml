@@ -12,7 +12,7 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_ShopperFragment"
-            app:destination="@id/ShopperFragment" />
+            app:destination="@id/FragmentStoreList" />
 
         <action
             android:id="@+id/action_FirstFragment_to_OwnerFragment"
@@ -29,6 +29,19 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/FragmentStoreList"
+        android:name="com.example.shopeaze.FragmentStoreList"
+        android:label="Stores"
+        tools:layout="@layout/activity_store_list" />
+
+    <fragment
+        android:id="@+id/FragmentMyCart"
+        android:name="com.example.shopeaze.FragmentMyCart"
+        android:label="My Cart"
+        tools:layout="@layout/activity_cart" />
+
 
     <!-- Add the new fragments for Shopper and Owner screens -->
 
