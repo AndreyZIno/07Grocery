@@ -22,7 +22,7 @@
             android:name=".Logout"
             android:exported="false" />
         <activity
-            android:name=".LogoutActivity"
+            android:name=".Logout"
             android:exported="false" />
         <activity
             android:name=".SignUp"
