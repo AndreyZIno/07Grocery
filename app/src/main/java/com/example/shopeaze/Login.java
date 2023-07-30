@@ -37,7 +37,7 @@ public class Login extends Fragment {
         // Check if user is already signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getActivity(), MainActivity.class);
+            Intent intent = new Intent(getActivity(), LogoutActivity.class);
             startActivity(intent);
             getActivity().finish();
         }
@@ -95,7 +95,7 @@ public class Login extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                    Intent intent = new Intent(getActivity(), LogoutActivity.class);
                                     startActivity(intent);
                                     getActivity().finish();
 
