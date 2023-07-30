@@ -11,8 +11,11 @@
         tools:layout="@layout/activity_login">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/WelcomeScreen" />
+            android:id="@+id/action_Login_to_SignUp"
+            app:destination="@id/signUp"   />
+        <action
+            android:id="@+id/action_Login_to_logout"
+            app:destination="@id/logout" />
     </fragment>
 
     <fragment
@@ -25,24 +28,26 @@
             android:id="@+id/action_WelcomeScreen_to_Login"
             app:destination="@id/Login" />
 
-        <!-- <action
-            android:id="@+id/action_FirstFragment_to_OwnerFragment"
-            app:destination="@id/OwnerFragment" /> -->
+    </fragment>
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.example.shopeaze.SignUp"
+        android:label="activity_sign_up"
+        tools:layout="@layout/activity_sign_up" >
+        <action
+            android:id="@+id/action_signUp_to_Login"
+            app:destination="@id/Login" />
     </fragment>
 
-    <!-- Add the new fragments for Shopper and Owner screens -->
-
-    <!--
     <fragment
-        android:id="@+id/ShopperFragment"
-        android:name="com.example.shopeaze.ShopperFragment"
-        android:label="@string/shopper_fragment_label"
-        tools:layout="@layout/fragment_shopper" />
+        android:id="@+id/logout"
+        android:name="com.example.shopeaze.Logout"
+        android:label="activity_logout"
+        tools:layout="@layout/activity_logout" >
+        <action
+            android:id="@+id/action_logout_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen" />
+    </fragment>
 
-    <fragment
-        android:id="@+id/OwnerFragment"
-        android:name="com.example.shopeaze.OwnerFragment"
-        android:label="@string/owner_fragment_label"
-        tools:layout="@layout/fragment_owner" />
-    -->
+
 </navigation>

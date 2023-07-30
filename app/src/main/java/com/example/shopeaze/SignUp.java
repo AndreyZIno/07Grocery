@@ -3,6 +3,7 @@ package com.example.shopeaze;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class SignUp extends Fragment {
     ProgressBar progressBar;
     TextView textView;
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -37,9 +39,11 @@ public class SignUp extends Fragment {
         // Check if user is already signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-            getActivity().finish();
+            //Intent intent = new Intent(getActivity(), MainActivity.class);
+            //startActivity(intent);
+            //getActivity().finish();
+            NavHostFragment.findNavController(SignUp.this)
+                    .navigate(R.id.action_logout_to_WelcomeScreen);
         }
     }
 
@@ -62,9 +66,11 @@ public class SignUp extends Fragment {
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(getActivity(), Login.class);
-                startActivity(intent);
-                getActivity().finish();
+                //Intent intent = new Intent(getActivity(), Login.class);
+                //startActivity(intent);
+                //getActivity().finish();
+                NavHostFragment.findNavController(SignUp.this)
+                        .navigate(R.id.action_signUp_to_Login);
             }
         });
 
@@ -102,9 +108,11 @@ public class SignUp extends Fragment {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getActivity(), "Account Created.",
                                             Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getActivity(), Login.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
+                                    //Intent intent = new Intent(getActivity(), Login.class);
+                                    //startActivity(intent);
+                                    //getActivity().finish();
+                                    NavHostFragment.findNavController(SignUp.this)
+                                            .navigate(R.id.action_signUp_to_Login);
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Toast.makeText(getActivity(), "Authentication failed.",
