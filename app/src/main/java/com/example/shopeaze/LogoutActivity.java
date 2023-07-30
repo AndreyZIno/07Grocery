@@ -35,7 +35,7 @@ public class LogoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.logout);
 
         auth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logout);
