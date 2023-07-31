@@ -10,6 +10,7 @@
         android:label="@string/Login"
         tools:layout="@layout/activity_login">
 
+<<<<<<< HEAD
         <action
             android:id="@+id/action_Login_to_SignUp"
             app:destination="@id/signUp"   />
@@ -37,9 +38,41 @@
             />
 
 
-        <!--             android:id="@+id/action_WelcomeScreen_to_Login"
-                    app:destination="@id/Login" />  THIS WAS IN MAINNNNNNNNNNNNNN-->
+    </fragment>
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.example.shopeaze.SignUp"
+        android:label="activity_sign_up"
+        tools:layout="@layout/activity_sign_up" >
+        <action
+            android:id="@+id/action_signUp_to_Login"
+            app:destination="@id/Login" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/logout"
+        android:name="com.example.shopeaze.Logout"
+        android:label="activity_logout"
+        tools:layout="@layout/activity_logout" >
+        <action
+=======
+        <action
+            android:id="@+id/action_Login_to_SignUp"
+            app:destination="@id/signUp"   />
+        <action
+            android:id="@+id/action_Login_to_logout"
+            app:destination="@id/logout" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/WelcomeScreen"
+        android:name="com.example.shopeaze.WelcomeScreen"
+        android:label="@string/Welcome_screen"
+        tools:layout="@layout/activity_main">
+
+        <action
+            android:id="@+id/action_WelcomeScreen_to_Login"
+            app:destination="@id/Login" />
 
     </fragment>
     <fragment
@@ -58,6 +91,7 @@
         android:label="activity_logout"
         tools:layout="@layout/activity_logout" >
         <action
+>>>>>>> main
             android:id="@+id/action_logout_to_WelcomeScreen"
             app:destination="@id/WelcomeScreen" />
     </fragment>
