@@ -131,15 +131,6 @@ public class OwnerSignUp extends Fragment {
             }
         });
 
-        if (mAuth.getCurrentUser() != null) {
-            //Create new store owner
-            String username = mAuth.getCurrentUser().getEmail();
-            String password = mAuth.getCurrentUser().getUid();
-            String storeName = editStoreName.getText().toString();
-            StoreOwner storeOwner = new StoreOwner(username, password, storeName);
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("StoreOwner");
-            databaseReference.child(mAuth.getCurrentUser().getUid()).setValue(storeOwner);
-        }
     }
 
 }
