@@ -38,6 +38,15 @@
             android:id="@+id/action_signUp_to_Login"
             app:destination="@id/Login" />
     </fragment>
+    <fragment
+        android:id="@+id/OwnerSignUp"
+        android:name="com.example.shopeaze.OwnerSignUp"
+        android:label="activity_sign_up_owner"
+        tools:layout="@layout/activity_sign_up_owner" >
+        <action
+            android:id="@+id/action_OwnerSignUp_to_Login"
+            app:destination="@id/Login" />
+    </fragment>
 
     <fragment
         android:id="@+id/logout"
