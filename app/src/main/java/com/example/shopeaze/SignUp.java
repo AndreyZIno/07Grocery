@@ -112,7 +112,9 @@ public class SignUp extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    DatabaseReference userRef = ref.child("shoppers").child(user.getUid());
+                                    userRef.child("email").setValue(email);
                                     Toast.makeText(getActivity(), "Account Created.",
                                             Toast.LENGTH_SHORT).show();
                                     NavHostFragment.findNavController(SignUp.this)
