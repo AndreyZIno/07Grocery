@@ -23,7 +23,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends Fragment {
+public class OwnerLogin extends Fragment {
 
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin;
@@ -41,7 +41,7 @@ public class Login extends Fragment {
             //Intent intent = new Intent(getActivity(), LogoutActivity.class);
             //startActivity(intent);
             //getActivity().finish();
-            NavHostFragment.findNavController(Login.this)
+            NavHostFragment.findNavController(OwnerLogin.this)
                     .navigate(R.id.action_Login_to_logout);
         }
     }
@@ -64,7 +64,7 @@ public class Login extends Fragment {
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                NavHostFragment.findNavController(Login.this)
+                NavHostFragment.findNavController(OwnerLogin.this)
                         .navigate(R.id.action_Login_to_SignUp);
                 //Intent intent = new Intent(getActivity(), SignUp.class);
                 //startActivity(intent);
@@ -103,7 +103,7 @@ public class Login extends Fragment {
                                     //Intent intent = new Intent(getActivity(), LogoutActivity.class);
                                     //startActivity(intent);
                                     //getActivity().finish();
-                                    NavHostFragment.findNavController(Login.this)
+                                    NavHostFragment.findNavController(OwnerLogin.this)
                                             .navigate(R.id.action_Login_to_logout);
 
                                 } else {

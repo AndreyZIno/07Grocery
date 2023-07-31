@@ -103,6 +103,9 @@ public class OwnerSignUp extends Fragment {
 
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            //Read firebase realtime db to see if the store name already exists
+                            //If it does, then don't create the account
+                            //If it doesn't, then create the account
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
@@ -128,73 +131,9 @@ public class OwnerSignUp extends Fragment {
             String password = mAuth.getCurrentUser().getUid();
             String storeName = editStoreName.getText().toString();
             StoreOwner storeOwner = new StoreOwner(username, password, storeName);
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("StoreOwners");
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("StoreOwner");
             databaseReference.child(mAuth.getCurrentUser().getUid()).setValue(storeOwner);
         }
     }
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        editTextEmail = findViewById(R.id.email);
-        editTextPassword = findViewById(R.id.password);
-        editStoreName = findViewById(R.id.store_name);
-        register = findViewById(R.id.register);
-        progressBar = findViewById(R.id.progressBar);
-
-        mAuth = FirebaseAuth.getInstance();
-        register.setOnClickListener(view -> {
-            String username = null;
-            String password = null;
-            try {
-                username = editTextEmail.getEditText().getText().toString();
-                password = editTextPassword.getEditText().getText().toString();
-            } catch (NullPointerException e) {
-                Log.e(TAG, "onClick: Null Pointer Exception: " + e.getMessage());
-            }
-            if (TextUtils.isEmpty(username)) {
-                editTextEmail.setError("Username is Required.");
-                return;
-            }
-            boolean signed_up = signup(username, password);
-            if(!signed_up){
-                //Message saying failed
-                Toast.makeText(StoreOwnerSignUp.this, "Failed to sign up", Toast.LENGTH_SHORT).show();
-            }
-        });
-        if (mAuth.getCurrentUser() != null) {
-            //Create new store owner
-            String username = mAuth.getCurrentUser().getEmail();
-            String password = mAuth.getCurrentUser().getUid();
-            String storeName = editStoreName.getEditText().getText().toString();
-            StoreOwner storeOwner = new StoreOwner(username, password, storeName);
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("StoreOwners");
-            databaseReference.child(mAuth.getCurrentUser().getUid()).setValue(storeOwner);
-        }
-    }
-
-    public boolean signup(String username, String password)  {
-        mAuth.createUserWithEmailAndPassword(username, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // User creation successful
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        if (user != null) {
-                            //Switch to login page
-                            Toast.makeText(StoreOwnerSignUp.this, "Signed up successfully", Toast.LENGTH_SHORT).show();
-                            finish();
-                            return;
-                        }
-                    } else {
-                        // User creation failed
-                        FirebaseAuthException e = (FirebaseAuthException) task.getException();
-                        Toast.makeText(StoreOwnerSignUp.this, "Failed Registration: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                });
-        return true;
-    }
-    */
 
 }
