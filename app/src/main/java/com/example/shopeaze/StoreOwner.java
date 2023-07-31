@@ -26,4 +26,8 @@ public class StoreOwner extends Account {
     public boolean login(String username, String password) {
         return false;
     }
+
+    public Object getProducts() {
+        return products;
+    }
 }

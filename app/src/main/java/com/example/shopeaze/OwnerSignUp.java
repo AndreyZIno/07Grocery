@@ -110,6 +110,12 @@ public class OwnerSignUp extends Fragment {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
+                                    FirebaseUser owner = mAuth.getCurrentUser();
+                                    StoreOwner storeOwner = new StoreOwner(email, password, editStoreName.getText().toString());
+                                    DatabaseReference userRef = ref.child("Users").child("StoreOwner").child(owner.getUid());
+                                    userRef.child("Email").setValue(email);
+                                    userRef.child("StoreName").setValue(editStoreName.getText().toString());
+                                    userRef.child("Product List").setValue(storeOwner.getProducts());
                                     //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
                                     Toast.makeText(getActivity(), "Account Created.",
                                             Toast.LENGTH_SHORT).show();
