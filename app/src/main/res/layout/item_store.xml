@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="16dp"
-        android:background="drawable/img">
+        android:background="@drawable/img">
 
         <!-- Left-side store name -->
         <ImageView
