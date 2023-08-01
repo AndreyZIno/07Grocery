@@ -72,13 +72,14 @@
 
     <TextView
         android:id="@+id/signUpNow"
-        android:text="@string/create_an_account"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="@string/create_an_account"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
 
 </LinearLayout>
