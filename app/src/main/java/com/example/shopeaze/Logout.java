@@ -41,7 +41,7 @@ public class Logout extends Fragment {
             //Intent intent = new Intent(getActivity(), Login.class);
             //startActivity(intent);
             NavHostFragment.findNavController(Logout.this)
-                    .navigate(R.id.action_logout_to_WelcomeScreen);
+                    .navigate(R.id.action_stores_page_to_welcomeScreen);
         }
         else{
             textView.setText(user.getEmail());
@@ -54,7 +54,7 @@ public class Logout extends Fragment {
                 //Intent intent = new Intent(getActivity(), WelcomeScreen.class);
                 //startActivity(intent);
                 NavHostFragment.findNavController(Logout.this)
-                        .navigate(R.id.action_logout_to_WelcomeScreen);
+                        .navigate(R.id.action_stores_page_to_welcomeScreen);
             }
         });
 

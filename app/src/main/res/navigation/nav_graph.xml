@@ -9,13 +9,107 @@
         android:name="com.example.shopeaze.Login"
         android:label="@string/Login"
         tools:layout="@layout/activity_login">
+            <action
+                android:id="@+id/action_Login_to_SignUp"
+                app:destination="@id/signUp"   />
+            <action
+                android:id="@+id/action_Login_to_stores_page"
+                app:destination="@id/stores_page"/>
+    </fragment>
 
+    <fragment
+        android:id="@+id/item_display"
+        android:name="com.example.shopeaze.ItemView"
+        android:label="@string/item_display"
+        tools:layout="@layout/item_display" >
+            <action
+                android:id="@+id/action_item_display_to_cart_page"
+                app:destination="@id/cart_page" />
+            <action
+                android:id="@+id/action_item_display_to_item_display_description"
+                app:destination="@id/item_display_description" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/item_display_description"
+        android:name="com.example.shopeaze.ItemViewDescription"
+        android:label="Item Display Description"
+        tools:layout="@layout/item_display_description" >
+            <action
+                android:id="@+id/action_item_display_description_to_item_display"
+                app:destination="@id/item_display" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cart_page"
+        android:name="com.example.shopeaze.Cart"
+        android:label="Cart Page"
+        tools:layout="@layout/cart_page" >
+            <action
+                android:id="@+id/action_cart_page_to_orders_success"
+                app:destination="@id/order_success" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/order_success"
+        android:name="com.example.shopeaze.OrdersSuccess"
+        android:label="Order Success!"
+        tools:layout="@layout/order_success" >
         <action
-            android:id="@+id/action_Login_to_SignUp"
-            app:destination="@id/signUp"   />
+            android:id="@+id/action_order_success_to_stores_page"
+            app:destination="@id/stores_page" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/orders_shopper"
+        android:name="com.example.shopeaze.OrdersShopper"
+        android:label="Shopper Orders"
+        tools:layout="@layout/orders_shopper" >
+            <action
+                android:id="@+id/action_orders_shopper_to_stores_page"
+                app:destination="@id/stores_page" />
+            <action
+                android:id="@+id/action_orders_shopper_to_cart_page"
+                app:destination="@id/cart_page" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/stores_page"
+        android:name="com.example.shopeaze.Stores"
+        android:label="Stores Page"
+        tools:layout="@layout/stores_page" >
+            <action
+                android:id="@+id/action_stores_page_to_store_products_page"
+                app:destination="@id/store_products_page" />
+            <action
+                android:id="@+id/action_stores_page_to_cart_page"
+                app:destination="@id/cart_page" />
+            <action
+                android:id="@+id/action_stores_page_to_orders_shopper"
+                app:destination="@id/orders_shopper" />
+            <action
+                android:id="@+id/action_stores_page_to_welcomeScreen"
+                app:destination="@id/WelcomeScreen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/store_products_page"
+        android:name="com.example.shopeaze.StoresProducts"
+        android:label="Stores Product Page"
+        tools:layout="@layout/store_products_page" >
         <action
-            android:id="@+id/action_Login_to_logout"
-            app:destination="@id/logout" />
+            android:id="@+id/action_store_products_page_to_cart_page"
+            app:destination="@id/cart_page" />
+        <action
+            android:id="@+id/action_store_products_page_to_orders_shopper"
+            app:destination="@id/orders_shopper" />
+        <action
+            android:id="@+id/action_store_products_page_to_stores_page"
+            app:destination="@id/stores_page" />
+        <action
+            android:id="@+id/action_store_products_page_to_item_display"
+            app:destination="@id/item_display" />
     </fragment>
 
     <fragment
@@ -23,10 +117,9 @@
         android:name="com.example.shopeaze.WelcomeScreen"
         android:label="@string/Welcome_screen"
         tools:layout="@layout/activity_main">
-
-        <action
-            android:id="@+id/action_WelcomeScreen_to_Login"
-            app:destination="@id/Login" />
+            <action
+                android:id="@+id/action_WelcomeScreen_to_Login"
+                app:destination="@id/Login" />
 
     </fragment>
     <fragment
@@ -34,20 +127,11 @@
         android:name="com.example.shopeaze.SignUp"
         android:label="activity_sign_up"
         tools:layout="@layout/activity_sign_up" >
-        <action
-            android:id="@+id/action_signUp_to_Login"
-            app:destination="@id/Login" />
+            <action
+                android:id="@+id/action_signUp_to_Login"
+                app:destination="@id/Login" />
     </fragment>
 
-    <fragment
-        android:id="@+id/logout"
-        android:name="com.example.shopeaze.Logout"
-        android:label="activity_logout"
-        tools:layout="@layout/activity_logout" >
-        <action
-            android:id="@+id/action_logout_to_WelcomeScreen"
-            app:destination="@id/WelcomeScreen" />
-    </fragment>
 
 
 </navigation>

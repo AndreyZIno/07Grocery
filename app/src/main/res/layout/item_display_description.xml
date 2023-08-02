@@ -78,7 +78,7 @@
         android:layout_height="440dp"
         android:layout_marginTop="112dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintBottom_toTopOf="@+id/product_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -86,7 +86,7 @@
         app:srcCompat="@drawable/item1" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/product_name"
         android:layout_width="340dp"
         android:layout_height="184dp"
         android:layout_marginBottom="4dp"

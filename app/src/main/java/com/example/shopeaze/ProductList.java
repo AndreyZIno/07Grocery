@@ -16,7 +16,7 @@ maintaining a local copy of the products for efficient access and display w/i th
 
 public class ProductList {
     private DatabaseReference databaseReference;
-    private List<Product> products;
+    public static List<Product> products;
 
     public ProductList() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -28,7 +28,6 @@ public class ProductList {
     public void addProduct(Product product) {
         String productID = databaseReference.push().getKey();
         product.setProductID(productID);
-
         databaseReference.child(productID).setValue(product);
     }
 

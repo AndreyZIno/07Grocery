@@ -51,7 +51,7 @@ public class SignUp extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             NavHostFragment.findNavController(SignUp.this)
-                    .navigate(R.id.action_logout_to_WelcomeScreen);
+                    .navigate(R.id.action_stores_page_to_welcomeScreen);
         }
     }
 

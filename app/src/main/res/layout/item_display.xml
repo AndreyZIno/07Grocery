@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:padding="20dp">
-
-    <!--    <com.google.android.material.textfield.TextInputLayout-->
-    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_margin="16dp"-->
-    <!--        android:hint="@string/select"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        tools:layout_editor_absoluteX="36dp">-->
-
-    <!--        <AutoCompleteTextView-->
-    <!--            android:id="@+id/autocomplete_txt1"-->
-    <!--            android:hint="Select Size"-->
-    <!--            android:layout_width="356dp"-->
-    <!--            android:layout_height="63dp"-->
-    <!--            android:inputType="none" />-->
-
-    <!--    </com.google.android.material.textfield.TextInputLayout>-->
 
 
     <ImageButton
@@ -31,10 +12,10 @@
         android:layout_width="124dp"
         android:layout_height="62dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="36dp"
         android:background="@drawable/roundcorner"
-        android:contentDescription="Store Button"
+        android:contentDescription="@string/store_button"
         android:scaleType="centerCrop"
         android:src="@drawable/aritzia_logo"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,9 +28,9 @@
         android:layout_width="57dp"
         android:layout_height="57dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:background="@drawable/roundcorner"
-        android:contentDescription="Add to Cart Button"
+        android:contentDescription="@string/add_to_cart_button"
         android:scaleType="centerCrop"
         android:src="@drawable/add_to_cart_button"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,11 +43,11 @@
         android:layout_width="60dp"
         android:layout_height="62dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
 
         android:layout_marginTop="36dp"
         android:background="@drawable/roundcorner"
-        android:contentDescription="Back Button"
+        android:contentDescription="@string/back_button"
         android:padding="20dp"
         android:paddingStart="20dp"
         android:paddingLeft="20dp"
@@ -104,11 +85,11 @@
         app:srcCompat="@drawable/product12" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/product_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="140dp"
-        android:text="Product Name"
+        android:text="@string/product_name"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -117,27 +98,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/Product_details"
+        android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="details"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Price" />
-
-    <TextView
-        android:id="@+id/Price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
-        android:text="Price"
+        android:layout_marginBottom="96dp"
+        android:text="@string/price"
         android:textColor="#98755C"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -146,7 +117,7 @@
         android:layout_height="392dp"
         android:layout_marginTop="112dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintBottom_toTopOf="@+id/product_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
@@ -158,22 +129,32 @@
         android:layout_width="290dp"
         android:layout_height="62dp"
         android:layout_marginBottom="-2dp"
+        android:autofillHints="Select Size"
+        app:layout_constraintEnd_toStartOf="@+id/add_to_cart_button"
 
         android:background="#AB8971"
+
         android:contextClickable="false"
         android:dropDownWidth="wrap_content"
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/add_to_cart_button"
         app:layout_constraintHorizontal_bias="0.159"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="156dp"
-        android:layout_height="65dp"
-        tools:layout_editor_absoluteX="-10dp"
-        tools:layout_editor_absoluteY="-9dp" />
-
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/details"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="168dp"
+        android:layout_height="58dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-30dp"
+        android:text="@string/details"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:iconTint="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_price" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

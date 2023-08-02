@@ -1,53 +1,41 @@
 package com.example.shopeaze;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import com.example.shopeaze.databinding.CartPageBinding;
 
-public class Cart extends Activity {
+public class Cart extends Fragment {
 
     private CartPageBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.cart_page);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = CartPageBinding.inflate(inflater, container, false);
+        View rootView = binding.getRoot();
 
-        // home button tht switches to stores_page.xml
-        ImageButton HomeButton = findViewById(R.id.homeButton);
-        HomeButton.setOnClickListener(new View.OnClickListener() {
+        // checkout that switches to order_success
+        Button checkoutButton = rootView.findViewById(R.id.checkout);
+        checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // placeholder until we get the class for the display of stores we can switch to
-                // Intent intent = new Intent(Cart.this, StoresPage.class);
-                // startActivity(intent);
+                NavHostFragment.findNavController(Cart.this)
+                        .navigate(R.id.action_cart_page_to_orders_success);
             }
         });
 
-        // orders button that switches to orders_shopper.xml
-        ImageButton OrdersButton = findViewById(R.id.ordersButton);
-        HomeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // placeholder until we get the class for the shopper orders we can switch to
-                // Intent intent = new Intent(Cart.this, OrdersShopper.class);
-                // startActivity(intent);
-            }
-        });
-
+        return rootView;
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         binding = null;
     }
-
 }
-

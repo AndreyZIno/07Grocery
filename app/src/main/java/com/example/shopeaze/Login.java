@@ -42,7 +42,7 @@ public class Login extends Fragment {
             //startActivity(intent);
             //getActivity().finish();
             NavHostFragment.findNavController(Login.this)
-                    .navigate(R.id.action_Login_to_logout);
+                    .navigate(R.id.action_Login_to_stores_page);
         }
     }
 
@@ -104,7 +104,7 @@ public class Login extends Fragment {
                                     //startActivity(intent);
                                     //getActivity().finish();
                                     NavHostFragment.findNavController(Login.this)
-                                            .navigate(R.id.action_Login_to_logout);
+                                            .navigate(R.id.action_Login_to_stores_page);
 
                                 } else {
                                     //display message if email already exists (didnt do that yet):
