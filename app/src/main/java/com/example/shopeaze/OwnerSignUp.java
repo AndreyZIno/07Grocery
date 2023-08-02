@@ -23,8 +23,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class OwnerSignUp extends Fragment {
     TextInputEditText editTextEmail, editTextPassword, editStoreName;
@@ -45,7 +49,7 @@ public class OwnerSignUp extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             NavHostFragment.findNavController(OwnerSignUp.this)
-                    .navigate(R.id.action_logout_to_WelcomeScreen);
+                    .navigate(R.id.action_OwnerSignUp_to_logout);
         }
     }
 
@@ -74,6 +78,8 @@ public class OwnerSignUp extends Fragment {
             }
         });
 
+
+
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,9 +87,11 @@ public class OwnerSignUp extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
                 String email;
                 String password;
+                String storeName;
                 //read email and password:
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
+                storeName = editStoreName.getText().toString();
 
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(getActivity(), "Please enter email", Toast.LENGTH_SHORT).show();
@@ -95,39 +103,63 @@ public class OwnerSignUp extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
+                if (TextUtils.isEmpty(storeName)){
+                    Toast.makeText(getActivity(), "Please enter a store name", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    return;
+                }
                 if (password.length() < 6){
                     Toast.makeText(getActivity(), "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
 
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            //Read firebase realtime db to see if the store name already exists
-                            //If it does, then don't create the account
-                            //If it doesn't, then create the account
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    FirebaseUser owner = mAuth.getCurrentUser();
-                                    StoreOwner storeOwner = new StoreOwner(email, password, editStoreName.getText().toString());
-                                    DatabaseReference userRef = ref.child("Users").child("StoreOwner").child(owner.getUid());
-                                    userRef.child("Email").setValue(email);
-                                    userRef.child("StoreName").setValue(editStoreName.getText().toString());
-                                    userRef.child("Product List").setValue(storeOwner.getProducts());
-                                    //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
-                                    Toast.makeText(getActivity(), "Account Created.",
-                                            Toast.LENGTH_SHORT).show();
-                                    NavHostFragment.findNavController(OwnerSignUp.this)
-                                            .navigate(R.id.action_signUp_to_Login);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(getActivity(), "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+
+                //Check if there are duplicate store names in the database if there are, don't create account
+                Query query = ref.child("Users").child("StoreOwner").orderByChild("StoreName").equalTo(storeName);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            Toast.makeText(getActivity(), "Store name already exists", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            //throw new AppExceptions.StoreNameAlreadyExistsException("Store name already exists");
+                            return;
+                        }
+
+                        mAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        progressBar.setVisibility(View.GONE);
+                                        if (task.isSuccessful()) {
+                                            FirebaseUser owner = mAuth.getCurrentUser();
+                                            StoreOwner storeOwner = new StoreOwner(email, password, editStoreName.getText().toString());
+                                            DatabaseReference userRef = ref.child("Users").child("StoreOwner").child(owner.getUid());
+                                            userRef.child("Email").setValue(email);
+                                            userRef.child("StoreName").setValue(storeName);
+                                            userRef.child("Product List").setValue(storeOwner.getProducts());
+                                            //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
+                                            Toast.makeText(getActivity(), "Account Created.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            NavHostFragment.findNavController(OwnerSignUp.this)
+                                                    .navigate(R.id.action_OwnerSignUp_to_logout);
+
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Toast.makeText(getActivity(), "Authentication failed.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
             }
         });
 

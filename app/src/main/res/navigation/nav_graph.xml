@@ -47,6 +47,15 @@
         android:label="activity_sign_up_owner"
         tools:layout="@layout/activity_sign_up_owner" >
 
+        <action
+            android:id="@+id/action_OwnerSignUp_to_Login"
+            app:destination="@id/Login" />
+        <action
+            android:id="@+id/action_OwnerSignUp_to_logout"
+            app:destination="@id/logout" />
+        <action
+            android:id="@+id/action_OwnerSignUp_to_ProductList"
+            app:destination="@id/recyclerViewProducts" />
     </fragment>
 
     <fragment
