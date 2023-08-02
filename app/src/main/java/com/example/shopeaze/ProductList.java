@@ -18,6 +18,7 @@ public class ProductList {
     private DatabaseReference databaseReference;
     public static List<Product> products;
 
+
     public ProductList() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("products");

@@ -46,13 +46,13 @@
         android:label="Cart Page"
         tools:layout="@layout/cart_page" >
             <action
-                android:id="@+id/action_cart_page_to_orders_success"
+                android:id="@+id/action_cart_page_to_order_success"
                 app:destination="@id/order_success" />
     </fragment>
 
     <fragment
         android:id="@+id/order_success"
-        android:name="com.example.shopeaze.OrdersSuccess"
+        android:name="com.example.shopeaze.OrderSuccess"
         android:label="Order Success!"
         tools:layout="@layout/order_success" >
         <action
