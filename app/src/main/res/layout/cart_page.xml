@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/back_button4"
+        android:id="@+id/back"
         android:layout_width="60dp"
         android:layout_height="62dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
 
         android:layout_marginStart="60dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="53dp"
         android:background="@drawable/roundcorner"
-        android:contentDescription="Back Button"
+        android:contentDescription="@string/back"
         android:padding="20dp"
         android:paddingStart="20dp"
         android:paddingLeft="20dp"
@@ -26,16 +25,16 @@
         android:paddingBottom="20dp"
         android:scaleType="centerCrop"
         android:src="@drawable/back_button"
-        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintEnd_toStartOf="@+id/my_cart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/my_cart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
-        android:text="My Cart"
+        android:text="@string/my_cart"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -44,55 +43,46 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/OrdersButton"
+        android:id="@+id/ordersButton"
         android:layout_width="92dp"
         android:layout_height="62dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="14dp"
+        android:layout_alignParentEnd="true"
         android:background="@drawable/roundcorner"
-        android:contentDescription="OrdersButton"
+        android:contentDescription="@string/orders"
         android:scaleType="fitXY"
         android:src="@drawable/orders_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ordersButton" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/ordersButton"
+        android:id="@+id/cartButton"
         android:layout_width="98dp"
         android:layout_height="75dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="44dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
         android:background="@drawable/roundcorner"
-        android:contentDescription="CartButton"
+        android:contentDescription="@string/cart"
         android:scaleType="fitXY"
         android:src="@drawable/cart_button_clicked"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ordersButton" />
 
     <ImageButton
         android:id="@+id/homeButton"
         android:layout_width="92dp"
         android:layout_height="61dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="18dp"
         android:background="@drawable/roundcorner"
-        android:contentDescription="HomeButton"
+        android:contentDescription="@string/home"
         android:scaleType="fitXY"
         android:src="@drawable/home_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/OrdersButton" />
-
-    <LinearLayout
-        android:layout_width="314dp"
-        android:layout_height="83dp"
-        android:layout_marginTop="128dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintEnd_toStartOf="@+id/ordersButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

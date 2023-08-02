@@ -4,7 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:padding="20dp">
+
+    <!--    <com.google.android.material.textfield.TextInputLayout-->
+    <!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="16dp"-->
+    <!--        android:hint="@string/select"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        tools:layout_editor_absoluteX="36dp">-->
+
+    <!--        <AutoCompleteTextView-->
+    <!--            android:id="@+id/autocomplete_txt1"-->
+    <!--            android:hint="Select Size"-->
+    <!--            android:layout_width="356dp"-->
+    <!--            android:layout_height="63dp"-->
+    <!--            android:inputType="none" />-->
+
+    <!--    </com.google.android.material.textfield.TextInputLayout>-->
+
 
     <ImageButton
         android:id="@+id/storeButton"
@@ -34,25 +54,6 @@
         android:src="@drawable/add_to_cart_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ImageButton
-        android:id="@+id/size_select_button"
-        android:layout_width="289dp"
-        android:layout_height="47dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/roundcorner"
-        android:contentDescription="Size select Button"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/select_size_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/add_to_cart_button"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
@@ -106,13 +107,13 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="140dp"
         android:text="Product Name"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -121,8 +122,9 @@
         android:layout_height="wrap_content"
         android:text="details"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="586dp" />
+        app:layout_constraintTop_toBottomOf="@+id/Price" />
 
     <TextView
         android:id="@+id/Price"
@@ -150,4 +152,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/item1" />
+
+    <Spinner
+        android:id="@+id/spinner_sizes"
+        android:layout_width="290dp"
+        android:layout_height="62dp"
+        android:layout_marginBottom="-2dp"
+
+        android:background="#AB8971"
+        android:contextClickable="false"
+        android:dropDownWidth="wrap_content"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/add_to_cart_button"
+        app:layout_constraintHorizontal_bias="0.159"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="156dp"
+        android:layout_height="65dp"
+        tools:layout_editor_absoluteX="-10dp"
+        tools:layout_editor_absoluteY="-9dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
