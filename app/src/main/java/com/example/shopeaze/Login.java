@@ -27,8 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 
-public class Login extends Fragment {
+public class Login extends Fragment {       //shopper login
 
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin;
@@ -46,9 +47,6 @@ public class Login extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         //Check if current user is a shopper or a seller
         if(currentUser != null){
-            //Intent intent = new Intent(getActivity(), LogoutActivity.class);
-            //startActivity(intent);
-            //getActivity().finish();
             NavHostFragment.findNavController(Login.this)
                     .navigate(R.id.action_Login_to_logout);
         }
@@ -74,9 +72,6 @@ public class Login extends Fragment {
             public void onClick(View v){
                 NavHostFragment.findNavController(Login.this)
                         .navigate(R.id.action_Login_to_SignUp);
-                //Intent intent = new Intent(getActivity(), SignUp.class);
-                //startActivity(intent);
-                //getActivity().finish();
             }
         });
 
@@ -109,34 +104,9 @@ public class Login extends Fragment {
                                 if (task.isSuccessful()) {
                                     //Get the current user:
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    DatabaseReference ref= db.getReference();
-                                    Query query = ref.child("Users").child("StoreOwner").orderByChild("Email").equalTo(user.getEmail());
-                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if(snapshot.exists()){
-                                                //user is a seller
-                                                Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
-                                                NavHostFragment.findNavController(Login.this)
-                                                        .navigate(R.id.action_Login_to_ProductList);
-                                            }
-                                            else{
-                                                Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
-                                                NavHostFragment.findNavController(Login.this)
-                                                        .navigate(R.id.action_Login_to_logout);
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                        }
-                                    });
-
+                                    Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
+                                    NavHostFragment.findNavController(Login.this).navigate(R.id.action_Login_to_logout);
                                 } else {
-                                    //display message if email already exists (didnt do that yet):
-
-                                    //or, other issue:
                                     Toast.makeText(getActivity(), "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
