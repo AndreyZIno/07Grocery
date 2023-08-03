@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/hi"
+        android:textColor="#3F51B5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/manage_inventory"
+        app:layout_constraintEnd_toStartOf="@+id/user_details2" />
+
+    <TextView
+        android:id="@+id/manage_inventory"
+        android:layout_width="247dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="5dp"
+        android:text="Manage your Inventory"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.341"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_details2" />
+
+    <TextView
+        android:id="@+id/user_details2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/Username"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ordersButton"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/roundcorner"
+        android:contentDescription="OrdersButton"
+        android:scaleType="fitXY"
+        android:src="@drawable/orders_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.744"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/inventoryButton"
+        android:layout_width="99dp"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="24dp"
+        android:background="@drawable/roundcorner"
+        android:contentDescription="@string/inventorybutton"
+        android:scaleType="fitXY"
+        android:src="@drawable/inventory_button_clicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ordersButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
