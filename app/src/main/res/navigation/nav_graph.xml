@@ -115,7 +115,7 @@
     <fragment
         android:id="@+id/WelcomeScreen"
         android:name="com.example.shopeaze.WelcomeScreen"
-        android:label="@string/Welcome_screen"
+        android:label="Welcome to ShopEaze!"
         tools:layout="@layout/activity_main">
             <action
                 android:id="@+id/action_WelcomeScreen_to_Login"
