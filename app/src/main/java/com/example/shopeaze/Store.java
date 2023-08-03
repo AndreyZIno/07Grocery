@@ -7,7 +7,6 @@ public class Store {
 
     private String storeId;
     private String StoreName;
-    private String email;
     private String logoUrl;
     private ProductList productList;
 
@@ -37,10 +36,6 @@ public class Store {
         return StoreName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
 
     public String getLogoUrl() {
         return logoUrl;
@@ -57,9 +52,6 @@ public class Store {
 
     public void setName(String name) {
         this.StoreName = name;
-    }
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setLogoUrl(String logoUrl) {

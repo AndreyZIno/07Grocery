@@ -33,8 +33,9 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
     @Override
     public StoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_store, parent, false);
-        return new StoreViewHolder(view);
+        return new StoreViewHolder(view, itemClickListener, stores);
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull StoreViewHolder holder, int position) {
@@ -54,28 +55,30 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
         return stores.size();
     }
 
-
     public static class StoreViewHolder extends RecyclerView.ViewHolder {
         TextView textViewStoreName;
         ImageView imageViewStoreLogo;
+        OnItemClickListener itemClickListener;
+        List<Store> stores;
 
-        public StoreViewHolder(@NonNull View itemView) {
+        public StoreViewHolder(@NonNull View itemView, OnItemClickListener itemClickListener, List<Store> stores) {
             super(itemView);
+            this.itemClickListener = itemClickListener;
+            this.stores = stores;
             textViewStoreName = itemView.findViewById(R.id.textViewStoreName);
             //imageViewStoreLogo = itemView.findViewById(R.id.imageViewStoreLogo);
 
-            /*itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // handle click on store item
-                    // start new activity or fragment to display products offered by clicked store
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Store store = stores.get(position);
+                        itemClickListener.onItemClick(store);
+                    }
                 }
-            }); */
+            });
         }
-
     }
-
-    // FOR TEMPORARY TEST PURPOSES
-
 
 }

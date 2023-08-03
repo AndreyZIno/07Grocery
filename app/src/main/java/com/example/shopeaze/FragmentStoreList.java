@@ -58,7 +58,10 @@ public class FragmentStoreList extends Fragment implements StoreAdapter.OnItemCl
 
     @Override
     public void onItemClick(Store store) {
-        openProductsOfferedFragment(store.getStoreID());
+        Bundle bundle = new Bundle();
+        bundle.putString("storeID", store.getStoreID());
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_StoreList_to_ProductsOffered, bundle);
     }
 
     private void openProductsOfferedFragment(String storeID) {
