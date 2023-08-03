@@ -74,11 +74,9 @@ public class OwnerSignUp extends Fragment {
             @Override
             public void onClick(View v){
                 NavHostFragment.findNavController(OwnerSignUp.this)
-                        .navigate(R.id.action_signUp_to_Login);
+                        .navigate(R.id.action_OwnerSignUp_to_Login);
             }
         });
-
-
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
