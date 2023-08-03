@@ -136,7 +136,6 @@ public class OwnerSignUp extends Fragment {
                                             userRef.child("Email").setValue(email);
                                             userRef.child("StoreName").setValue(storeName);
                                             userRef.child("Product List").setValue(storeOwner.getProducts());
-                                            //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
                                             Toast.makeText(getActivity(), "Account Created.",
                                                     Toast.LENGTH_SHORT).show();
                                             NavHostFragment.findNavController(OwnerSignUp.this)
