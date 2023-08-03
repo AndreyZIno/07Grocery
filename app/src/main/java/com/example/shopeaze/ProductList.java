@@ -57,7 +57,7 @@ public class ProductList {
     }
 
     // Get the product by its ID (search method)
-    public Product getProductByID(String productID) throws AppExceptions.ProductNotFoundException {
+    public static Product getProductByID(String productID) throws AppExceptions.ProductNotFoundException {
         for (Product product : products) {
             if (product.getProductID().equals(productID)) {
                 return product;

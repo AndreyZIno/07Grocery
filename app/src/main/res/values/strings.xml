@@ -52,4 +52,5 @@
     <string name="back_button">BackButton</string>
     <string name="product_name">Product Name</string>
     <string name="details">details</string>
+    <string name="inventorybutton">InventoryButton</string>
 </resources>

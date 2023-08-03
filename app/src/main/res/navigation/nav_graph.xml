@@ -132,6 +132,28 @@
                 app:destination="@id/Login" />
     </fragment>
 
+    <fragment
+        android:id="@+id/orders_owner"
+        android:name="com.example.shopeaze.OrdersOwner"
+        android:label="My Orders"
+        tools:layout="@layout/orders_owner" >
+        <action
+            android:id="@+id/action_orders_owner_to_inventory_owner"
+            app:destination="@id/inventory_owner" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inventory_owner"
+        android:name="com.example.shopeaze.InventoryOwner"
+        android:label="My Inventory"
+        tools:layout="@layout/inventory_owner" >
+        <action
+            android:id="@+id/action_inventory_owner_to_orders_owner"
+            app:destination="@id/orders_owner" />
+    </fragment>
+
+
+
 
 
 </navigation>
