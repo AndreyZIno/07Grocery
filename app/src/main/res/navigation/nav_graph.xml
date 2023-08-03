@@ -46,13 +46,13 @@
         android:label="Cart Page"
         tools:layout="@layout/cart_page" >
             <action
-                android:id="@+id/action_cart_page_to_orders_success"
+                android:id="@+id/action_cart_page_to_order_success"
                 app:destination="@id/order_success" />
     </fragment>
 
     <fragment
         android:id="@+id/order_success"
-        android:name="com.example.shopeaze.OrdersSuccess"
+        android:name="com.example.shopeaze.OrderSuccess"
         android:label="Order Success!"
         tools:layout="@layout/order_success" >
         <action
@@ -115,7 +115,7 @@
     <fragment
         android:id="@+id/WelcomeScreen"
         android:name="com.example.shopeaze.WelcomeScreen"
-        android:label="@string/Welcome_screen"
+        android:label="Welcome to ShopEaze!"
         tools:layout="@layout/activity_main">
             <action
                 android:id="@+id/action_WelcomeScreen_to_Login"
@@ -131,6 +131,28 @@
                 android:id="@+id/action_signUp_to_Login"
                 app:destination="@id/Login" />
     </fragment>
+
+    <fragment
+        android:id="@+id/orders_owner"
+        android:name="com.example.shopeaze.OrdersOwner"
+        android:label="My Orders"
+        tools:layout="@layout/orders_owner" >
+        <action
+            android:id="@+id/action_orders_owner_to_inventory_owner"
+            app:destination="@id/inventory_owner" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/inventory_owner"
+        android:name="com.example.shopeaze.InventoryOwner"
+        android:label="My Inventory"
+        tools:layout="@layout/inventory_owner" >
+        <action
+            android:id="@+id/action_inventory_owner_to_orders_owner"
+            app:destination="@id/orders_owner" />
+    </fragment>
+
+
 
 
 

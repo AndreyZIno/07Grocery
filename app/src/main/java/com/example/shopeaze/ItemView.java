@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,11 +20,36 @@ import com.google.android.material.button.MaterialButton;
 public class ItemView extends Fragment {
 
     private ItemDisplayBinding binding;
+    TextView product_name;
+    TextView product_price;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = ItemDisplayBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
+
+
+        product_name = rootView.findViewById(R.id.product_name);
+        product_price = rootView.findViewById(R.id.product_price);
+
+        // get productID when item is clicked
+        String productID = "product_id";
+
+        // TEST:
+         productID = "1";
+//
+//        // get the product by its ID from the ProductList
+//        try {
+//            Product product = ProductList.getProductByID(productID);
+//            // set the product name to the textView
+//            product_name.setText(product.getName());
+//            product_price.setText((int) product.getPrice());
+//        } catch (AppExceptions.ProductNotFoundException e) {
+//            e.printStackTrace();
+//            // handle the exception if the product is not found
+//        }
+
+
 
         // add to cart button that switches to cart_page
         ImageButton addToCartButton = rootView.findViewById(R.id.add_to_cart_button);
@@ -52,10 +78,6 @@ public class ItemView extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        // update name of product
-//        List<Product> productsList = ProductList.products;
-//        String productName = productsList.get(0).getProductName();
-//        binding.productName.setText(productName);
 
         return rootView;
     }

@@ -18,6 +18,7 @@ public class ProductList {
     private DatabaseReference databaseReference;
     public static List<Product> products;
 
+
     public ProductList() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("products");
@@ -56,7 +57,7 @@ public class ProductList {
     }
 
     // Get the product by its ID (search method)
-    public Product getProductByID(String productID) throws AppExceptions.ProductNotFoundException {
+    public static Product getProductByID(String productID) throws AppExceptions.ProductNotFoundException {
         for (Product product : products) {
             if (product.getProductID().equals(productID)) {
                 return product;

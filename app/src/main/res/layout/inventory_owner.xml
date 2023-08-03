@@ -5,54 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/back_button3"
-        android:layout_width="60dp"
-        android:layout_height="62dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/roundcorner"
-        android:contentDescription="Back Button"
-        android:padding="20dp"
-        android:paddingStart="20dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="20dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="20dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/back_button"
-        app:layout_constraintEnd_toStartOf="@+id/textView9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:text="My Orders"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/hi"
+        android:textColor="#3F51B5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/manage_inventory"
+        app:layout_constraintEnd_toStartOf="@+id/user_details2" />
+
+    <TextView
+        android:id="@+id/manage_inventory"
+        android:layout_width="247dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="5dp"
+        android:text="Manage your Inventory"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.341"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_details2" />
+
+    <TextView
+        android:id="@+id/user_details2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/Username"
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constrainedWidth="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/ordersButton"
-        android:layout_width="98dp"
-        android:layout_height="75dp"
+        android:layout_width="96dp"
+        android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:background="@drawable/roundcorner"
         android:contentDescription="OrdersButton"
         android:scaleType="fitXY"
-        android:src="@drawable/orders_button_clicked"
+        android:src="@drawable/orders_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.744"
@@ -60,15 +61,15 @@
 
     <ImageButton
         android:id="@+id/inventoryButton"
-        android:layout_width="94dp"
-        android:layout_height="59dp"
+        android:layout_width="99dp"
+        android:layout_height="80dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="24dp"
         android:background="@drawable/roundcorner"
         android:contentDescription="@string/inventorybutton"
         android:scaleType="fitXY"
-        android:src="@drawable/inventory_button"
+        android:src="@drawable/inventory_button_clicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ordersButton"
         app:layout_constraintStart_toStartOf="parent" />

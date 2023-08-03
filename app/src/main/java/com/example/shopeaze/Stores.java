@@ -24,7 +24,7 @@ public class Stores extends Fragment {
     ImageButton ordersButton;
     ImageButton storeButton;
 
-    TextView textView;
+    TextView name_display;
     FirebaseUser user;
 
     @Override
@@ -35,20 +35,18 @@ public class Stores extends Fragment {
         logoutButton = view.findViewById(R.id.logout);
         cartButton = view.findViewById(R.id.cartButton);
         ordersButton = view.findViewById(R.id.ordersButton);
-        textView = view.findViewById(R.id.user_details);
+        name_display = view.findViewById(R.id.user_details);
         storeButton = view.findViewById(R.id.Store1);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
         if (user==null){
-            //Intent intent = new Intent(getActivity(), Login.class);
-            //startActivity(intent);
             NavHostFragment.findNavController(Stores.this)
                     .navigate(R.id.action_stores_page_to_welcomeScreen);
         }
         else{
-            textView.setText(user.getEmail());
+            name_display.setText(user.getEmail());
         }
 
         logoutButton.setOnClickListener(new View.OnClickListener(){

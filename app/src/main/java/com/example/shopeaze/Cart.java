@@ -26,7 +26,7 @@ public class Cart extends Fragment {
             @Override
             public void onClick(View v) {
                 NavHostFragment.findNavController(Cart.this)
-                        .navigate(R.id.action_cart_page_to_orders_success);
+                        .navigate(R.id.action_cart_page_to_order_success);
             }
         });
 

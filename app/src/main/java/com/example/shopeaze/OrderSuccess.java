@@ -5,6 +5,7 @@ package com.example.shopeaze;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
+        import android.widget.Button;
         import android.widget.ImageButton;
         import androidx.fragment.app.Fragment;
         import androidx.navigation.fragment.NavHostFragment;
@@ -12,7 +13,7 @@ package com.example.shopeaze;
 
         import com.example.shopeaze.databinding.OrderSuccessBinding;
 
-public class OrdersSuccess extends Fragment {
+public class OrderSuccess extends Fragment {
 
     private OrderSuccessBinding binding;
 
@@ -22,11 +23,11 @@ public class OrdersSuccess extends Fragment {
         View rootView = binding.getRoot();
 
         // home button that switches to order_success
-        ImageButton homeButton = rootView.findViewById(R.id.backhomeButton);
+        Button homeButton = rootView.findViewById(R.id.backhomeButton);
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavHostFragment.findNavController(OrdersSuccess.this)
+                NavHostFragment.findNavController(OrderSuccess.this)
                         .navigate(R.id.action_order_success_to_stores_page);
             }
         });
