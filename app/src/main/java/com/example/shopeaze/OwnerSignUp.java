@@ -73,7 +73,7 @@ public class OwnerSignUp extends Fragment {
             @Override
             public void onClick(View v){
                 NavHostFragment.findNavController(OwnerSignUp.this)
-                        .navigate(R.id.action_OwnerSignUp_to_Login);
+                        .navigate(R.id.action_OwnerSignUp_to_ownerLogin);
             }
         });
 
@@ -140,7 +140,7 @@ public class OwnerSignUp extends Fragment {
                                             Toast.makeText(getActivity(), "Account Created.",
                                                     Toast.LENGTH_SHORT).show();
                                             NavHostFragment.findNavController(OwnerSignUp.this)
-                                                    .navigate(R.id.action_OwnerSignUp_to_logout);
+                                                    .navigate(R.id.action_OwnerSignUp_to_ownerLogin);
 
                                         } else {
                                             // If sign in fails, display a message to the user.
