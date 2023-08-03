@@ -1,4 +1,7 @@
+// StoreList.java
 package com.example.shopeaze;
+
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,17 +14,24 @@ import java.util.List;
 
 public class StoreList {
 
+    public interface OnStoresLoadedListener {
+        void onStoresLoaded(List<Store> stores);
+    }
+
     private DatabaseReference databaseReference;
     private List<Store> stores;
+    private OnStoresLoadedListener onStoresLoadedListener;
 
     public StoreList() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("stores");
+        databaseReference = database.getReference("Users").child("StoreOwner");
         stores = new ArrayList<>();
         loadStoresFromFirebase();
     }
 
-    // adding store handled by storeowner account signup and removing store handled by storeowner account deletion
+    public void setOnStoresLoadedListener(OnStoresLoadedListener listener) {
+        this.onStoresLoadedListener = listener;
+    }
 
     public List<Store> getAllStores() {
         return stores;
@@ -35,6 +45,10 @@ public class StoreList {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Store store = snapshot.getValue(Store.class);
                     stores.add(store);
+                }
+                Log.d("StoreList", "Loaded " + stores.size() + " stores from Firebase");
+                if (onStoresLoadedListener != null) {
+                    onStoresLoadedListener.onStoresLoaded(stores);
                 }
             }
 
@@ -55,5 +69,4 @@ public class StoreList {
         // if the store is not found
         throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
     }
-
 }

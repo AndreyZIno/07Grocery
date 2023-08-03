@@ -113,7 +113,7 @@ public class SignUp extends Fragment {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    DatabaseReference userRef = ref.child("shoppers").child(user.getUid());
+                                    DatabaseReference userRef = ref.child("Users").child("Shoppers").child(user.getUid());
                                     userRef.child("email").setValue(email);
                                     Toast.makeText(getActivity(), "Account Created.",
                                             Toast.LENGTH_SHORT).show();

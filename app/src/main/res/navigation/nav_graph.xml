@@ -17,8 +17,8 @@
             android:id="@+id/action_Login_to_logout"
             app:destination="@id/logout" />
         <action
-            android:id="@+id/action_Login_to_ProductList"
-            app:destination="@id/ProductList" />
+            android:id="@+id/action_Login_to_StoreList"
+            app:destination="@id/StoreList" />
     </fragment>
 
     <fragment
@@ -62,6 +62,31 @@
         <action
             android:id="@+id/action_OwnerSignUp_to_ProductList2"
             app:destination="@id/ProductList" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/StoreList"
+        android:name="com.example.shopeaze.FragmentStoreList"
+        android:label="Stores"
+        tools:layout="@layout/activity_store_list" >
+
+        <action
+            android:id="@+id/action_StoreList_to_logout"
+            app:destination="@id/logout" />
+        <action
+            android:id="@+id/action_StoreList_to_ProductsOffered"
+            app:destination="@id/ProductsOffered" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ProductsOffered"
+        android:name="com.example.shopeaze.ProductsOfferedFragment"
+        android:label="Products Offered"
+        tools:layout="@layout/activity_products_offered" >
+
+        <action
+            android:id="@+id/action_ProductsOffered_to_logout"
+            app:destination="@id/logout" />
     </fragment>
 
     <fragment

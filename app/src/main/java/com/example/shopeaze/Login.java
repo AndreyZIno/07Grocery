@@ -51,7 +51,7 @@ public class Login extends Fragment {
             //startActivity(intent);
             //getActivity().finish();
             NavHostFragment.findNavController(Login.this)
-                    .navigate(R.id.action_Login_to_logout);
+                    .navigate(R.id.action_Login_to_StoreList);
         }
     }
 
@@ -122,7 +122,7 @@ public class Login extends Fragment {
                                                 //startActivity(intent);
                                                 //getActivity().finish();
                                                 NavHostFragment.findNavController(Login.this)
-                                                        .navigate(R.id.action_Login_to_ProductList);
+                                                        .navigate(R.id.action_Login_to_StoreList);
                                             }
                                             else{
                                                 Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();

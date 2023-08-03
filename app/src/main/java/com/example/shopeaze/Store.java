@@ -1,17 +1,23 @@
 package com.example.shopeaze;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class Store {
 
     private String storeId;
-    private String name;
+    private String StoreName;
+    private String email;
     private String logoUrl;
     private ProductList productList;
 
-    // constructor
-    public Store(String storeId, String name, String logoUrl) {
-        this.name = name;
+    // constructors
+
+    public Store() {
+        // Default constructor required for calls to DataSnapshot.getValue(Store.class)
+    }
+    public Store(String storeId, String name, String email, String logoUrl) {
+        this.StoreName = name;
         this.storeId = generateStoreID();
         this.logoUrl = logoUrl;
         this.productList = new ProductList();
@@ -28,8 +34,13 @@ public class Store {
     }
 
     public String getStoreName() {
-        return name;
+        return StoreName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
 
     public String getLogoUrl() {
         return logoUrl;
@@ -45,7 +56,10 @@ public class Store {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.StoreName = name;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setLogoUrl(String logoUrl) {
