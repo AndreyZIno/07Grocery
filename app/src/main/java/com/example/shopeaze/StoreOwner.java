@@ -8,14 +8,13 @@ import java.util.ArrayList;
 public class StoreOwner extends Account {
     String storeName;
 
+   public ProductList products;
 
-    private ArrayList<Product> products;
 
 
     public StoreOwner(String username, String password, String storeName){
         this.storeName = storeName;
-        products = new ArrayList<>();
-        //orders = new ArrayList<>();
+        products = new ProductList();
     }
 
     public String getStoreName(){
@@ -28,6 +27,10 @@ public class StoreOwner extends Account {
     }
 
     public Object getProducts() {
-        return products;
+        return products.getAllProducts();
+    }
+
+    public void addProduct(Product product) {
+        products.addProduct(product);
     }
 }

@@ -114,7 +114,7 @@ public class OwnerSignUp extends Fragment {
 
 
                 //Check if there are duplicate store names in the database if there are, don't create account
-                Query query = ref.child("Users").child("StoreOwner").orderByChild("StoreName").equalTo(storeName);
+                Query query = ref.child("storeowners").orderByChild("StoreName").equalTo(storeName);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -133,10 +133,10 @@ public class OwnerSignUp extends Fragment {
                                         if (task.isSuccessful()) {
                                             FirebaseUser owner = mAuth.getCurrentUser();
                                             StoreOwner storeOwner = new StoreOwner(email, password, editStoreName.getText().toString());
-                                            DatabaseReference userRef = ref.child("Users").child("StoreOwner").child(owner.getUid());
+                                            DatabaseReference userRef = ref.child("storeowner").child(owner.getUid());
                                             userRef.child("Email").setValue(email);
                                             userRef.child("StoreName").setValue(storeName);
-                                            userRef.child("Product List").setValue(storeOwner.getProducts());
+                                            userRef.child("Products").setValue(storeOwner.getProducts());
                                             //ref.child("Users").child("Shopper").child("Email").setValue(email); //new line
                                             Toast.makeText(getActivity(), "Account Created.",
                                                     Toast.LENGTH_SHORT).show();
