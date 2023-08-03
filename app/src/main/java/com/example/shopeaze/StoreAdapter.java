@@ -18,9 +18,15 @@ import java.util.List;
 public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHolder> {
 
     private List<Store> stores;
+    private OnItemClickListener itemClickListener;
 
-    public StoreAdapter(List<Store> stores) {
+    public interface OnItemClickListener {
+        void onItemClick(Store store);
+    }
+
+    public StoreAdapter(List<Store> stores, OnItemClickListener itemClickListener) {
         this.stores = stores;
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -56,13 +62,13 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
             textViewStoreName = itemView.findViewById(R.id.textViewStoreName);
             imageViewStoreLogo = itemView.findViewById(R.id.imageViewStoreLogo);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // handle click on store item
                     // start new activity or fragment to display products offered by clicked store
                 }
-            });
+            }); */
         }
 
     }

@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp"
-        android:background="@drawable/img">
+        android:padding="16dp">
 
         <!-- Left-side store name -->
         <ImageView
@@ -21,7 +20,6 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:src="@drawable/sample"
             android:scaleType="centerCrop"
             />
 
@@ -46,3 +44,4 @@
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
