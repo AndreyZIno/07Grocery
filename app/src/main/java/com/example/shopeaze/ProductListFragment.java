@@ -70,7 +70,7 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
     }
 
     private void fetchProducts() {
-        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference().child("Products");
+        DatabaseReference productsRef = storeOwnerRef.child("Products");
         productsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -81,6 +81,7 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
                         products.add(product);
                     }
                 }
+                System.out.println("Products: " + products);
                 // Update the adapter with the fetched products
                 adapter.setProducts(products);
             }
