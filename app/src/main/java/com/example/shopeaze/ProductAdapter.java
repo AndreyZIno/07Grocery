@@ -28,7 +28,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_product_list, parent, false);
+                .inflate(R.layout.item_product, parent, false);
         return new ProductViewHolder(view);
     }
 
@@ -67,4 +67,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         }
     }
 
+    public void setProducts(List<Product> products) {
+        this.products = products;
+        notifyDataSetChanged();
+    }
 }

@@ -1,65 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_product_list.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- Product List Layout -->
-    <RelativeLayout
+    <TextView
+        android:id="@+id/textViewStoreName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Store Name"
+        android:textSize="18sp"
+        android:layout_margin="16dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewProducts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
 
-        <!-- Add FloatingActionButton to add new products -->
-        <TextView
-            android:id="@+id/textViewStoreName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewProducts"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_container">
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/fab_margin"
-            android:contentDescription="Add Product"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
             android:src="@drawable/ic_add" />
+    </FrameLayout>
 
-    </RelativeLayout>
-
-    <!-- Product Details Layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/textViewProductName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textViewProductBrand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textViewProductPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp" />
-
-    </LinearLayout>
 
 </LinearLayout>

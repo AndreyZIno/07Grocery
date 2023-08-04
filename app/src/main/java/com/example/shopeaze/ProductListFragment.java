@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListFragment extends Fragment implements ProductAdapter.OnItemClickListener {
@@ -50,9 +51,7 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
             RecyclerView recyclerViewProducts = rootView.findViewById(R.id.recyclerViewProducts);
             recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            ProductList productList = new ProductList(currentUser, textViewStoreName);
-            adapter = new ProductAdapter(productList.getAllProducts(), this);
-            recyclerViewProducts.setAdapter(adapter);
+            fetchProducts();
         }
 
         FloatingActionButton fabAddProduct = rootView.findViewById(R.id.fabAddProduct);
@@ -64,6 +63,29 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
         });
 
         return rootView;
+    }
+
+    private void fetchProducts() {
+        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference().child("Products");
+        productsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Product> products = new ArrayList<>();
+                for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
+                    Product product = productSnapshot.getValue(Product.class);
+                    products.add(product);
+                }
+                // Update the adapter with the fetched products
+                adapter.setProducts(products);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the database error here
+                String errorMessage = "Error fetching products: " + databaseError.getMessage();
+                showToast(errorMessage);
+            }
+        });
     }
 
     private void fetchStoreName() {
