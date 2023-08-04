@@ -5,8 +5,8 @@ public class AppExceptions {
         public ProductNotFoundException(String message) {
             super(message);
         }
-
     }
+
     public static class StoreNameAlreadyExists extends Exception {
         public StoreNameAlreadyExists(String message) {
             super(message);
@@ -20,5 +20,4 @@ public class AppExceptions {
     }
 
     // add any other exceptions here
-
 }

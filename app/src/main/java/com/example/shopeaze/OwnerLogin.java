@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -22,43 +21,41 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 
-public class SignUp extends Fragment {
+public class OwnerLogin extends Fragment {       //owner login
 
     TextInputEditText editTextEmail, editTextPassword;
-    Button buttonSignUp;
+    Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
-
-    FirebaseDatabase db;
-
+    private FirebaseDatabase db;
 
     @Override
     public void onStart() {
         super.onStart();
-        //new line:
-        db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
-        //old:
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
         // Check if user is already signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        //Check if current user is a shopper or a seller
         if(currentUser != null){
-            NavHostFragment.findNavController(SignUp.this)
-                    .navigate(R.id.action_logout_to_WelcomeScreen);
+            NavHostFragment.findNavController(OwnerLogin.this)
+                    .navigate(R.id.action_ownerLogin_to_logout);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_sign_up, container, false);
+        return inflater.inflate(R.layout.fragment_owner_login, container, false);
     }
 
     @Override
@@ -67,22 +64,20 @@ public class SignUp extends Fragment {
 
         editTextEmail = view.findViewById(R.id.email);
         editTextPassword = view.findViewById(R.id.password);
-        buttonSignUp = view.findViewById(R.id.btn_signup);
+        buttonLogin = view.findViewById(R.id.btn_login);
         progressBar = view.findViewById(R.id.progressBar);
-        textView = view.findViewById(R.id.loginNow);
-
+        textView = view.findViewById(R.id.signUpNow);
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                NavHostFragment.findNavController(SignUp.this)
-                        .navigate(R.id.action_signUp_to_Login);
+                NavHostFragment.findNavController(OwnerLogin.this)
+                        .navigate(R.id.action_ownerLogin_to_OwnerSignUp);
             }
         });
 
-        buttonSignUp.setOnClickListener(new View.OnClickListener() {
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference ref= db.getReference();
                 progressBar.setVisibility(View.VISIBLE);
                 String email;
                 String password;
@@ -100,27 +95,18 @@ public class SignUp extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
-                if (password.length() < 6){
-                    Toast.makeText(getActivity(), "Password should be at least 6 characters", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
 
-                mAuth.createUserWithEmailAndPassword(email, password)
+                mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
+                                    //Get the current user:
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    DatabaseReference userRef = ref.child("Users").child("Shoppers").child(user.getUid());
-                                    userRef.child("email").setValue(email);
-                                    Toast.makeText(getActivity(), "Account Created.",
-                                            Toast.LENGTH_SHORT).show();
-                                    NavHostFragment.findNavController(SignUp.this)
-                                            .navigate(R.id.action_signUp_to_Login);
+                                    Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
+                                    NavHostFragment.findNavController(OwnerLogin.this).navigate(R.id.action_ownerLogin_to_logout);
                                 } else {
-                                    // If sign in fails, display a message to the user.
                                     Toast.makeText(getActivity(), "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
