@@ -58,17 +58,24 @@ public class FragmentStoreList extends Fragment implements StoreAdapter.OnItemCl
 
     @Override
     public void onItemClick(Store store) {
+        if (store == null) {
+            Log.e("FragmentStoreList", "Store object is null");
+        } else {
+            Log.d("FragmentStoreList", "FragmentStoreList StoreID is" + store.getStoreID());
+        }
         Bundle bundle = new Bundle();
-        bundle.putString("storeID", store.getStoreID());
+        bundle.putString("store_id", store.getStoreID());
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(R.id.action_StoreList_to_ProductsOffered, bundle);
     }
 
-    private void openProductsOfferedFragment(String storeID) {
+    /*private void openProductsOfferedFragment(String storeID) {
+        Log.d("FragmentStoreList", "Trying to open ProductsOfferedFragment for " + storeID + " store");
         ProductsOfferedFragment fragment = ProductsOfferedFragment.newInstance(storeID);
+        Log.d("FragmentStoreList", "Trying to open ProductsOfferedFragment for " + storeID + " store");
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
-    }
+    }*/
 }
