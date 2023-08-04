@@ -24,18 +24,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         this.itemClickListener = itemClickListener;
     }
 
+    @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_product_list, parent, false);
         return new ProductViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+    public void onBindViewHolder(ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        holder.textViewProductName.setText(product.getName());
-        holder.textViewProductBrand.setText(product.getBrand());
-        holder.textViewProductPrice.setText(String.valueOf(product.getPrice()));
+        holder.bind(product, itemClickListener);
     }
 
     @Override
@@ -51,6 +51,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             textViewProductName = itemView.findViewById(R.id.textViewProductName);
             textViewProductBrand = itemView.findViewById(R.id.textViewProductBrand);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
+        }
+
+        public void bind(final Product product, final OnItemClickListener listener) {
+            textViewProductName.setText(product.getName());
+            textViewProductBrand.setText(product.getBrand());
+            textViewProductPrice.setText((int) product.getPrice());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(product);
+                }
+            });
         }
     }
 
