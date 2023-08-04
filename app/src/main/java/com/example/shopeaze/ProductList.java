@@ -77,6 +77,7 @@ public class ProductList {
 
     private void loadProductsFromFirebase() {
         databaseReference.addValueEventListener(new ValueEventListener() {
+            @NonNull
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 products.clear();

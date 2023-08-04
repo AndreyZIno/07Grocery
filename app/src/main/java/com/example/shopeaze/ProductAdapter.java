@@ -8,19 +8,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
-    private List<Product> products;
+public class ProductAdapter extends FirebaseRecyclerAdapter<Product, ProductAdapter.ProductViewHolder> {
     private OnItemClickListener itemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(Product product);
     }
 
-    public ProductAdapter(List<Product> products, OnItemClickListener itemClickListener) {
-        this.products = products;
+    public ProductAdapter(@NonNull FirebaseRecyclerOptions<Product> options, OnItemClickListener itemClickListener) {
+        super(options);
         this.itemClickListener = itemClickListener;
     }
 
@@ -33,14 +33,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     @Override
-    public void onBindViewHolder(ProductViewHolder holder, int position) {
-        Product product = products.get(position);
-        holder.bind(product, itemClickListener);
-    }
-
-    @Override
-    public int getItemCount() {
-        return products.size();
+    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull Product model) {
+        holder.bind(model, itemClickListener);
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +50,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public void bind(final Product product, final OnItemClickListener listener) {
             textViewProductName.setText(product.getName());
             textViewProductBrand.setText(product.getBrand());
-            textViewProductPrice.setText((int) product.getPrice());
+            textViewProductPrice.setText(String.valueOf(product.getPrice()));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,9 +60,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             });
         }
     }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-        notifyDataSetChanged();
-    }
 }
+

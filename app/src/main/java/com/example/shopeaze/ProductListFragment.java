@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListFragment extends Fragment implements ProductAdapter.OnItemClickListener {
-    private List<Product> products;
     private ProductAdapter adapter;
 
     private DatabaseReference storeOwnerRef;
@@ -35,23 +35,23 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_product_list, container, false);
 
-        // Find the TextView and set the store name
         textViewStoreName = rootView.findViewById(R.id.textViewStoreName);
 
-        // Initialize Firebase components
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             String storeOwnerId = currentUser.getUid();
             storeOwnerRef = FirebaseDatabase.getInstance().getReference().child("Users").child("StoreOwner").child(storeOwnerId);
 
-            // Fetch the store name from Firebase
             fetchStoreName();
 
             RecyclerView recyclerViewProducts = rootView.findViewById(R.id.recyclerViewProducts);
             recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            fetchProducts();
+            adapter = new ProductAdapter(new FirebaseRecyclerOptions.Builder<Product>()
+                    .setQuery(FirebaseDatabase.getInstance().getReference().child("Products"), Product.class)
+                    .build(), this);
+            recyclerViewProducts.setAdapter(adapter);
         }
 
         FloatingActionButton fabAddProduct = rootView.findViewById(R.id.fabAddProduct);
@@ -65,27 +65,16 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
         return rootView;
     }
 
-    private void fetchProducts() {
-        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference().child("Products");
-        productsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Product> products = new ArrayList<>();
-                for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
-                    Product product = productSnapshot.getValue(Product.class);
-                    products.add(product);
-                }
-                // Update the adapter with the fetched products
-                adapter.setProducts(products);
-            }
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the database error here
-                String errorMessage = "Error fetching products: " + databaseError.getMessage();
-                showToast(errorMessage);
-            }
-        });
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     private void fetchStoreName() {
@@ -96,14 +85,12 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
                 if (storeName != null) {
                     textViewStoreName.setText(storeName);
                 } else {
-                    // The store name is not available or null in the database
                     showToast("Store name not found");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the database error here
                 String errorMessage = "Error fetching store name: " + databaseError.getMessage();
                 showToast(errorMessage);
             }
@@ -128,7 +115,6 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
     }
 
     private void showAddProductDialog() {
-        // Create and show a dialog to gather product information from the user
         AddProductDialog dialog = new AddProductDialog();
         dialog.show(requireActivity().getSupportFragmentManager(), "AddProductDialog");
     }
