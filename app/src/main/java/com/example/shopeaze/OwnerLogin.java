@@ -48,7 +48,7 @@ public class OwnerLogin extends Fragment {       //owner login
         //Check if current user is a shopper or a seller
         if(currentUser != null){
             NavHostFragment.findNavController(OwnerLogin.this)
-                    .navigate(R.id.action_ownerLogin_to_logout);
+                    .navigate(R.id.action_ownerLogin_to_ProductList);
         }
     }
 
