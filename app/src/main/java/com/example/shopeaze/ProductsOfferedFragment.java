@@ -1,6 +1,7 @@
 package com.example.shopeaze;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +38,12 @@ public class ProductsOfferedFragment extends Fragment implements ProductAdapter.
         String storeID = getArguments().getString(ARG_STORE_ID);
         Store store = getStoreDetails(storeID);
         if (store != null) {
+            Log.d("ProductsOfferedFragment", "Store found: " + store.getStoreName());
             products = store.getProductList().getAllProducts();
             adapter = new ProductAdapter(products, this);
             recyclerViewProducts.setAdapter(adapter);
+        } else {
+            Log.d("ProductsOfferedFragment", "Store not found");
         }
 
         return rootView;
@@ -59,6 +63,7 @@ public class ProductsOfferedFragment extends Fragment implements ProductAdapter.
     }
 
     private Store getStoreDetails(String storeID) {
+        Log.d("ProductsOfferedFragment", "Getting store details for ID: " + storeID);
         StoreList storeList = new StoreList();
         try {
             return storeList.getStoreByID(storeID);

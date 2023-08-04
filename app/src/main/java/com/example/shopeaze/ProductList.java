@@ -1,7 +1,10 @@
 package com.example.shopeaze;
 
-import android.provider.ContactsContract;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -17,12 +20,46 @@ maintaining a local copy of the products for efficient access and display w/i th
 public class ProductList {
     private DatabaseReference databaseReference;
     public List<Product> products;
+    private TextView textViewStoreName;
 
-    public ProductList() {
+    public ProductList(FirebaseUser currentUser, TextView textViewStoreName) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("products");
+        this.textViewStoreName = textViewStoreName;
         products = new ArrayList<>();
         loadProductsFromFirebase();
+
+
+        if (currentUser != null) {
+            String storeOwnerId = currentUser.getUid();
+            DatabaseReference storeOwnerRef = FirebaseDatabase.getInstance()
+                    .getReference().child("Users")
+                    .child("StoreOwner")
+                    .child(storeOwnerId);
+
+            // Fetch the store name from Firebase
+            fetchStoreName(storeOwnerRef);
+        }
+
+    }
+
+    private void fetchStoreName(DatabaseReference storeOwnerRef) {
+        storeOwnerRef.child("StoreName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String storeName = dataSnapshot.getValue(String.class);
+                if (storeName != null) {
+                    textViewStoreName.setText(storeName);
+                } else {
+                    System.err.println("Store name not found in the database.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.err.println("Error fetching store name: " + databaseError.getMessage());
+            }
+        });
     }
 
     public void addProduct(Product product) {
@@ -40,8 +77,9 @@ public class ProductList {
 
     private void loadProductsFromFirebase() {
         databaseReference.addValueEventListener(new ValueEventListener() {
+            @NonNull
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 products.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Product product = snapshot.getValue(Product.class);
@@ -50,7 +88,7 @@ public class ProductList {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 System.err.println("Error loading products from Firebase: " + error.getMessage());
             }
         });

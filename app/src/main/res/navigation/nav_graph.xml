@@ -61,6 +61,9 @@
             android:id="@+id/action_OwnerSignUp_to_Login"
             app:destination="@id/Login" />
         <action
+            android:id="@+id/action_OwnerSignUp_to_ownerLogin"
+            app:destination="@id/ownerLogin" />
+        <action
             android:id="@+id/action_OwnerSignUp_to_logout"
             app:destination="@id/logout" />
         <action
