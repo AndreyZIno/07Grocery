@@ -1,3 +1,6 @@
+
+// StoreList.java
+
 package com.example.shopeaze;
 
 import android.util.Log;
@@ -16,6 +19,7 @@ public class StoreList {
     public interface OnStoresLoadedListener {
         void onStoresLoaded(List<Store> stores);
     }
+
     private static final String TAG = "StoreList";
     private DatabaseReference databaseReference;
     private List<Store> stores;
@@ -40,6 +44,7 @@ public class StoreList {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 Log.d("StoreList", "onDataChange called"); // Add this log statement
                 stores.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -49,6 +54,7 @@ public class StoreList {
                         store.setStoreID(storeId);
                         stores.add(store);
                     }
+
                 }
                 Log.d("StoreList", "Loaded " + stores.size() + " stores from Firebase");
                 if (onStoresLoadedListener != null) {
@@ -63,7 +69,7 @@ public class StoreList {
             }
         });
 
-    }
+
 
     public Store getStoreByID(String storeID) throws AppExceptions.StoreNotFoundException {
         for (Store store : stores) {

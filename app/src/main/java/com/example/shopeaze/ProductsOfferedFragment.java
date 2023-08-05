@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+
+
 public class ProductsOfferedFragment extends Fragment implements ProductsOfferedAdapter.OnItemClickListener, StoreList.OnStoresLoadedListener, ProductList.OnProductsLoadedListener {
     private static final String TAG = "ProductsOfferedFragment";
     private static final String ARG_STORE_ID = "store_id";
@@ -96,4 +98,15 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
         }
         throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
     }
+    private Store getStoreDetails(String storeID) {
+        StoreList storeList = new StoreList();
+        try {
+            return storeList.getStoreByID(storeID);
+        } catch (AppExceptions.StoreNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
+    }
+
 }
