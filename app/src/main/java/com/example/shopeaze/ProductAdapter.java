@@ -17,9 +17,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private List<Product> products;
 
+    private ProductAdapter.OnItemClickListener listener;
 
-    public ProductAdapter(List<Product> products) {
+    public interface OnItemClickListener {
+        void onItemClick(Product product);
+    }
+
+    public ProductAdapter(List<Product> products, OnItemClickListener listener) {
         this.products = products;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,9 +38,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = products.get(position);
-        holder.textViewProductName.setText(product.getName());
-        holder.textViewProductBrand.setText(product.getBrand());
-        holder.textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
+        holder.bind(product, listener);
 
         /*if (holder.textViewProductImage == null) {
             Log.d("ProductAdapter", "Product image is null");
@@ -65,6 +69,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             textViewProductBrand = itemView.findViewById(R.id.textViewProductBrand);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
         }
-
+        public void bind(final Product product, final ProductAdapter.OnItemClickListener listener) {
+            textViewProductName.setText(product.getName());
+            textViewProductBrand.setText(product.getBrand());
+            textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(product);
+                }
+            });
+        }
     }
 }
