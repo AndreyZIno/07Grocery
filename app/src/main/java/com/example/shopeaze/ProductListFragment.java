@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -29,11 +32,14 @@ public class ProductListFragment extends Fragment {
     private ProductAdapter productAdapter;
     private DatabaseReference productsRef;
     private ProgressDialog progressDialog;
+    private TextView textViewStoreName;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
+
+        textViewStoreName = view.findViewById(R.id.textViewStoreName);
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setCancelable(false);
@@ -47,21 +53,23 @@ public class ProductListFragment extends Fragment {
         products = new ArrayList<>();
         productAdapter = new ProductAdapter(getActivity(), products);
 
+        fetchStoreName();
+
         recyclerView.setAdapter(productAdapter);
-        // Get the reference to your Realtime Database node, in this case, "Products"
         productsRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
                 .child("StoreOwner")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("Products");
 
-        // Set up a ChildEventListener to listen for changes in the data
+
         productsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                 Product product = dataSnapshot.getValue(Product.class);
                 products.add(product);
                 productAdapter.notifyDataSetChanged();
+
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
             }
@@ -112,5 +120,34 @@ public class ProductListFragment extends Fragment {
         // Create and show a dialog to gather product information from the user
         AddProductDialog dialog = new AddProductDialog();
         dialog.show(requireActivity().getSupportFragmentManager(), "AddProductDialog");
+    }
+
+    private void fetchStoreName() {
+        DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("StoreOwner")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("StoreName");
+        storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String storeName = dataSnapshot.getValue(String.class);
+                if (storeName != null) {
+                    textViewStoreName.setText(storeName);
+                } else {
+                    showToast("Store name not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                String errorMessage = "Error fetching store name: " + databaseError.getMessage();
+                showToast(errorMessage);
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
