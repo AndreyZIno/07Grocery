@@ -34,8 +34,11 @@ public class ShopperProductDetailsFragment extends Fragment {
         TextView productNameTextView = rootView.findViewById(R.id.textViewProductName);
         productNameTextView.setText(product.getName());
 
+        TextView brandNameTextView = rootView.findViewById(R.id.textViewBrandName);
+        brandNameTextView.setText(String.valueOf(product.getBrand()));
+
         TextView productPriceTextView = rootView.findViewById(R.id.textViewProductPrice);
-        productPriceTextView.setText(String.valueOf(product.getPrice()));
+        productPriceTextView.setText("$ " + String.valueOf(product.getPrice()));
 
         TextView productDescriptionTextView = rootView.findViewById(R.id.textViewProductDescription);
         productDescriptionTextView.setText(product.getDescription());
