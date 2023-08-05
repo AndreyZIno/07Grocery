@@ -58,7 +58,7 @@
         tools:layout="@layout/activity_sign_up_owner" >
 
         <action
-            android:id="@+id/action_OwnerSignUp_to_Login"
+            android:id="@+id/action_OwnerSignUp_to_ownerLogin"
             app:destination="@id/Login" />
         <action
             android:id="@+id/action_OwnerSignUp_to_logout"
