@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- fragment_product_list.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,21 +8,26 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProducts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="8dp" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add" />
+
     <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fragment_container">
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddProduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_add" />
+        android:layout_alignParentBottom="true">
+
+        <!-- The content of your fragment container goes here -->
+
     </FrameLayout>
 
-
-</LinearLayout>
+</RelativeLayout>
