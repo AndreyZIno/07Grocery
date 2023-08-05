@@ -75,8 +75,9 @@ public class ProductStatusFragment extends Fragment {
                 for(DataSnapshot productSnapshot : snapshot.getChildren()){
                     String productName = productSnapshot.child("ProductName").getValue(String.class);
                     String productPrice = productSnapshot.child("ProductPrice").getValue(String.class);
+                    String productQuantity = productSnapshot.child("ProductQuantity").getValue(String.class);
                     String productStatus = productSnapshot.child("ProductStatus").getValue(String.class);
-                    String productOrder = productName + " " + productPrice + " " + productStatus;
+                    String productOrder = productName + " " + productPrice + " " + productStatus + " " + productQuantity;
                     productStatusList.add(productOrder);
                 }
             }
