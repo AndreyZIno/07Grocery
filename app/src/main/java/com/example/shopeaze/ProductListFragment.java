@@ -105,7 +105,17 @@ public class ProductListFragment extends Fragment {
             }
         });
 
+        productAdapter.setOnProductClickListener(product -> openProductDetailsFragment(product.getProductID()));
+
         return view;
+    }
+
+    private void openProductDetailsFragment(String productID) {
+        ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(productID);
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void openStoreProductDetailsFragment(String productID) {
