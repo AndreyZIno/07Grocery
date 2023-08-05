@@ -5,14 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewStoreName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Store Name"
-        android:textSize="18sp"
-        android:layout_margin="16dp"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProducts"
         android:layout_width="match_parent"

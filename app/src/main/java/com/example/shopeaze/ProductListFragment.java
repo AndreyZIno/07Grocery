@@ -1,86 +1,101 @@
 package com.example.shopeaze;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
-import java.util.List;
 
-public class ProductListFragment extends Fragment implements ProductAdapter.OnItemClickListener, ProductList.OnProductsLoadedListener {
+public class ProductListFragment extends Fragment {
+    private RecyclerView recyclerView;
+    private ArrayList<Product> products;
+    private ProductAdapter productAdapter;
+    private DatabaseReference productsRef;
+    private ProgressDialog progressDialog;
 
-    private static final String TAG = "ProductListFragment";
-    private static final String ARG_STORE_ID = "store_id";
-    private ProductAdapter adapter;
-    private RecyclerView recyclerViewProducts;
-    private ProductList productList;
-
-    public static ProductListFragment newInstance(String storeID) {
-        Log.d(TAG, "Creating new ProductListFragment for store ID: " + storeID);
-        ProductListFragment fragment = new ProductListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_STORE_ID, storeID);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "Creating view for ProductListFragment");
-        View rootView = inflater.inflate(R.layout.fragment_product_list, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_product_list, container, false);
 
-        recyclerViewProducts = rootView.findViewById(R.id.recyclerViewProducts);
-        recyclerViewProducts.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Fetching Products...");
+        progressDialog.show();
 
-        String storeID = getArguments().getString(ARG_STORE_ID);
-        Log.d(TAG, "Store ID: " + storeID);
+        recyclerView = view.findViewById(R.id.recyclerViewProducts);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        productList = new ProductList(storeID);
-        productList.setOnProductsLoadedListener(this);
+        products = new ArrayList<>();
+        productAdapter = new ProductAdapter(getActivity(), products);
 
-        return rootView;
-    }
+        recyclerView.setAdapter(productAdapter);
+        // Get the reference to your Realtime Database node, in this case, "Products"
+        productsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("StoreOwner")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Products");
 
-    @Override
-    public void onProductsLoaded(List<Product> products) {
-        adapter = new ProductAdapter(products, this);
-        recyclerViewProducts.setAdapter(adapter);
-    }
+        // Set up a ChildEventListener to listen for changes in the data
+        productsRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                Product product = dataSnapshot.getValue(Product.class);
+                products.add(product);
+                productAdapter.notifyDataSetChanged();
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+            }
 
-    @Override
-    public void onItemClick(Product product) {
-        Log.d(TAG, "Product clicked: " + product.getName());
-        openStoreProductDetailsFragment(product.getProductID());
-    }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle changes to existing children if needed
+            }
 
-    private void openStoreProductDetailsFragment(String productID) {
-        Log.d(TAG, "Opening StoreProductDetailsFragment for product ID: " + productID);
-        StoreProductDetailsFragment fragment = StoreProductDetailsFragment.newInstance(productID);
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                // Handle removed children if needed
+            }
 
-    private void showAddProductDialog() {
-        // Create and show a dialog to gather product information from the user
-        AddProductDialog dialog = new AddProductDialog();
-        dialog.show(requireActivity().getSupportFragmentManager(), "AddProductDialog");
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle moved children if needed
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                if (progressDialog.isShowing())
+                    progressDialog.dismiss();
+                Log.w("TAG", "Listen failed.", databaseError.toException());
+            }
+        });
+
+        return view;
     }
 }
-
