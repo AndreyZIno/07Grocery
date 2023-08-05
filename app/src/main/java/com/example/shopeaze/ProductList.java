@@ -25,6 +25,9 @@ public class ProductList {
     public List<Product> products;
     private OnProductsLoadedListener onProductsLoadedListener;
 
+    private String storeID;
+    private DatabaseReference productsRef;
+
     public ProductList() {
         Log.d(TAG, "Creating new ProductList");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -38,6 +41,11 @@ public class ProductList {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("Users").child("StoreOwner").child(storeID).child("Products");
         products = new ArrayList<>();
+        this.storeID = storeID;
+        productsRef = FirebaseDatabase.getInstance().getReference()
+                        .child("Users")
+                .child("StoreOwner")
+                .child(storeID);
         loadProductsFromFirebase();
     }
 
