@@ -123,6 +123,9 @@
         android:label="product_details"
         tools:layout="@layout/fragment_product_details">
 
+        <action
+            android:id="@+id/action_product_details_to_product_list"
+            app:destination="@id/ProductList" />
 
     </fragment>
 

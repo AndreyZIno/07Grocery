@@ -26,12 +26,6 @@ public class AddProductDialog extends DialogFragment {
         this.onProductAddedListener = onProductAddedListener;
     }
 
-    public static AddProductDialog newInstance(ProductListFragment productListFragment) {
-        AddProductDialog dialog = new AddProductDialog();
-        dialog.setTargetFragment(productListFragment, 0);
-        return dialog;
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
