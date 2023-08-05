@@ -8,11 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class AddProductDialog extends DialogFragment {
 
@@ -24,6 +29,101 @@ public class AddProductDialog extends DialogFragment {
 
     public void setOnProductAddedListener(OnProductAddedListener onProductAddedListener) {
         this.onProductAddedListener = onProductAddedListener;
+    }
+
+    private void addProduct(final Product newProduct) {
+        // Get the current user's UID
+        String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Get the reference to the "Users" node in the Firebase database
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+
+        // Get the reference to the "StoreOwner" node under the current user's UID
+        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner").child(currentUserUid);
+
+        // Add the product under the "StoreOwner" node
+        storeOwnerRef.child("Products").push().setValue(newProduct);
+
+        if (onProductAddedListener != null) {
+            onProductAddedListener.onProductAdded(newProduct);
+        }
+    }
+
+    private void checkProductExistence(final Product newProduct) {
+        // Get the current user's UID
+        String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Get the reference to the "Users" node in the Firebase database
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+
+        // Get the reference to the "StoreOwner" node under the current user's UID
+        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner").child(currentUserUid);
+
+        // Get the reference to the "Products" node under the "StoreOwner" node
+        DatabaseReference productsRef = storeOwnerRef.child("Products");
+
+        // Query to check if the product with the same name exists
+        Query productNameQuery = productsRef.orderByChild("name").equalTo(newProduct.getName());
+
+        productNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Product with the same name already exists
+                    // Now, check for the same brand
+                    checkProductBrandExistence(newProduct);
+                } else {
+                    // Product name is unique, check for brand existence
+                    checkProductBrandExistence(newProduct);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error if the query is canceled
+                // For example, log the error or show an error message
+            }
+        });
+    }
+
+    private void checkProductBrandExistence(final Product newProduct) {
+        // Get the current user's UID
+        String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Get the reference to the "Users" node in the Firebase database
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+
+        // Get the reference to the "StoreOwner" node under the current user's UID
+        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner").child(currentUserUid);
+
+        // Get the reference to the "Products" node under the "StoreOwner" node
+        DatabaseReference productsRef = storeOwnerRef.child("Products");
+
+        // Query to check if the product with the same brand exists
+        Query productBrandQuery = productsRef.orderByChild("brand").equalTo(newProduct.getBrand());
+
+        productBrandQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Product with the same brand already exists
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Product Exists")
+                            .setMessage("The product with the same name and brand already exists.")
+                            .setPositiveButton("OK", null)
+                            .show();
+                } else {
+                    // Product name and brand are both unique, add the product
+                    addProduct(newProduct);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error if the query is canceled
+                // For example, log the error or show an error message
+            }
+        });
     }
 
     @Override
@@ -59,22 +159,8 @@ public class AddProductDialog extends DialogFragment {
                         newProduct.setDescription(productDescription);
                         newProduct.setQuantity(productQuantity);
 
-                        // Get the current user's UID
-                        String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                        // Get the reference to the "Users" node in the Firebase database
-                        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-
-                        // Get the reference to the "StoreOwner" node under the current user's UID
-                        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner").child(currentUserUid);
-
-                        // Add the product under the "StoreOwner" node
-                        storeOwnerRef.child("Products").push().setValue(newProduct);
-
-                        if (onProductAddedListener != null) {
-                            onProductAddedListener.onProductAdded(newProduct);
-                        }
-
+                        // Check if the product already exists (by name and brand)
+                        checkProductExistence(newProduct);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -86,4 +172,5 @@ public class AddProductDialog extends DialogFragment {
 
         return builder.create();
     }
+
 }
