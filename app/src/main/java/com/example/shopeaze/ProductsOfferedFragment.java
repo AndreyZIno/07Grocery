@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-
 
 public class ProductsOfferedFragment extends Fragment implements ProductsOfferedAdapter.OnItemClickListener, StoreList.OnStoresLoadedListener, ProductList.OnProductsLoadedListener {
     private static final String TAG = "ProductsOfferedFragment";
@@ -70,6 +70,7 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
 
     @Override
     public void onProductsLoaded(List<Product> products) {
+        Log.d(TAG, "onProductsLoaded: products size: " + products.size());
         adapter = new ProductsOfferedAdapter(products, this);
         recyclerViewProducts.setAdapter(adapter);
     }
@@ -77,17 +78,23 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
     @Override
     public void onItemClick(Product product) {
         Log.d(TAG, "Product clicked: " + product.getName());
-        openStoreProductDetailsFragment(product.getProductID());
+
+        String storeID = getArguments().getString(ARG_STORE_ID);
+
+        openShopperProductDetailsFragment(storeID, product);
     }
 
-    private void openStoreProductDetailsFragment(String productID) {
-        Log.d(TAG, "Opening StoreProductDetailsFragment for product ID: " + productID);
-        StoreProductDetailsFragment fragment = StoreProductDetailsFragment.newInstance(productID);
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    private void openShopperProductDetailsFragment(String storeID, Product product) {
+        Log.d(TAG, "Opening ShopperProductDetails for product: " + product.getName());
+
+        Bundle bundle = new Bundle();
+        bundle.putString("store_id", storeID);
+        bundle.putSerializable("product", product);
+
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_ProductsOffered_to_ProductDetails, bundle);
     }
+
 
     private Store getStoreByID(String storeID, List<Store> stores) throws AppExceptions.StoreNotFoundException {
         for (Store store : stores) {
@@ -97,14 +104,4 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
         }
         throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
     }
-    private Store getStoreDetails(String storeID) {
-        StoreList storeList = new StoreList();
-        try {
-            return storeList.getStoreByID(storeID);
-        } catch (AppExceptions.StoreNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 }
