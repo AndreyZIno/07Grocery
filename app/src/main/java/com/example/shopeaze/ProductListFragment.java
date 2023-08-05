@@ -109,7 +109,7 @@ public class ProductListFragment extends Fragment {
     }
 
     private void openStoreProductDetailsFragment(String productID) {
-        StoreProductDetailsFragment fragment = StoreProductDetailsFragment.newInstance(productID);
+        ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(productID);
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)

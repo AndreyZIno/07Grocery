@@ -14,6 +14,9 @@
             android:id="@+id/action_Login_to_SignUp"
             app:destination="@id/signUp"   />
         <action
+            android:id="@+id/action_Login_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen" />
+        <action
             android:id="@+id/action_Login_to_logout"
             app:destination="@id/logout" />
         <action
