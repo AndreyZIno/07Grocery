@@ -50,7 +50,7 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     private Product getProductDetails(String productID) {
-        ProductList productList = new ProductList(FirebaseAuth.getInstance().getCurrentUser(), null);
+        ProductList productList = new ProductList();
         try {
             return productList.getProductByID(productID);
         } catch (AppExceptions.ProductNotFoundException e) {

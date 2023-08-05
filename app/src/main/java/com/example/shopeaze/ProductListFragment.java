@@ -28,8 +28,9 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
     private List<Product> products;
     private ProductAdapter adapter;
 
-    private DatabaseReference storeOwnerRef;
-    public TextView textViewStoreName;
+    private DatabaseReference productsRef;
+    private TextView textViewStoreName;
+    private FirebaseUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,10 +41,10 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
 
         // Initialize Firebase components
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             String storeOwnerId = currentUser.getUid();
-            storeOwnerRef = FirebaseDatabase.getInstance().getReference().child("Users").child("StoreOwner").child(storeOwnerId);
+            productsRef = FirebaseDatabase.getInstance().getReference().child("Users").child("StoreOwner").child(storeOwnerId);
 
             fetchStoreName();
 
@@ -55,6 +56,7 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
             adapter = new ProductAdapter(products, this);
             recyclerViewProducts.setAdapter(adapter);
 
+            fetchStoreName();
             fetchProducts();
         }
 
@@ -70,7 +72,6 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
     }
 
     private void fetchProducts() {
-        DatabaseReference productsRef = storeOwnerRef.child("Products");
         productsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -81,7 +82,6 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
                         products.add(product);
                     }
                 }
-                System.out.println("Products: " + products);
                 // Update the adapter with the fetched products
                 adapter.setProducts(products);
             }
@@ -96,6 +96,9 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
     }
 
     private void fetchStoreName() {
+        DatabaseReference storeOwnerRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child("StoreOwner").child(currentUser.getUid());
+
         storeOwnerRef.child("StoreName").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -103,14 +106,12 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
                 if (storeName != null) {
                     textViewStoreName.setText(storeName);
                 } else {
-                    // The store name is not available or null in the database
                     showToast("Store name not found");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the database error here
                 String errorMessage = "Error fetching store name: " + databaseError.getMessage();
                 showToast(errorMessage);
             }

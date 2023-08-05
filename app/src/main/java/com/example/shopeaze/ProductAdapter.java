@@ -15,7 +15,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
     private static final String TAG = "ProductAdapter";
     private List<Product> products;
-    private OnItemClickListener itemClickListener;
+    private OnItemClickListener listener;
+
+    public void setProducts(List<Product> products) {
+    }
 
     public interface OnItemClickListener {
         void onItemClick(Product product);
@@ -24,7 +27,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public ProductAdapter(List<Product> products, OnItemClickListener itemClickListener) {
         Log.d(TAG, "Creating new ProductAdapter with " + products.size() + " products");
         this.products = products;
-        this.itemClickListener = itemClickListener;
+        this.listener = itemClickListener;
     }
 
     @Override
@@ -38,9 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Log.d(TAG, "Binding product at position " + position);
         Product product = products.get(position);
-        holder.textViewProductName.setText(product.getName());
-        holder.textViewProductBrand.setText(product.getBrand());
-        holder.textViewProductPrice.setText(String.valueOf(product.getPrice()));
+        holder.bind(product, listener);
     }
 
     @Override
@@ -50,13 +51,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewProductName, textViewProductBrand, textViewProductPrice;
+        private TextView textViewProductName, textViewProductBrand, textViewProductPrice;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewProductName = itemView.findViewById(R.id.textViewProductName);
             textViewProductBrand = itemView.findViewById(R.id.textViewProductBrand);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
+        }
+
+        public void bind(final Product product, final ProductAdapter.OnItemClickListener listener) {
+            textViewProductName.setText(product.getName());
+            textViewProductBrand.setText(product.getBrand());
+            textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(product);
+                }
+            });
         }
     }
 }

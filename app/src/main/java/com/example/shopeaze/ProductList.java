@@ -3,9 +3,6 @@ package com.example.shopeaze;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
