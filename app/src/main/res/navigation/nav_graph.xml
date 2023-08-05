@@ -140,7 +140,11 @@
         android:id="@+id/ProductList"
         android:name="com.example.shopeaze.ProductListFragment"
         android:label="fragment_product_list"
-        tools:layout="@layout/fragment_product_list" />
+        tools:layout="@layout/fragment_product_list" >
+        <action
+            android:id="@+id/action_product_list_to_product_details"
+            app:destination="@id/ProductDetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/orderFragment"
@@ -162,9 +166,6 @@
         <action
             android:id="@+id/action_ownerLogin_to_ProductList"
             app:destination="@id/ProductList" />
-        <action
-            android:id="@+id/action_product_list_to_product_details"
-            app:destination="@id/ProductDetails" />
 
     </fragment>
 

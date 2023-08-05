@@ -5,14 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 public class ProductDetailsFragment extends Fragment {
     private static final String ARG_PRODUCT = "product_id";
@@ -31,8 +30,31 @@ public class ProductDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_product_details, container, false);
 
-        product = (Product) getArguments().getSerializable(ARG_PRODUCT);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            product = (Product) arguments.getSerializable(ARG_PRODUCT);
+            if (product != null) {
+                initializeViews(rootView);
+            } else {
+                Toast.makeText(requireContext(), "Product data is null.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(requireContext(), "No arguments passed to the fragment.", Toast.LENGTH_SHORT).show();
+        }
 
+        ImageButton imageButtonGoBack = rootView.findViewById(R.id.buttonGoBack);
+        imageButtonGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle "go back" button click by navigating back to the previous fragment
+                requireActivity().onBackPressed();
+            }
+        });
+
+        return rootView;
+    }
+
+    private void initializeViews(View rootView) {
         ImageView imageViewProduct = rootView.findViewById(R.id.imageViewProduct);
         TextView textViewProductName = rootView.findViewById(R.id.textViewProductName);
         TextView textViewProductBrand = rootView.findViewById(R.id.textViewProductBrand);
@@ -48,7 +70,7 @@ public class ProductDetailsFragment extends Fragment {
         textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
         textViewProductDescription.setText(product.getDescription());
 
-        return rootView;
+        // Add click listeners and implement actions for the buttons if needed.
     }
 }
 

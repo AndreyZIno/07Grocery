@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/gradient_with_image">
 
     <!-- ImageView to display the product image -->
     <ImageView
@@ -16,7 +17,20 @@
         android:scaleType="centerCrop"
         android:padding="16dp" />
 
+    <!-- Button to go back -->
+
     <!-- TextView to display the product name -->
+    <ImageButton
+        android:id="@+id/buttonGoBack"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="18dp"
+        android:background="@null"
+        android:src="@drawable/go_back_btn" />
+
     <TextView
         android:id="@+id/textViewProductName"
         android:layout_width="wrap_content"
@@ -82,6 +96,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:padding="8dp"
-        android:text="Remove Product" />
+        android:text="Remove" />
 
 </LinearLayout>

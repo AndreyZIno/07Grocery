@@ -159,11 +159,11 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
     }
 
     private void openProductDetailsFragment(Product product) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("product", product);
-
         NavController navController = NavHostFragment.findNavController(this);
-        navController.navigate(R.id.action_product_list_to_product_details, bundle);
+        navController.navigate(
+                R.id.action_product_list_to_product_details,
+                ProductDetailsFragment.newInstance(product).getArguments()
+        );
     }
 
     private void showAddProductDialog() {
@@ -242,5 +242,11 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                 Log.w("TAG", "Listen failed.", databaseError.toException());
             }
         });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Refresh the products when the fragment becomes visible again
+        refreshProducts();
     }
 }
