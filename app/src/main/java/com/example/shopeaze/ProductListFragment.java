@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ProductListFragment extends Fragment implements AddProductDialog.OnProductAddedListener{
+public class ProductListFragment extends Fragment implements AddProductDialog.OnProductAddedListener,
+    ProductAdapter.OnProductClickListener {
     private RecyclerView recyclerView;
     private ArrayList<Product> products;
     private ProductAdapter productAdapter;
@@ -60,7 +63,7 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         products = new ArrayList<>();
-        productAdapter = new ProductAdapter(getActivity(), products);
+        productAdapter = new ProductAdapter(getActivity(), products, this);
 
         fetchStoreName();
 
@@ -150,12 +153,17 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
         return view;
     }
 
-    private void openStoreProductDetailsFragment(String productID) {
-        ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(productID);
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    @Override
+    public void onItemClick(Product product) {
+        openProductDetailsFragment(product);
+    }
+
+    private void openProductDetailsFragment(Product product) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+
+        NavController navController = NavHostFragment.findNavController(this);
+        navController.navigate(R.id.action_product_list_to_product_details, bundle);
     }
 
     private void showAddProductDialog() {
