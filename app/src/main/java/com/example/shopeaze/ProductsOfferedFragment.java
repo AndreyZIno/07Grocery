@@ -16,18 +16,18 @@ import java.util.List;
 
 public class ProductsOfferedFragment extends Fragment implements ProductsOfferedAdapter.OnItemClickListener, StoreList.OnStoresLoadedListener, ProductList.OnProductsLoadedListener {
     private static final String TAG = "ProductsOfferedFragment";
-    private static final String ARG_STORE_ID = "store_id";
+    private static final String ARG_STORE = "store";
     private List<Product> products;
     private ProductsOfferedAdapter adapter;
     private RecyclerView recyclerViewProducts;
     private StoreList storeList;
     private ProductList productList;
 
-    public static ProductsOfferedFragment newInstance(String storeID) {
-        Log.d(TAG, "Creating new ProductsOfferedFragment for store ID: " + storeID);
+    public static ProductsOfferedFragment newInstance(Store store) {
+        Log.d(TAG, "Creating new ProductsOfferedFragment for store: " + store.getStoreName());
         ProductsOfferedFragment fragment = new ProductsOfferedFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STORE_ID, storeID);
+        args.putSerializable(ARG_STORE, store);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,12 +40,12 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
         recyclerViewProducts = rootView.findViewById(R.id.recyclerViewProductsOffered);
         recyclerViewProducts.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
-        String storeID = getArguments().getString(ARG_STORE_ID);
-        Log.d(TAG, "Store ID: " + storeID);
+        Store store = (Store) getArguments().getSerializable(ARG_STORE);
+        Log.d(TAG, "Store: " + store.getStoreName());
         storeList = new StoreList();
         storeList.setOnStoresLoadedListener(this);
 
-        productList = new ProductList(storeID);
+        productList = new ProductList(store.getStoreID());
         productList.setOnProductsLoadedListener(this);
 
         return rootView;
@@ -53,18 +53,11 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
 
     @Override
     public void onStoresLoaded(List<Store> stores) {
-        String storeID = getArguments().getString(ARG_STORE_ID);
-        Store store = null;
-        try {
-            store = getStoreByID(storeID, stores);
-            if (store != null) {
-                Log.d(TAG, "Store found: " + store.getStoreName());
-            } else {
-                Log.d(TAG, "Store not found");
-            }
-        } catch (AppExceptions.StoreNotFoundException e) {
-            e.printStackTrace();
-            Log.d(TAG, "getStoreDetails store not found ");
+        Store store = (Store) getArguments().getSerializable(ARG_STORE);
+        if (store != null) {
+            Log.d(TAG, "Store found: " + store.getStoreName());
+        } else {
+            Log.d(TAG, "Store not found");
         }
     }
 
@@ -79,29 +72,19 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
     public void onItemClick(Product product) {
         Log.d(TAG, "Product clicked: " + product.getName());
 
-        String storeID = getArguments().getString(ARG_STORE_ID);
+        Store store = (Store) getArguments().getSerializable(ARG_STORE);
 
-        openShopperProductDetailsFragment(storeID, product);
+        openShopperProductDetailsFragment(store, product);
     }
 
-    private void openShopperProductDetailsFragment(String storeID, Product product) {
+    private void openShopperProductDetailsFragment(Store store, Product product) {
         Log.d(TAG, "Opening ShopperProductDetails for product: " + product.getName());
 
         Bundle bundle = new Bundle();
-        bundle.putString("store_id", storeID);
+        bundle.putSerializable("store", store);
         bundle.putSerializable("product", product);
 
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(R.id.action_ProductsOffered_to_ProductDetails, bundle);
-    }
-
-
-    private Store getStoreByID(String storeID, List<Store> stores) throws AppExceptions.StoreNotFoundException {
-        for (Store store : stores) {
-            if (store.getStoreID().equals(storeID)) {
-                return store;
-            }
-        }
-        throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
     }
 }
