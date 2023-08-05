@@ -9,48 +9,54 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
-    private static final String TAG = "ProductAdapter";
     private List<Product> products;
-    private OnItemClickListener listener;
 
-    public void setProducts(List<Product> products) {
-    }
 
-    public interface OnItemClickListener {
-        void onItemClick(Product product);
-    }
-
-    public ProductAdapter(List<Product> products, OnItemClickListener itemClickListener) {
-        Log.d(TAG, "Creating new ProductAdapter with " + products.size() + " products");
+    public ProductAdapter(List<Product> products) {
         this.products = products;
-        this.listener = itemClickListener;
     }
 
+    @NonNull
     @Override
-    public ProductViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "Creating new ProductViewHolder");
+    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
         return new ProductViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Log.d(TAG, "Binding product at position " + position);
         Product product = products.get(position);
-        holder.bind(product, listener);
+        holder.textViewProductName.setText(product.getName());
+        holder.textViewProductBrand.setText(product.getBrand());
+        holder.textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
+
+        /*if (holder.textViewProductImage == null) {
+            Log.d("ProductAdapter", "Product image is null");
+        }
+        if (product == null) {
+            Log.d("ProductAdapter", "Product is null");
+        }
+        else if (product.getImageURL() == null) {
+            Log.d("ProductAdapter", "Product image URL is null");
+        }
+        else {
+            Glide.with(holder.textViewProductImage.getContext())
+                    .load(product.getImageURL()).into(holder.textViewProductImage);
+        }*/
     }
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "Getting item count: " + products.size());
         return products.size();
     }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder {
+    public class ProductViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewProductName, textViewProductBrand, textViewProductPrice;
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -60,16 +66,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
         }
 
-        public void bind(final Product product, final ProductAdapter.OnItemClickListener listener) {
-            textViewProductName.setText(product.getName());
-            textViewProductBrand.setText(product.getBrand());
-            textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(product);
-                }
-            });
-        }
     }
 }

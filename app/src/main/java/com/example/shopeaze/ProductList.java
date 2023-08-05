@@ -16,6 +16,7 @@ maintaining a local copy of the products for efficient access and display w/i th
  */
 
 public class ProductList {
+
     public interface OnProductsLoadedListener{
         void onProductsLoaded(List<Product> products);
     }
@@ -62,7 +63,7 @@ public class ProductList {
         return products;
     }
 
-    private void loadProductsFromFirebase() {
+    public void loadProductsFromFirebase() {
         Log.d(TAG, "Loading products from Firebase");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

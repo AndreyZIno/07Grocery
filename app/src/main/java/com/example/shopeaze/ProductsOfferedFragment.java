@@ -98,7 +98,7 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
         }
         throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
     }
-    private Store getStoreDetails(String storeID) {
+    private Store getStoreDetails(String storeID) throws AppExceptions.StoreNotFoundException {
         StoreList storeList = new StoreList();
         try {
             return storeList.getStoreByID(storeID);
@@ -106,7 +106,7 @@ public class ProductsOfferedFragment extends Fragment implements ProductsOffered
             e.printStackTrace();
             return null;
         }
-        throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
+        // throw new AppExceptions.StoreNotFoundException("Store with ID " + storeID + " not found.");
     }
 
 }

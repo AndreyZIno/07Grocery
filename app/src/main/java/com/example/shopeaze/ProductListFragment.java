@@ -4,135 +4,98 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.FloatingWindow;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductListFragment extends Fragment implements ProductAdapter.OnItemClickListener {
-    private List<Product> products;
-    private ProductAdapter adapter;
+public class ProductListFragment extends Fragment implements AddProductDialog.OnProductAddedListener{
 
+    private RecyclerView recyclerView;
+    private ProductAdapter productAdapter;
+    private List<Product> productList;
     private DatabaseReference productsRef;
-    private TextView textViewStoreName;
     private FirebaseUser currentUser;
+
+    public ProductListFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_product_list, container, false);
-
-        // Find the TextView and set the store name
-        textViewStoreName = rootView.findViewById(R.id.textViewStoreName);
-
-        // Initialize Firebase components
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
-            String storeOwnerId = currentUser.getUid();
-            productsRef = FirebaseDatabase.getInstance().getReference().child("Users").child("StoreOwner").child(storeOwnerId);
-
-            fetchStoreName();
-
-            RecyclerView recyclerViewProducts = rootView.findViewById(R.id.recyclerViewProducts);
-            recyclerViewProducts.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-            // Initialize the adapter and set it to the RecyclerView
-            products = new ArrayList<>();
-            adapter = new ProductAdapter(products, this);
-            recyclerViewProducts.setAdapter(adapter);
-
-            fetchStoreName();
-            fetchProducts();
-        }
-
-        FloatingActionButton fabAddProduct = rootView.findViewById(R.id.fabAddProduct);
-        fabAddProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddProductDialog();
-            }
-        });
-
-        return rootView;
-    }
-
-    private void fetchProducts() {
-        productsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Product> products = new ArrayList<>();
-                for (DataSnapshot productSnapshot : dataSnapshot.getChildren()) {
-                    Product product = productSnapshot.getValue(Product.class);
-                    if (product != null) {
-                        products.add(product);
-                    }
-                }
-                // Update the adapter with the fetched products
-                adapter.setProducts(products);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the database error here
-                String errorMessage = "Error fetching products: " + databaseError.getMessage();
-                showToast(errorMessage);
-            }
-        });
-    }
-
-    private void fetchStoreName() {
-        DatabaseReference storeOwnerRef = FirebaseDatabase.getInstance().getReference()
-                .child("Users").child("StoreOwner").child(currentUser.getUid());
-
-        storeOwnerRef.child("StoreName").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String storeName = dataSnapshot.getValue(String.class);
-                if (storeName != null) {
-                    textViewStoreName.setText(storeName);
-                } else {
-                    showToast("Store name not found");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                String errorMessage = "Error fetching store name: " + databaseError.getMessage();
-                showToast(errorMessage);
-            }
-        });
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        View view = inflater.inflate(R.layout.fragment_product_list, container, false);
+        recyclerView = view.findViewById(R.id.recyclerViewProducts);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        productList = new ArrayList<>();
+        productAdapter = new ProductAdapter(productList);
+        recyclerView.setAdapter(productAdapter);
+        return view;
     }
 
     @Override
-    public void onItemClick(Product product) {
-        openProductDetailsFragment(product.getProductID());
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
+        productsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("StoreOwner")
+                .child(currentUser.getUid())
+                .child("products");
+        productsRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                Product product = dataSnapshot.getValue(Product.class);
+                if (product != null) {
+                    productList.add(product);
+                    productAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle product update if needed
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                // Handle product removal if needed
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle product moved if needed
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle database error if needed
+            }
+        });
+
+        FloatingActionButton addButton = view.findViewById(R.id.fabAddProduct);
+        addButton.setOnClickListener(v -> showAddProductDialog());
     }
 
-    private void openProductDetailsFragment(String productID) {
-        ProductDetailsFragment fragment = ProductDetailsFragment.newInstance(productID);
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
+    @Override
+    public void onProductAdded(Product product) {
+        productList.add(product);
+        productAdapter.notifyDataSetChanged();
     }
 
     private void showAddProductDialog() {
@@ -140,5 +103,4 @@ public class ProductListFragment extends Fragment implements ProductAdapter.OnIt
         AddProductDialog dialog = new AddProductDialog();
         dialog.show(requireActivity().getSupportFragmentManager(), "AddProductDialog");
     }
-
 }
