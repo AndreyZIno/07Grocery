@@ -108,13 +108,13 @@ public class ProductListFragment extends Fragment {
         return view;
     }
 
-    private void openStoreProductDetailsFragment(String productID) {
+    /*private void openStoreProductDetailsFragment(String productID) {
         StoreProductDetailsFragment fragment = StoreProductDetailsFragment.newInstance(productID);
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
-    }
+    }*/
 
     private void showAddProductDialog() {
         // Create and show a dialog to gather product information from the user
