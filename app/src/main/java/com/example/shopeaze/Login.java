@@ -78,40 +78,57 @@ public class Login extends Fragment {       //shopper login
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email;
-                String password;
-                //read email and password:
-                email = String.valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
+                String email = String.valueOf(editTextEmail.getText());
+                Query query = db.getReference("Users").child("Shoppers").orderByChild("email").equalTo(email);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            progressBar.setVisibility(View.VISIBLE);
+                            String email;
+                            String password;
+                            //read email and password:
+                            email = String.valueOf(editTextEmail.getText());
+                            password = String.valueOf(editTextPassword.getText());
 
-                if (TextUtils.isEmpty(email)){
-                    Toast.makeText(getActivity(), "Please enter email", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-                if (TextUtils.isEmpty(password)){
-                    Toast.makeText(getActivity(), "Please enter password", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (TextUtils.isEmpty(email)){
+                                Toast.makeText(getActivity(), "Please enter email", Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    //Get the current user:
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
-                                    NavHostFragment.findNavController(Login.this).navigate(R.id.action_Login_to_StoreList);
-                                } else {
-                                    Toast.makeText(getActivity(), "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                                return;
                             }
-                        });
+                            if (TextUtils.isEmpty(password)){
+                                Toast.makeText(getActivity(), "Please enter password", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                                return;
+                            }
+                            mAuth.signInWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            progressBar.setVisibility(View.GONE);
+                                            if (task.isSuccessful()) {
+                                                //Get the current user:
+                                                FirebaseUser user = mAuth.getCurrentUser();
+                                                Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
+                                                NavHostFragment.findNavController(Login.this).navigate(R.id.action_Login_to_StoreList);
+                                            } else {
+                                                Toast.makeText(getActivity(), "Authentication failed.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }
