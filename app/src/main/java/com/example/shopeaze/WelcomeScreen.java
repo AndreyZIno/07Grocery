@@ -1,6 +1,7 @@
 package com.example.shopeaze;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +51,11 @@ public class WelcomeScreen extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(snapshot.exists()){ //Shopper
-                        Toast.makeText(getActivity(), "Welcome back, shopper!", Toast.LENGTH_SHORT);
+                        //Make toast to welcome back shopper
                         shopperButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                Toast.makeText(getActivity(), "Welcome back, shopper!", Toast.LENGTH_SHORT).show();
                                 NavHostFragment.findNavController(WelcomeScreen.this)
                                         .navigate(R.id.action_WelcomeScreen_to_Login);
                             }
@@ -61,23 +63,25 @@ public class WelcomeScreen extends Fragment {
                         ownerButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Toast.makeText(getActivity(), "You are not an owner!", Toast.LENGTH_SHORT);
+                                Toast.makeText(getActivity(), "You are not an owner!", Toast.LENGTH_SHORT).show();
+                                Log.d("WelcomeScreen", "You are not an owner!");
                             }
                         });
 
 
                     }
                     else{ //Owner
-                        Toast.makeText(getActivity(), "Welcome back, owner!", Toast.LENGTH_SHORT);
                         shopperButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                            Toast.makeText(getActivity(), "You are not a shopper!", Toast.LENGTH_SHORT);
+                                Toast.makeText(getActivity(), "You are not a shopper!", Toast.LENGTH_SHORT).show();
+                                Log.d("WelcomeScreen", "You are not a shopper!");
                             }
                         });
                         ownerButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                Toast.makeText(getActivity(), "Welcome back, owner!", Toast.LENGTH_SHORT).show();
                                 NavHostFragment.findNavController(WelcomeScreen.this)
                                         .navigate(R.id.action_WelcomeScreen_to_ownerLogin);
                             }

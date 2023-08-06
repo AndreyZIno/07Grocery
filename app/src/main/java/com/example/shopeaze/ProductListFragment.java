@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -136,6 +137,17 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
             @Override
             public void onClick(View v) {
                 showAddProductDialog();
+            }
+        });
+
+        /*Testing owner orders view*/
+        FloatingActionButton fabOwnerOrders = view.findViewById(R.id.fabOwnerOrders);
+
+        fabOwnerOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Navigate to fragment_product_orders_view.xml
+                NavHostFragment.findNavController(ProductListFragment.this).navigate(R.id.action_ProductList_to_OwnerOrders);
             }
         });
 

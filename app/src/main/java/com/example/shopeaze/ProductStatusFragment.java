@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductStatusFragment extends Fragment {
@@ -39,19 +40,31 @@ public class ProductStatusFragment extends Fragment {
 
     // Declare a List to hold the orders data.
     private List<String> productStatusList;
+    int count;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance();
         View view = inflater.inflate(R.layout.fragment_product_order_view, container, false);
-
-        productStatusList = view.findViewById(R.id.productOrderedListView);
-
+        productStatusListView = view.findViewById(R.id.productOrderedListView);
+        productStatusList = new ArrayList<>();
+        //Try this if its null then set the list to 0
+        try{
+            int count = productStatusList.size();
+        } catch (NullPointerException e){
+            count = 0;
+        }
+        if(count == 0){
+            Toast.makeText(getActivity(), "No orders to display", Toast.LENGTH_SHORT).show();
+        }
         // Initialize the refresh Button and set a click listener.
         Button refreshButton = view.findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(v -> loadProducts());
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
-
+        // Initialize the ArrayAdapter.
+        productStatusAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, productStatusList);
+        productStatusListView.setAdapter(productStatusAdapter);
 
         loadProducts();
 
