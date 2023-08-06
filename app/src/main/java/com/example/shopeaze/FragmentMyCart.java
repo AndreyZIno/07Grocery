@@ -43,6 +43,15 @@ public class FragmentMyCart extends Fragment {
                 }
             }
         });
+
+        ImageButton ordersButton = rootView.findViewById(R.id.button_orders);
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(FragmentMyCart.this);
+                navController.navigate(R.id.action_Cart_to_Orders);
+            }
+        });
         return rootView;
     }
 

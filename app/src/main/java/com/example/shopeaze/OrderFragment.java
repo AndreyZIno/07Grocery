@@ -95,6 +95,17 @@ public class OrderFragment extends Fragment {
 
     // Function to load orders from Firestore.
     private void fetchData() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        if (currentUser == null) {
+            Log.d("OrderFragment", "Current user is null");
+            return;
+        } else {
+            String userId = currentUser.getUid();
+            Log.d("OrderFragment", "Current user has id: " + userId);
+        }
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("orders");
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -105,9 +116,9 @@ public class OrderFragment extends Fragment {
                 for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
                     Order order = orderSnapshot.getValue(Order.class);
 
-                    if(order != null) {
+                    if (order != null) {
                         for (Order.Products product : order.getProducts()) {
-                            if(product.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            if (product.getUserId() != null && product.getUserId().equals(currentUser.getUid())) {
                                 orderList.add(order);
                                 break;  // Break after adding, to avoid adding the same order multiple times
                             }
@@ -124,8 +135,6 @@ public class OrderFragment extends Fragment {
             }
         });
     }
-
-
 
 
 

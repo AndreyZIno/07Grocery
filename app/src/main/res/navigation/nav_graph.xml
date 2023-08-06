@@ -120,11 +120,6 @@
         android:label="Product Details"
         tools:layout="@layout/activity_shopper_product_details">
 
-        <action
-            android:id="@+id/action_ShopperProductDetails_to_ProductsOffered"
-            app:destination="@id/ProductsOffered"
-            />
-
 
     </fragment>
 
@@ -199,6 +194,9 @@
         <action
             android:id="@+id/action_Cart_to_StoreList"
             app:destination="@id/StoreList"/>
+        <action
+            android:id="@+id/action_Cart_to_Orders"
+            app:destination="@id/OrderFragment"/>
     </fragment>
 
 
