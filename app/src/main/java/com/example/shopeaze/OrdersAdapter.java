@@ -11,37 +11,38 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
+    private List<Order> orderList;
 
-    private List<String> ordersList;
-
-    public OrdersAdapter(List<String> ordersList) {
-        this.ordersList = ordersList;
+    public OrdersAdapter(List<Order> orderList) {
+        this.orderList = orderList;
     }
 
-    @NonNull
     @Override
-    public OrderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+    public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_order, parent, false);
         return new OrderViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
-        String order = ordersList.get(position);
-        holder.textView.setText(order);
+    public void onBindViewHolder(OrderViewHolder holder, int position) {
+        Order order = orderList.get(position);
+        holder.statusView.setText(order.getStatus());
     }
 
     @Override
     public int getItemCount() {
-        return ordersList.size();
+        return orderList.size();
     }
 
-    static class OrderViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+    public static class OrderViewHolder extends RecyclerView.ViewHolder {
+        public TextView statusView;
 
-        public OrderViewHolder(@NonNull View itemView) {
+        public OrderViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(android.R.id.text1);
+            statusView = itemView.findViewById(R.id.statusView);
         }
     }
 }
+
+

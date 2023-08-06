@@ -1,6 +1,7 @@
 package com.example.shopeaze;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,16 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -33,29 +41,27 @@ public class OrderFragment extends Fragment {
     private FirebaseFirestore db;
 
     // Declare a ListView to display the orders and a Button for refreshing the orders.
-    private ListView ordersListView;
     private Button refreshButton;
 
     // Declare a List to hold the orders data.
-    private List<String> ordersList;
-
-    private RecyclerView ordersRecyclerView;
-    private OrdersAdapter ordersAdapter;
+    private RecyclerView recyclerView;
+    private OrdersAdapter adapter;
+    private List<Order> orderList = new ArrayList<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
 
+        recyclerView = view.findViewById(R.id.recyclerViewOrders);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ordersRecyclerView = view.findViewById(R.id.recyclerViewOrders);
+        adapter = new OrdersAdapter(orderList);
+        recyclerView.setAdapter(adapter);
 
         Button refreshButton = view.findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(v -> loadOrders());
-
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-
-        loadOrders();
+        refreshButton.setOnClickListener(v -> {
+            fetchData();
+        });
 
         ImageButton ordersButton = view.findViewById(R.id.button_orders);
         ordersButton.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +75,8 @@ public class OrderFragment extends Fragment {
                 }
             }
         });
+
+        fetchData();
 
         ImageButton storesButton = view.findViewById(R.id.button_stores);
         storesButton.setOnClickListener(new View.OnClickListener() {
@@ -93,37 +101,26 @@ public class OrderFragment extends Fragment {
 
 
     // Function to load orders from Firestore.
-    private void loadOrders() {
-        // Get the current user's ID.
-        String userId = mAuth.getCurrentUser().getUid();
+    private void fetchData() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("orders");
+        Query query = ref.orderByChild("userId").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        // Query Firestore for orders where the userId matches the current user's ID.
-        db.collection("orders")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    // If the query is successful...
-                    if (task.isSuccessful()) {
-                        // Initialize the ordersList.
-                        ordersList = new ArrayList<>();
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                orderList.clear();
+                for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
+                    Order order = orderSnapshot.getValue(Order.class);
+                    orderList.add(order);
+                }
+                adapter.notifyDataSetChanged();
+            }
 
-                        // Loop through each document in the results.
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Convert the document into an Order object.
-                            Order order = document.toObject(Order.class);
-
-                            // Add the order's ID and status to the ordersList.
-                            ordersList.add("Order ID: " + order.getOrderId() + "\nStatus: " + order.getStatus());
-                        }
-
-                        // Create an ArrayAdapter with the ordersList and set it as the adapter for ordersListView.
-                        ordersAdapter = new OrdersAdapter(ordersList);
-                        ordersRecyclerView.setAdapter(ordersAdapter);
-                    } else {
-                        // If the query is not successful, display a toast with an error message.
-                        Toast.makeText(getContext(), "Error getting orders", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("OrdersFragment", "onCancelled", databaseError.toException());
+            }
+        });
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
