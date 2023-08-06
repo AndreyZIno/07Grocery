@@ -82,8 +82,9 @@ public class ProductDetailsFragment extends Fragment {
         imageButtonGoBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle "go back" button click by navigating back to the previous fragment
-                requireActivity().onBackPressed();
+                NavController navController = NavHostFragment
+                        .findNavController(ProductDetailsFragment.this);
+                navController.navigate(R.id.action_product_details_to_product_list);
             }
         });
 
