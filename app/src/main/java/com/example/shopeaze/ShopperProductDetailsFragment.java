@@ -9,14 +9,15 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 public class ShopperProductDetailsFragment extends Fragment {
-    private static final String ARG_STORE_ID = "store_id";
+    private static final String ARG_STORE = "store";
     private static final String ARG_PRODUCT = "product";
     private Product product;
+    private Store store;
 
-    public static ShopperProductDetailsFragment newInstance(String storeID, Product product) {
+    public static ShopperProductDetailsFragment newInstance(Store store, Product product) {
         ShopperProductDetailsFragment fragment = new ShopperProductDetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STORE_ID, storeID);
+        args.putSerializable(ARG_STORE, store);
         args.putSerializable(ARG_PRODUCT, product);
         fragment.setArguments(args);
         return fragment;
@@ -27,8 +28,12 @@ public class ShopperProductDetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_shopper_product_details, container, false);
 
         // Retrieve storeID and product from arguments
-        String storeID = getArguments().getString(ARG_STORE_ID);
+        store = (Store) getArguments().getSerializable(ARG_STORE);
         product = (Product) getArguments().getSerializable(ARG_PRODUCT);
+
+        // Display store card at top
+        TextView textViewStoreName = rootView.findViewById(R.id.textViewStoreName);
+        textViewStoreName.setText(store.getStoreName());
 
         // Display product details
         TextView productNameTextView = rootView.findViewById(R.id.textViewProductName);
