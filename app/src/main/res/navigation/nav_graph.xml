@@ -14,9 +14,6 @@
             android:id="@+id/action_Login_to_SignUp"
             app:destination="@id/signUp"   />
         <action
-            android:id="@+id/action_Login_to_WelcomeScreen"
-            app:destination="@id/WelcomeScreen" />
-        <action
             android:id="@+id/action_Login_to_logout"
             app:destination="@id/logout" />
         <action
@@ -107,9 +104,6 @@
         <action
             android:id="@+id/action_OwnerSignUp_to_ProductList"
             app:destination="@id/ProductList" />
-        <action
-            android:id="@+id/action_ProductsOffered_to_ownerOrders"
-            app:destination="@id/ownerOrders" />
 
     </fragment>
 
@@ -123,6 +117,17 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/ProductDetails"
+        android:name="com.example.shopeaze.ProductDetailsFragment"
+        android:label="product_details"
+        tools:layout="@layout/fragment_product_details">
+
+        <action
+            android:id="@+id/action_product_details_to_product_list"
+            app:destination="@id/ProductList" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/logout"
@@ -140,8 +145,8 @@
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <action
-            android:id="@+id/action_ProductList_to_OwnerOrders"
-            app:destination="@id/ownerOrders" />
+            android:id="@+id/action_product_list_to_product_details"
+            app:destination="@id/ProductDetails" />
     </fragment>
 
     <fragment
@@ -164,13 +169,8 @@
         <action
             android:id="@+id/action_ownerLogin_to_ProductList"
             app:destination="@id/ProductList" />
-    </fragment>
 
-    <fragment
-        android:id="@+id/ownerOrders"
-        android:name="com.example.shopeaze.ProductStatusFragment"
-        android:label="OwnerOrderView"
-        tools:layout="@layout/fragment_product_order_view" />
+    </fragment>
 
 
 </navigation>
