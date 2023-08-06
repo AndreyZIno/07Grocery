@@ -53,33 +53,33 @@ public class AddProductDialog extends DialogFragment {
         productsRef.orderByChild("name")
                 .equalTo(newProduct.getName())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean productExists = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Product product = snapshot.getValue(Product.class);
-                    if (product != null && product.getBrand().equals(newProduct.getBrand())) {
-                        productExists = true;
-                        break;
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        boolean productExists = false;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Product product = snapshot.getValue(Product.class);
+                            if (product != null && product.getBrand().equals(newProduct.getBrand())) {
+                                productExists = true;
+                                break;
+                            }
+                        }
+
+                        if (productExists) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle("Product Exists")
+                                    .setMessage("The product with the same name and brand already exists.")
+                                    .setPositiveButton("OK", null)
+                                    .show();
+                        } else {
+                            addProduct(newProduct);
+                        }
                     }
-                }
 
-                if (productExists) {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle("Product Exists")
-                            .setMessage("The product with the same name and brand already exists.")
-                            .setPositiveButton("OK", null)
-                            .show();
-                } else {
-                    addProduct(newProduct);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the error if the query is canceled
-            }
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Handle the error if the query is canceled
+                    }
+                });
 
 
     }
