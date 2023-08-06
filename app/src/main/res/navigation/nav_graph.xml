@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_StoreList_to_ProductsOffered"
             app:destination="@id/ProductsOffered" />
+        <action
+            android:id="@+id/action_StoreList_to_Cart"
+            app:destination="@id/Cart"/>
     </fragment>
 
     <fragment
@@ -117,6 +120,17 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/ProductDetails"
+        android:name="com.example.shopeaze.ProductDetailsFragment"
+        android:label="product_details"
+        tools:layout="@layout/fragment_product_details">
+
+        <action
+            android:id="@+id/action_product_details_to_product_list"
+            app:destination="@id/ProductList" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/logout"
@@ -132,7 +146,11 @@
         android:id="@+id/ProductList"
         android:name="com.example.shopeaze.ProductListFragment"
         android:label="fragment_product_list"
-        tools:layout="@layout/fragment_product_list" />
+        tools:layout="@layout/fragment_product_list" >
+        <action
+            android:id="@+id/action_product_list_to_product_details"
+            app:destination="@id/ProductDetails" />
+    </fragment>
 
     <fragment
         android:id="@+id/orderFragment"
@@ -154,6 +172,18 @@
         <action
             android:id="@+id/action_ownerLogin_to_ProductList"
             app:destination="@id/ProductList" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/Cart"
+        android:name="com.example.shopeaze.FragmentMyCart"
+        android:label="My Cart"
+        tools:layout="@layout/activity_cart">
+
+        <action
+            android:id="@+id/action_Cart_to_StoreList"
+            app:destination="@id/StoreList"/>
     </fragment>
 
 
