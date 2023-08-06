@@ -96,7 +96,6 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                // Handle removed children if needed
                 Product removedProduct = dataSnapshot.getValue(Product.class);
                 if (removedProduct != null) {
                     products.remove(removedProduct);
