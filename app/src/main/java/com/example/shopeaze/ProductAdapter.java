@@ -10,19 +10,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+//import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
+    private OnProductClickListener listener;
     Context context;
     ArrayList<Product> products;
 
-    public ProductAdapter(Context context, ArrayList<Product> products) {
+    public interface OnProductClickListener {
+        void onItemClick(Product product);
+    }
+
+
+    public ProductAdapter(Context context, ArrayList<Product> products, OnProductClickListener listener) {
         this.context = context;
         this.products = products;
+        this.listener = listener;
     }
 
     @NonNull
@@ -30,7 +37,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public ProductAdapter.ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
-
         return new ProductViewHolder(v);
     }
 
@@ -40,6 +46,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.productName.setText(product.getName());
         holder.productBrand.setText(product.getBrand());
         holder.productPrice.setText("$ " + String.valueOf(product.getPrice()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(product);
+            }
+        });
     }
 
     @Override
