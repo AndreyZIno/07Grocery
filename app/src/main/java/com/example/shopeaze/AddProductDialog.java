@@ -44,39 +44,27 @@ public class AddProductDialog extends DialogFragment {
 
     private void checkProductExistence(final Product newProduct) {
         String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner").child(currentUserUid);
-        DatabaseReference productsRef = storeOwnerRef.child("Products");
-        Query productNameQuery = productsRef.orderByChild("name").equalTo(newProduct.getName());
+        DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("StoreOwner")
+                .child(currentUserUid)
+                .child("Products");
 
-        productNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        productsRef.orderByChild("name")
+                .equalTo(newProduct.getName())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    checkProductBrandExistence(newProduct);
-                } else {
-                    checkProductBrandExistence(newProduct);
+                boolean productExists = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Product product = snapshot.getValue(Product.class);
+                    if (product != null && product.getBrand().equals(newProduct.getBrand())) {
+                        productExists = true;
+                        break;
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the error if the query is canceled
-            }
-        });
-    }
-
-    private void checkProductBrandExistence(final Product newProduct) {
-        String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner").child(currentUserUid);
-        DatabaseReference productsRef = storeOwnerRef.child("Products");
-        Query productBrandQuery = productsRef.orderByChild("brand").equalTo(newProduct.getBrand());
-
-        productBrandQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (productExists) {
                     new AlertDialog.Builder(getActivity())
                             .setTitle("Product Exists")
                             .setMessage("The product with the same name and brand already exists.")
@@ -92,7 +80,10 @@ public class AddProductDialog extends DialogFragment {
                 // Handle the error if the query is canceled
             }
         });
+
+
     }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
