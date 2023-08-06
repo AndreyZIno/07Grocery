@@ -104,7 +104,7 @@ public class ProductDetailsFragment extends Fragment {
         imageViewProduct.setImageResource(R.drawable.sample);
         textViewProductName.setText("Name: " + product.getName());
         textViewProductBrand.setText("Brand: " + product.getBrand());
-        textViewProductPrice.setText("$ " + String.valueOf(product.getPrice()));
+        textViewProductPrice.setText("Price: $ " + String.valueOf(product.getPrice()));
         textViewProductDescription.setText(product.getDescription());
         textViewProductQuantity.setText("Inventory: " + String.valueOf(product.getQuantity()));
 
@@ -140,7 +140,11 @@ public class ProductDetailsFragment extends Fragment {
                         Dialog dialogView = (Dialog) dialog;
                         EditText editTextNewPrice = dialogView.findViewById(R.id.editTextNewPrice);
                         String newPrice = editTextNewPrice.getText().toString();
-                        updateProductPrice(newPrice);
+                        if (!newPrice.isEmpty()) {
+                            updateProductPrice(newPrice);
+                        } else {
+                            showToast("No changes applied.");
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -162,7 +166,11 @@ public class ProductDetailsFragment extends Fragment {
                         Dialog dialogView = (Dialog) dialog;
                         EditText editTextNewDescription = dialogView.findViewById(R.id.editTextNewDescription);
                         String newDescription = editTextNewDescription.getText().toString();
-                        updateProductDescription(newDescription);
+                        if (!newDescription.isEmpty()) {
+                            updateProductDescription(newDescription);
+                        } else {
+                            showToast("No changes applied.");
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -237,7 +245,11 @@ public class ProductDetailsFragment extends Fragment {
                         Dialog dialogView = (Dialog) dialog;
                         EditText editTextNewQuantity = dialogView.findViewById(R.id.editTextNewQuantity);
                         String newQuantity = editTextNewQuantity.getText().toString();
-                        updateProductQuantity(newQuantity);
+                        if (!newQuantity.isEmpty()) {
+                            updateProductQuantity(newQuantity);
+                        } else {
+                            showToast("No changes applied.");
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

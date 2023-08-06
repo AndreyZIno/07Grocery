@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ public class ShopperProductDetailsFragment extends Fragment {
     private static final String ARG_PRODUCT = "product";
     private Product product;
 
-    Button addToCartButton;         //new
+    ImageButton addToCartButton;         //new
     private static final String TAG = "ShopperProductDetails";  //new
 
     public static ShopperProductDetailsFragment newInstance(String storeID, Product product) {

@@ -10,5 +10,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="whiteTxt" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
     <style name="Theme.ShopEaze" parent="Base.Theme.ShopEaze" />
 </resources>
