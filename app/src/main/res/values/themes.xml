@@ -19,6 +19,15 @@
         <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="whiteTxt" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
     <style name="Theme.ShopEaze" parent="Base.Theme.ShopEaze" />
 
     <style name="BlurDialog" parent="Theme.AppCompat.Dialog">
