@@ -74,10 +74,19 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                 Product product = dataSnapshot.getValue(Product.class);
-                if (!products.contains(product)) {
+                if (!isProductDuplicate(product)) {
                     products.add(product);
                     productAdapter.notifyDataSetChanged();
                 }
+            }
+
+            private boolean isProductDuplicate(Product newProduct) {
+                for (Product product : products) {
+                    if (product.getName().equals(newProduct.getName()) && product.getBrand().equals(newProduct.getBrand())) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             @Override
