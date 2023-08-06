@@ -8,10 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -23,22 +20,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderFragment extends Fragment {
-    // Declare Firebase Auth and Firestore instances.
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
 
     // Declare a ListView to display the orders and a Button for refreshing the orders.
     private Button refreshButton;
@@ -103,16 +96,25 @@ public class OrderFragment extends Fragment {
     // Function to load orders from Firestore.
     private void fetchData() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("orders");
-        Query query = ref.orderByChild("userId").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        query.addValueEventListener(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 orderList.clear();
+
                 for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
                     Order order = orderSnapshot.getValue(Order.class);
-                    orderList.add(order);
+
+                    if(order != null) {
+                        for (Order.Products product : order.getProducts()) {
+                            if(product.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                orderList.add(order);
+                                break;  // Break after adding, to avoid adding the same order multiple times
+                            }
+                        }
+                    }
                 }
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -122,6 +124,10 @@ public class OrderFragment extends Fragment {
             }
         });
     }
+
+
+
+
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
