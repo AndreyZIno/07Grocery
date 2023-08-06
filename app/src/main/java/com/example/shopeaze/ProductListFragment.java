@@ -1,6 +1,5 @@
 package com.example.shopeaze;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,8 +39,12 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
 
     @Override
     public void onProductAdded(Product product) {
-        // products.add(product);
-        //productAdapter.notifyDataSetChanged();
+        if (!products.contains(product)) {
+            products.add(product);
+            productAdapter.notifyDataSetChanged();
+        } else {
+            showToast("Product already exists");
+        }
     }
 
     @Nullable
