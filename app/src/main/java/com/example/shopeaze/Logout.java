@@ -37,8 +37,6 @@ public class Logout extends Fragment {
         user = auth.getCurrentUser();
 
         if (user==null){
-            //Intent intent = new Intent(getActivity(), Login.class);
-            //startActivity(intent);
             NavHostFragment.findNavController(Logout.this)
                     .navigate(R.id.action_logout_to_WelcomeScreen);
         }
