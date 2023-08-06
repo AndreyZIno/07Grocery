@@ -60,4 +60,10 @@
 
     </FrameLayout>
 
+    <Button
+        android:id="@+id/logoutButton2"
+        android:layout_width="177dp"
+        android:layout_height="wrap_content"
+        android:text="@string/log_out" />
+
 </RelativeLayout>

@@ -68,11 +68,14 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/red_hat_display"
             android:hint="@string/Email"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#009688"
             android:textColorHint="@color/gray"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:textColorLink="#009688">
 
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>
@@ -89,11 +92,14 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
-            android:hint="@string/Password"
-            android:fontFamily="@font/red_hat_display"
-            android:textColorHint="@color/light_gray"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/red_hat_display"
+            android:hint="@string/Password"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#009688"
+            android:textColorHint="@color/light_gray"
+            android:textColorLink="#009688">
 
         </com.google.android.material.textfield.TextInputEditText>
     </com.google.android.material.textfield.TextInputLayout>

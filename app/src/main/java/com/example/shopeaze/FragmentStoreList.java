@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -30,6 +31,11 @@ public class FragmentStoreList extends Fragment implements StoreAdapter.OnItemCl
 
     private List<Store> stores;
     private StoreAdapter adapter;
+    FirebaseAuth auth;
+    Button logoutButton;
+
+    TextView name_display;
+    FirebaseUser user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -79,6 +85,31 @@ public class FragmentStoreList extends Fragment implements StoreAdapter.OnItemCl
             public void onClick(View v) {
                 NavController navController = NavHostFragment.findNavController(FragmentStoreList.this);
                 navController.navigate(R.id.action_StoreList_to_Cart);
+            }
+        });
+
+        // logout button
+        logoutButton = rootView.findViewById(R.id.logoutButton1);
+        name_display = rootView.findViewById(R.id.textviewName);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
+        if (user==null){
+            NavHostFragment.findNavController(FragmentStoreList.this)
+                    .navigate(R.id.action_StoreList_to_WelcomeScreen);
+        }
+        else{
+            name_display.setText(user.getEmail());
+        }
+
+        logoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                name_display.setText("called");
+                FirebaseAuth.getInstance().signOut();
+                NavHostFragment.findNavController(FragmentStoreList.this)
+                        .navigate(R.id.action_StoreList_to_WelcomeScreen);
             }
         });
 

@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/vector2_background"
+    android:orientation="vertical"
     android:paddingHorizontal="10dp">
+
 
 
     <LinearLayout
@@ -19,36 +20,43 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="35dp"
+            android:fontFamily="@font/red_hat_display"
             android:text="Hi"
             android:textColor="@color/white"
-            android:textSize="32sp"
-            android:fontFamily="@font/red_hat_display"/>
+            android:textSize="32sp" />
 
         <TextView
             android:id="@+id/textviewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Shopper"
-            android:layout_marginTop="35dp"
             android:layout_marginLeft="6dp"
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/red_hat_display"
+            android:text="Shopper"
             android:textColor="@color/turquoise"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/red_hat_display"/>
+            android:textStyle="bold" />
+
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/logoutButton1"
+        android:layout_width="177dp"
+        android:layout_height="wrap_content"
+        android:text="@string/log_out" />
 
     <TextView
         android:id="@+id/textViewShopByStore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textColor="@color/light_gray"
-        android:fontFamily="@font/red_hat_display"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="33dp"
+        android:fontFamily="@font/red_hat_display"
         android:text="Browse through Stores"
-        android:textSize="20sp"
-        android:layout_marginBottom="33dp"/>
+        android:textColor="@color/light_gray"
+        android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewStores"
@@ -66,8 +74,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -78,32 +86,32 @@
                 android:id="@+id/button_stores"
                 android:layout_width="90dp"
                 android:layout_height="50dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/nav_gradient"
                 android:background="@drawable/rounded_nav_button"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
-                android:layout_marginRight="5dp" />
+                android:src="@drawable/nav_gradient" />
 
             <ImageView
                 android:id="@+id/storeIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/white_store"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="9dp"
                 android:scaleType="centerCrop"
-                android:layout_marginTop="9dp" />
+                android:src="@drawable/white_store" />
 
             <TextView
                 android:id="@+id/textViewStoresText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/red_hat_display"
                 android:text="Stores"
                 android:textColor="@color/light_gray"
-                android:textSize="13sp"
-                android:layout_marginTop="10dp"/>
+                android:textSize="13sp" />
         </FrameLayout>
 
 
@@ -116,37 +124,36 @@
                 android:id="@+id/button_cart"
                 android:layout_width="90dp"
                 android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:src="@drawable/nav_gradient"
                 android:background="@drawable/rounded_nav_button"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
-                android:layout_marginLeft="5dp" />
+                android:src="@drawable/nav_gradient" />
 
             <ImageView
                 android:id="@+id/cartIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/white_cart"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="9dp"
                 android:scaleType="centerCrop"
-                android:layout_marginTop="9dp" />
+                android:src="@drawable/white_cart" />
 
             <TextView
                 android:id="@+id/textViewCartText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/red_hat_display"
-                android:text="Cart"
                 android:gravity="center_horizontal"
+                android:text="Cart"
                 android:textColor="@color/light_gray"
-                android:textSize="13sp"
-                android:layout_marginTop="10dp" />
+                android:textSize="13sp" />
         </FrameLayout>
 
     </LinearLayout>
-
 
 
 </LinearLayout>

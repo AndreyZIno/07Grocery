@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,12 +38,18 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
     private ProductAdapter productAdapter;
     private DatabaseReference productsRef;
     private TextView textViewStoreName;
+    FirebaseAuth auth;
+    Button logoutButton;
+
+    TextView name_display;
+    FirebaseUser user;
 
     @Override
     public void onProductAdded(Product product) {
         if (!products.contains(product)) {
             products.add(product);
             productAdapter.notifyDataSetChanged();
+
         } else {
             showToast("Product already exists");
         }
@@ -69,6 +77,28 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                 .child("StoreOwner")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("Products");
+
+
+        // logout button
+        logoutButton = view.findViewById(R.id.logoutButton2);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
+        if (user==null){
+            NavHostFragment.findNavController(ProductListFragment.this)
+                    .navigate(R.id.action_product_list_to_WelcomeScreen);
+        }
+
+
+        logoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FirebaseAuth.getInstance().signOut();
+                NavHostFragment.findNavController(ProductListFragment.this)
+                        .navigate(R.id.action_product_list_to_WelcomeScreen);
+            }
+        });
 
         productsRef.addChildEventListener(new ChildEventListener() {
             @Override

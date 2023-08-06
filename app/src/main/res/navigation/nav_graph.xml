@@ -90,6 +90,9 @@
         <action
             android:id="@+id/action_StoreList_to_Cart"
             app:destination="@id/Cart"/>
+        <action
+            android:id="@+id/action_StoreList_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen"/>
     </fragment>
 
     <fragment
@@ -150,6 +153,9 @@
         <action
             android:id="@+id/action_product_list_to_product_details"
             app:destination="@id/ProductDetails" />
+        <action
+            android:id="@+id/action_product_list_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen" />
     </fragment>
 
     <fragment
