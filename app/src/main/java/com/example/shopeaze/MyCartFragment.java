@@ -95,8 +95,24 @@ public class MyCartFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                // Handle changes to existing cart items if needed
+                CartItem updatedCartItem = dataSnapshot.getValue(CartItem.class);
+                int position = findCartItemPosition(updatedCartItem);
+                if (position != -1) {
+                    products.set(position, updatedCartItem);
+                    cartAdapter.notifyItemChanged(position);
+                }
             }
+
+            private int findCartItemPosition(CartItem updatedCartItem) {
+                for (int i = 0; i < products.size(); i++) {
+                    CartItem cartItem = products.get(i);
+                    if (cartItem.getcartProductID().equals(updatedCartItem.getcartProductID())) {
+                        return i;
+                    }
+                }
+                return -1; // Item not found
+            }
+
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
