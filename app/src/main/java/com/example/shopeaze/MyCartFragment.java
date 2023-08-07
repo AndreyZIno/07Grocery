@@ -182,6 +182,7 @@ public class MyCartFragment extends Fragment {
 
         // add each cart item in the list to the Orders database
         for (CartItem cartItem : cartItems) {
+            cartItem.setStatus("Received");
             ordersRef.push().setValue(cartItem);
         }
 

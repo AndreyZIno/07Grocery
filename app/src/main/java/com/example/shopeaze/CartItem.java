@@ -14,6 +14,7 @@ public class CartItem {
     private String cartProductBrand;
     private double cartProductPrice;
     private int image;
+    private String status;
 
     public CartItem(){
 
@@ -24,11 +25,15 @@ public class CartItem {
         this.cartProductBrand = product.getBrand();
         this.cartProductPrice = product.getPrice();
         this.image = product.getImage();
+        this.status = product.getStatus();
     }
 
     //Getters
     public String getcartProductID() {
         return cartProductID;
+    }
+    public String getStatus() {
+        return status;
     }
     public String getcartProductName() {
         return cartProductName;
@@ -64,6 +69,10 @@ public class CartItem {
     }
     public void setQuantity(int quantity){
     this.cartQuantity = quantity;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

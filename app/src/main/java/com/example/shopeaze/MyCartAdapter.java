@@ -40,6 +40,13 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyCartAdapter.MyViewHolder holder, int position) {
         CartItem cartItem = cartItems.get(position);
+        Log.d("MyCartAdapter", "Name: " + cartItem.getcartProductName());
+        Log.d("MyCartAdapter", "Price: " + cartItem.getcartProductPrice());
+        Log.d("MyCartAdapter", "Brand: " + cartItem.getcartProductBrand());
+        Log.d("MyCartAdapter", "Quantity: " + cartItem.getCartQuantity());
+        Log.d("MyCartAdapter", "ID: " + cartItem.getcartProductID());
+        Log.d("MyCartAdapter", "Status: " + cartItem.getStatus());
+
         holder.cartProductName.setText(cartItem.getcartProductName());
         holder.cartProductPrice.setText("$ " + String.valueOf(cartItem.getcartProductPrice()));
         holder.cartProductBrand.setText(cartItem.getcartProductBrand());
