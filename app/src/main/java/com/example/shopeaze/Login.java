@@ -30,7 +30,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
 
-public class Login extends Fragment {       //shopper login
+public class Login extends Fragment {
+    //shopper login, is the 'view' part of MVP
 
     TextInputEditText editTextEmail, editTextPassword;
     ImageButton buttonLogin;
