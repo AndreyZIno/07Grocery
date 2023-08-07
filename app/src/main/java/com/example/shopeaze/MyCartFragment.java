@@ -1,6 +1,8 @@
 package com.example.shopeaze;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -27,98 +32,108 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.shopeaze.CartItem;
+
 
 public class MyCartFragment extends Fragment {
 
-    DatabaseReference databaseReference;
-    FirebaseAuth auth;
+    private DatabaseReference productsRef;
+    private RecyclerView recyclerView;
+    private MyCartAdapter cartAdapter;
+    private ArrayList<CartItem> products;
 
-    RecyclerView recyclerView;
-    MyCartAdapter cartAdapter;
-    List<MyCartModel> cartModelList;
-
-    public MyCartFragment(){
-        //
-    }
-
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflator, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflator.inflate(R.layout.activity_cart, container, false);
 
-//        database = FirebaseFirestore.getInstance();
-//        auth = FirebaseAuth.getInstance();
-//        recyclerView = root.findViewById(R.id.recyclerCartView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//
-//        cartModelList = new ArrayList<>();
-//        cartAdapter = new MyCartAdapter(getActivity(), cartModelList);
-//        recyclerView.setAdapter(cartAdapter);
-//
-//        // go into the firebase database, entering "Users", then "Shoppers", then the current user's ID, then "Cart"
-//        database.collection("Users").document(auth.getCurrentUser().getUid())
-//                .collection("Shoppers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()){
-//                    for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
-//                        MyCartModel cartModel = documentSnapshot.toObject(MyCartModel.class);
-//                        cartModelList.add(cartModel);
-//                        cartAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//            }
-//
-//        });
-
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        auth = FirebaseAuth.getInstance();
         recyclerView = root.findViewById(R.id.recyclerCartView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        cartModelList = new ArrayList<>();
-        cartAdapter = new MyCartAdapter(getActivity(), cartModelList);
+        products = new ArrayList<>();
+        cartAdapter = new MyCartAdapter(getActivity(), products);
+
         recyclerView.setAdapter(cartAdapter);
+        productsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("Shoppers")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Cart");
 
-        // go into the firebase database, entering "Users", then "Shoppers", then the current user's ID, then "Cart"
-        databaseReference.child("Users").child(auth.getCurrentUser().getUid())
-                .child("Shoppers").addChildEventListener(new ChildEventListener() {
+        // access the firebase database at productsRef and update the cartModelList
+        productsRef.addChildEventListener(new ChildEventListener() {
 
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                        MyCartModel cartModel = dataSnapshot.getValue(MyCartModel.class);
-                        cartModelList.add(cartModel);
-                        cartAdapter.notifyDataSetChanged();
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                CartItem cartItem = dataSnapshot.getValue(CartItem.class);
+                products.add(cartItem);
+                cartAdapter.notifyDataSetChanged();
+                /*if (!isProductDuplicate(product)) {
+                    products.add(product);
+                    cartAdapter.notifyDataSetChanged();
+                }*/
+            }
+
+            /*private boolean isProductDuplicate(Product newProduct) {
+                for (Product product : products) {
+                    if (product.getName().equals(newProduct.getName()) && product.getBrand().equals(newProduct.getBrand())) {
+                        return true;
                     }
+                }
+                return false;
+            }*/
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                        // Handle changes to existing cart items if needed
-                    }
 
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                        // Handle removal of cart items if needed
-                    }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                CartItem updatedCartItem = dataSnapshot.getValue(CartItem.class);
+                int position = findCartItemPosition(updatedCartItem);
+                if (position != -1) {
+                    products.set(position, updatedCartItem);
+                    cartAdapter.notifyItemChanged(position);
+                }
+            }
 
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                        // Handle movement of cart items if needed
+            private int findCartItemPosition(CartItem updatedCartItem) {
+                for (int i = 0; i < products.size(); i++) {
+                    CartItem cartItem = products.get(i);
+                    if (cartItem.getcartProductID().equals(updatedCartItem.getcartProductID())) {
+                        return i;
                     }
+                }
+                return -1; // Item not found
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle error if needed
-                    }
-                });
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                CartItem removedProduct = dataSnapshot.getValue(CartItem.class);
+                if (removedProduct != null) {
+                    products.remove(removedProduct);
+                    cartAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle movement of cart items if needed
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+            }
+        });
+
 
         ImageButton storesButton = root.findViewById(R.id.button_stores);
         storesButton.setOnClickListener(new View.OnClickListener() {
@@ -149,13 +164,26 @@ public class MyCartFragment extends Fragment {
                 NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
                 navController.navigate(R.id.action_Cart_to_order_confirm);
 
-                // ###########################
-                // add list to orders in firebase
-                // ###########################
+                addToOrders(products);
             }
         });
 
         return root;
+
+    }
+
+
+    // add a list of Product objects to the Orders database in Firebase, under Shoppers
+    private void addToOrders(List<CartItem> cartItems) {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+        DatabaseReference ordersRef = shopperRef.child("Orders");
+
+        // add each cart item in the list to the Orders database
+        for (CartItem cartItem : cartItems) {
+            ordersRef.push().setValue(cartItem);
+        }
 
     }
 

@@ -1,55 +1,96 @@
 package com.example.shopeaze;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import androidx.annotation.NonNull;
 
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder>{
+import java.util.ArrayList;
+
+public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHolder>{
 
     Context context;
-    List<MyCartModel> cartModelList;
+    ArrayList<CartItem> cartItems;
 
-    public MyCartAdapter(Context context, List<MyCartModel> cartModelList) {
+    public MyCartAdapter(Context context, ArrayList<CartItem> cartItems) {
         this.context = context;
-        this.cartModelList = cartModelList;
+        this.cartItems = cartItems;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_item, parent, false));
+    public MyCartAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.cart_item, parent, false));
+
+        View v = LayoutInflater.from(context).inflate(R.layout.cart_item, parent, false);
+        return new MyCartAdapter.MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.name.setText(cartModelList.get(position).getProductName());
-        holder.price.setText(cartModelList.get(position).getProductPrice());
-        holder.quantity.setText(cartModelList.get(position).getProductQuantity());
+    public void onBindViewHolder(@NonNull MyCartAdapter.MyViewHolder holder, int position) {
+        CartItem cartItem = cartItems.get(position);
+        holder.cartProductName.setText(cartItem.getcartProductName());
+        holder.cartProductPrice.setText("$ " + String.valueOf(cartItem.getcartProductPrice()));
+        holder.cartProductBrand.setText(cartItem.getcartProductBrand());
+        holder.cartProductQuantity.setText(String.valueOf(cartItem.getCartQuantity()));
+
+        holder.removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    CartItem cartItem = cartItems.get(position);
+                    removeCartItem(cartItem);
+                    cartItems.remove(position);
+                    notifyItemRemoved(position);
+                }
+            }
+        });
+
+    }
+
+    private void removeCartItem(CartItem cartItem) {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+        DatabaseReference ordersRef = shopperRef.child("Orders");
+        ordersRef.child(cartItem.getcartProductID()).removeValue();
+
+        DatabaseReference cartRef = shopperRef.child("Cart");
+        cartRef.child(cartItem.getcartProductID()).removeValue();
     }
 
     @Override
     public int getItemCount() {
-        return cartModelList.size();
+        return cartItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-
-        TextView name, price, quantity;
-        public ViewHolder(@androidx.annotation.NonNull android.view.View itemView) {
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+        TextView cartProductName, cartProductPrice, cartProductBrand, cartProductQuantity;
+        Button removeButton;
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            name = itemView.findViewById(R.id.product_name);
-            price = itemView.findViewById(R.id.product_price);
-            quantity = itemView.findViewById(R.id.product_quantity);
+            cartProductName = itemView.findViewById(R.id.cartProductName);
+            cartProductPrice = itemView.findViewById(R.id.cartProductPrice);
+            cartProductBrand = itemView.findViewById(R.id.cartProductBrand);
+            cartProductQuantity = itemView.findViewById(R.id.productQuantity);
+            removeButton = itemView.findViewById(R.id.removeButton);
         }
     }
+
+
 
 
 

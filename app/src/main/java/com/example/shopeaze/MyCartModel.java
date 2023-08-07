@@ -5,11 +5,12 @@ public class MyCartModel {
     String productprice;
     String productquantity;
 
+
     public MyCartModel() {
         //
     }
 
-    public MyCartModel(String productname, String productprice, String productquantity, int totalprice) {
+    public MyCartModel(String productname, String productprice, String productquantity) {
         this.productname = productname;
         this.productprice = productprice;
         this.productquantity = productquantity;
@@ -41,13 +42,6 @@ public class MyCartModel {
         this.productquantity = productquantity;
     }
 
-//    public int getTotalPrice() {
-//        return totalprice;
-//    }
-//
-//    public void setTotalPrice(int totalprice) {
-//        this.totalprice = totalprice;
-//    }
 
 
 }
