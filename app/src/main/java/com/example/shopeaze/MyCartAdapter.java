@@ -65,6 +65,27 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             }
         });
 
+        holder.addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // increment the quantity of the item in the cart
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    CartItem cartItem = cartItems.get(position);
+                    cartItem.setQuantity(cartItem.getCartQuantity() + 1);
+                    holder.cartProductQuantity.setText(String.valueOf(cartItem.getCartQuantity()));
+                }
+
+//                // update the quantity of the item in the database
+//                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+//                DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+//                DatabaseReference cartRef = shopperRef.child("Cart");
+//                cartRef.child(cartItem.getcartProductID()).child("quantity").setValue(cartItem.getCartQuantity());
+
+            }
+        });
+
     }
 
     private void removeCartItem(CartItem cartItem) {
@@ -78,6 +99,17 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
         cartRef.child(cartItem.getcartProductID()).removeValue();
     }
 
+//    private void removeCartItem(CartItem cartItem) {
+//        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+//        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+//        DatabaseReference ordersRef = shopperRef.child("Orders");
+//        ordersRef.child(cartItem.getcartProductID()).removeValue();
+//
+//        DatabaseReference cartRef = shopperRef.child("Cart");
+//        cartRef.child(cartItem.getcartProductID()).removeValue();
+//    }
+
     @Override
     public int getItemCount() {
         return cartItems.size();
@@ -86,6 +118,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView cartProductName, cartProductPrice, cartProductBrand, cartProductQuantity;
         Button removeButton;
+        Button addButton;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -94,6 +127,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             cartProductBrand = itemView.findViewById(R.id.cartProductBrand);
             cartProductQuantity = itemView.findViewById(R.id.productQuantity);
             removeButton = itemView.findViewById(R.id.removeButton);
+            addButton = itemView.findViewById(R.id.addButton);
         }
     }
 

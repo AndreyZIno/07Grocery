@@ -24,6 +24,7 @@ public class CartItem {
         this.cartProductName = product.getName();
         this.cartProductBrand = product.getBrand();
         this.cartProductPrice = product.getPrice();
+        this.cartQuantity = product.getQuantity();
         this.image = product.getImage();
         this.status = product.getStatus();
     }
