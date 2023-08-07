@@ -52,6 +52,7 @@ public class MyCartFragment extends Fragment {
         //
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflator, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class MyCartFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                 Product product = dataSnapshot.getValue(Product.class);
                 products.add(product);
-//                cartAdapter.notifyDataSetChanged();
+                cartAdapter.notifyDataSetChanged();
             }
 
             @Override
