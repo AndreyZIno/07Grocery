@@ -214,6 +214,10 @@
         <action
             android:id="@+id/action_Cart_to_Orders"
             app:destination="@id/OrderFragment"/>
+
+        <action
+            android:id="@+id/action_Cart_to_order_confirm"
+            app:destination="@id/Order_confirmation"/>
     </fragment>
 
     <fragment
