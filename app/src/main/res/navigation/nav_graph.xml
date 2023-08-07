@@ -200,6 +200,13 @@
         android:label="Order Confirmed"
         tools:layout="@layout/order_confirm">
 
+        <action
+            android:id="@+id/action_Order_confirm_to_StoreList"
+            app:destination="@id/StoreList"/>
+        <action
+            android:id="@+id/action_Order_confirm_to_Cart"
+            app:destination="@id/Cart"/>"
+
     </fragment>
 
 <!--    <fragment-->

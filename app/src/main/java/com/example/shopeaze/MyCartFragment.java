@@ -1,5 +1,6 @@
 package com.example.shopeaze;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,30 +48,24 @@ public class MyCartFragment extends Fragment {
     private MyCartAdapter cartAdapter;
     private ArrayList<Product> products;
 
-
-    public MyCartFragment(){
-        //
-    }
-
-
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflator, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflator.inflate(R.layout.activity_cart, container, false);
 
+        recyclerView = root.findViewById(R.id.recyclerCartView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        products = new ArrayList<>();
+        cartAdapter = new MyCartAdapter(getActivity(), products);
+
+        recyclerView.setAdapter(cartAdapter);
         productsRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
                 .child("Shoppers")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("Cart");
-
-        products = new ArrayList<>();
-        recyclerView = root.findViewById(R.id.recyclerCartView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        cartAdapter = new MyCartAdapter(getActivity(), products);
-        recyclerView.setAdapter(cartAdapter);
 
         // access the firebase database at productsRef and update the cartModelList
         productsRef.addChildEventListener(new ChildEventListener() {
@@ -78,8 +73,19 @@ public class MyCartFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                 Product product = dataSnapshot.getValue(Product.class);
-                products.add(product);
-                cartAdapter.notifyDataSetChanged();
+                if (!isProductDuplicate(product)) {
+                    products.add(product);
+//                    cartAdapter.notifyDataSetChanged();
+                }
+            }
+
+            private boolean isProductDuplicate(Product newProduct) {
+                for (Product product : products) {
+                    if (product.getName().equals(newProduct.getName()) && product.getBrand().equals(newProduct.getBrand())) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             @Override
@@ -153,6 +159,14 @@ public class MyCartFragment extends Fragment {
         for (Product product : products) {
             CartItem orderItem = new CartItem(product);
             ordersRef.push().setValue(orderItem);
+        }
+
+        DatabaseReference ordersRefOwner = FirebaseDatabase.getInstance().getReference("orders");
+
+        // add each product in the list to the Orders database in Owners
+        for (Product product : products) {
+            CartItem orderItem = new CartItem(product);
+            ordersRefOwner.push().setValue(orderItem);
         }
     }
 
