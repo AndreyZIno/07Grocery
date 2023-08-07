@@ -103,7 +103,7 @@ public class ProductDetailsFragment extends Fragment {
     private void initializeViews(View rootView) {
 
         imageViewProduct.setImageResource(R.drawable.sample);
-        textViewProductName.setText("Name: " + product.getName());
+        textViewProductName.setText(product.getName());
         textViewProductBrand.setText("Brand: " + product.getBrand());
         textViewProductPrice.setText("Price: $ " + String.valueOf(product.getPrice()));
         textViewProductDescription.setText(product.getDescription());

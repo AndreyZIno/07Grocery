@@ -2,14 +2,16 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/gradient_with_image">
+        android:background="@drawable/gradient_with_image"
+        android:weightSum="1"
+        android:layout_gravity="top">
 
         <ImageButton
             android:id="@+id/buttonGoBack"
@@ -37,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/holo_orange_light"
             android:textStyle="bold"
             android:padding="8dp"
             android:layout_gravity="center_horizontal"
@@ -62,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/holo_green_light"
             android:padding="8dp"
             android:layout_gravity="center_horizontal"
             android:text="Product Price: $10.00"
@@ -77,8 +79,7 @@
             android:textColor="@android:color/white"
             android:padding="8dp"
             android:layout_gravity="center_horizontal"
-            android:text="Product Description: This is a great product."
-            android:textStyle="bold"/>
+            android:text="Product Description: This is a great product." />
 
         <!-- TextView to display the product quantity -->
         <TextView
