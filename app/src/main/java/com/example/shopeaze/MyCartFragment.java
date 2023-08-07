@@ -36,7 +36,7 @@ import java.util.List;
 
 public class MyCartFragment extends Fragment {
 
-    DatabaseReference databaseReference;
+    private DatabaseReference productsRef;
     FirebaseAuth auth;
 
     RecyclerView recyclerView;
@@ -52,34 +52,8 @@ public class MyCartFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflator.inflate(R.layout.activity_cart, container, false);
 
-//        database = FirebaseFirestore.getInstance();
-//        auth = FirebaseAuth.getInstance();
-//        recyclerView = root.findViewById(R.id.recyclerCartView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//
-//        cartModelList = new ArrayList<>();
-//        cartAdapter = new MyCartAdapter(getActivity(), cartModelList);
-//        recyclerView.setAdapter(cartAdapter);
-//
-//        // go into the firebase database, entering "Users", then "Shoppers", then the current user's ID, then "Cart"
-//        database.collection("Users").document(auth.getCurrentUser().getUid())
-//                .collection("Shoppers").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()){
-//                    for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
-//                        MyCartModel cartModel = documentSnapshot.toObject(MyCartModel.class);
-//                        cartModelList.add(cartModel);
-//                        cartAdapter.notifyDataSetChanged();
-//                    }
-//                }
-//            }
-//
-//        });
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        productsRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Shopper").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Cart");
         auth = FirebaseAuth.getInstance();
         recyclerView = root.findViewById(R.id.recyclerCartView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -88,37 +62,37 @@ public class MyCartFragment extends Fragment {
         cartAdapter = new MyCartAdapter(getActivity(), cartModelList);
         recyclerView.setAdapter(cartAdapter);
 
-        // go into the firebase database, entering "Users", then "Shoppers", then the current user's ID, then "Cart"
-        databaseReference.child("Users").child(auth.getCurrentUser().getUid())
-                .child("Shoppers").addChildEventListener(new ChildEventListener() {
+        // access the firebase database at productsRef and update the cartModelList
+        productsRef.addChildEventListener(new ChildEventListener() {
 
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                        MyCartModel cartModel = dataSnapshot.getValue(MyCartModel.class);
-                        cartModelList.add(cartModel);
-                        cartAdapter.notifyDataSetChanged();
-                    }
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                MyCartModel cartModel = dataSnapshot.getValue(MyCartModel.class);
+                cartModelList.add(cartModel);
+                cartAdapter.notifyDataSetChanged();
+            }
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                        // Handle changes to existing cart items if needed
-                    }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle changes to existing cart items if needed
+            }
 
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                        // Handle removal of cart items if needed
-                    }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                // Handle removal of cart items if needed
+            }
 
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                        // Handle movement of cart items if needed
-                    }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                // Handle movement of cart items if needed
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // Handle error if needed
-                    }
-                });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error if needed
+            }
+        });
+
 
         ImageButton storesButton = root.findViewById(R.id.button_stores);
         storesButton.setOnClickListener(new View.OnClickListener() {
