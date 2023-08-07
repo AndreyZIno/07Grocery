@@ -1,6 +1,7 @@
 package com.example.shopeaze;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -27,6 +31,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,10 +43,10 @@ public class MyCartFragment extends Fragment {
 
     private DatabaseReference productsRef;
     FirebaseAuth auth;
+    private RecyclerView recyclerView;
+    private MyCartAdapter cartAdapter;
+    private ArrayList<Product> products;
 
-    RecyclerView recyclerView;
-    MyCartAdapter cartAdapter;
-    List<MyCartModel> cartModelList;
 
     public MyCartFragment(){
         //
@@ -53,13 +58,17 @@ public class MyCartFragment extends Fragment {
         View root = inflator.inflate(R.layout.activity_cart, container, false);
 
 
-        productsRef = FirebaseDatabase.getInstance().getReference().child("Users").child("Shopper").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Cart");
-        auth = FirebaseAuth.getInstance();
+        productsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("Shoppers")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Cart");
+
+        products = new ArrayList<>();
         recyclerView = root.findViewById(R.id.recyclerCartView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        cartModelList = new ArrayList<>();
-        cartAdapter = new MyCartAdapter(getActivity(), cartModelList);
+        cartAdapter = new MyCartAdapter(getActivity(), products);
         recyclerView.setAdapter(cartAdapter);
 
         // access the firebase database at productsRef and update the cartModelList
@@ -67,9 +76,9 @@ public class MyCartFragment extends Fragment {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                MyCartModel cartModel = dataSnapshot.getValue(MyCartModel.class);
-                cartModelList.add(cartModel);
-                cartAdapter.notifyDataSetChanged();
+                Product product = dataSnapshot.getValue(Product.class);
+                products.add(product);
+//                cartAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -123,14 +132,27 @@ public class MyCartFragment extends Fragment {
                 NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
                 navController.navigate(R.id.action_Cart_to_order_confirm);
 
-                // ###########################
-                // add list to orders in firebase
-                // ###########################
+                addToOrders(products);
             }
         });
 
         return root;
 
+    }
+
+
+    // add a list of Product objects to the Orders database in Firebase, under Shoppers
+    private void addToOrders(List<Product> products) {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+        DatabaseReference ordersRef = shopperRef.child("Orders");
+
+        // add each product in the list to the Orders database
+        for (Product product : products) {
+            CartItem orderItem = new CartItem(product);
+            ordersRef.push().setValue(orderItem);
+        }
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

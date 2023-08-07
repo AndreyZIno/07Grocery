@@ -9,16 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder>{
 
     Context context;
-    List<MyCartModel> cartModelList;
+    ArrayList<Product> products;
 
-    public MyCartAdapter(Context context, List<MyCartModel> cartModelList) {
+    public MyCartAdapter(Context context, ArrayList<Product> products) {
         this.context = context;
-        this.cartModelList = cartModelList;
+        this.products = products;
     }
 
     @NonNull
@@ -29,14 +30,14 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.name.setText(cartModelList.get(position).getProductName());
-        holder.price.setText(cartModelList.get(position).getProductPrice());
-        holder.quantity.setText(cartModelList.get(position).getProductQuantity());
+        holder.name.setText(products.get(position).getName());
+        holder.price.setText((int) products.get(position).getPrice());
+        holder.quantity.setText(products.get(position).getQuantity());
     }
 
     @Override
     public int getItemCount() {
-        return cartModelList.size();
+        return products.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
