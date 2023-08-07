@@ -101,7 +101,7 @@ public class ShopperProductDetailsFragment extends Fragment {
                     //The product is already in the cart, update the quantity       (TEMPORARY, this will be done in actual cart)
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         CartItem existingCartItem = snapshot.getValue(CartItem.class);
-                        int newQuantity = existingCartItem.getQuantity() + 1;
+                        int newQuantity = existingCartItem.getCartQuantity() + 1;
                         snapshot.getRef().child("quantity").setValue(newQuantity);
                         Toast.makeText(getActivity(), "Items in cart: " + newQuantity, Toast.LENGTH_SHORT).show();
                     }

@@ -52,4 +52,5 @@ public class Product implements Serializable {
     public void setBrand(String brand) { this.productBrand = brand; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public void setImage(int image) { this.image = image; }
+
 }

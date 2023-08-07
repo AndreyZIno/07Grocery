@@ -32,6 +32,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,14 +40,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.shopeaze.CartItem;
+
 
 public class MyCartFragment extends Fragment {
 
     private DatabaseReference productsRef;
-    FirebaseAuth auth;
     private RecyclerView recyclerView;
     private MyCartAdapter cartAdapter;
-    private ArrayList<Product> products;
+    private ArrayList<CartItem> products;
 
     @Nullable
     @Override
@@ -72,21 +74,24 @@ public class MyCartFragment extends Fragment {
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
-                Product product = dataSnapshot.getValue(Product.class);
-                if (!isProductDuplicate(product)) {
+                CartItem cartItem = dataSnapshot.getValue(CartItem.class);
+                products.add(cartItem);
+                cartAdapter.notifyDataSetChanged();
+                /*if (!isProductDuplicate(product)) {
                     products.add(product);
-//                    cartAdapter.notifyDataSetChanged();
-                }
+                    cartAdapter.notifyDataSetChanged();
+                }*/
             }
 
-            private boolean isProductDuplicate(Product newProduct) {
+            /*private boolean isProductDuplicate(Product newProduct) {
                 for (Product product : products) {
                     if (product.getName().equals(newProduct.getName()) && product.getBrand().equals(newProduct.getBrand())) {
                         return true;
                     }
                 }
                 return false;
-            }
+            }*/
+
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
@@ -95,7 +100,11 @@ public class MyCartFragment extends Fragment {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                // Handle removal of cart items if needed
+                CartItem removedProduct = dataSnapshot.getValue(CartItem.class);
+                if (removedProduct != null) {
+                    products.remove(removedProduct);
+                    cartAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
@@ -149,25 +158,17 @@ public class MyCartFragment extends Fragment {
 
 
     // add a list of Product objects to the Orders database in Firebase, under Shoppers
-    private void addToOrders(List<Product> products) {
+    private void addToOrders(List<CartItem> cartItems) {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
         DatabaseReference ordersRef = shopperRef.child("Orders");
 
-        // add each product in the list to the Orders database
-        for (Product product : products) {
-            CartItem orderItem = new CartItem(product);
-            ordersRef.push().setValue(orderItem);
+        // add each cart item in the list to the Orders database
+        for (CartItem cartItem : cartItems) {
+            ordersRef.push().setValue(cartItem);
         }
 
-        DatabaseReference ordersRefOwner = FirebaseDatabase.getInstance().getReference("orders");
-
-        // add each product in the list to the Orders database in Owners
-        for (Product product : products) {
-            CartItem orderItem = new CartItem(product);
-            ordersRefOwner.push().setValue(orderItem);
-        }
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

@@ -33,7 +33,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/ProductName"
+                    android:id="@+id/cartProductName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Product Name"
@@ -41,7 +41,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/ProductBrand"
+                    android:id="@+id/cartProductBrand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Product Brand"
@@ -49,7 +49,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/ProductPrice"
+                    android:id="@+id/cartProductPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Price: $19.99"
@@ -67,6 +67,16 @@
                     android:textStyle="bold" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/removeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
