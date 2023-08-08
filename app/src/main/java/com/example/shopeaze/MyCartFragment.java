@@ -131,6 +131,8 @@ public class MyCartFragment extends Fragment {
             }
         });
 
+        // NEW
+
         Button checkoutButton = root.findViewById(R.id.CheckoutButton);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,18 +171,19 @@ public class MyCartFragment extends Fragment {
     }
 
 
-    // add a list of Product objects to the Orders database in Firebase, under Shoppers
+// add a list of Product objects to the Orders database in Firebase, under Shoppers
 
     private void addToOrders(List<CartItem> cartItems) {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
         DatabaseReference ordersRef = shopperRef.child("Orders");
+        DatabaseReference newOrderRef = ordersRef.push();
 
-        // add each cart item in the list to the Orders database
+        // add each cart item in the list to the Orders database under a single order ID
         for (CartItem cartItem : cartItems) {
             cartItem.setStatus("Received");
-            ordersRef.push().setValue(cartItem);
+            newOrderRef.push().setValue(cartItem);
         }
 
         // owners side
@@ -189,51 +192,35 @@ public class MyCartFragment extends Fragment {
 
         storesList = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
-            // if cartItem.storeName is not in storesList, add it
-            if (!storesList.contains(cartItem.getStoreName())) {
-                storesList.add(cartItem.getStoreName());
+            // if cartItem.storeId is not in storesList, add it
+            if (!storesList.contains(cartItem.getStoreID())) {
+                storesList.add(cartItem.getStoreID());
             }
         }
 
-        for (String storeName : storesList) {
-            if (storeName != null) {
-                storeOwnerRef.orderByChild("StoreName").equalTo(storeName).addListenerForSingleValueEvent(new ValueEventListener() {
+        for (String storeId : storesList) {
+            if (storeId != null) {
+                storeOwnerRef.child(storeId).child("Orders").child(newOrderRef.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                for (CartItem cartItem : cartItems) {
-                                    if (cartItem.getStoreName().equals(storeName)) {
-                                        // push cartItem to the Orders database under the current store owner
-                                        snapshot.getRef().child("Orders").push().setValue(cartItem);
-                                    }
-                                }
-
-                                CartItem existingCartItem = snapshot.getValue(CartItem.class);
-                                if (existingCartItem != null) {
-                                    int newQuantity = existingCartItem.getCartQuantity() + 1;
-                                    snapshot.getRef().child("cartQuantity").setValue(newQuantity);
-                                }
+                        for (CartItem cartItem : cartItems) {
+                            if (cartItem.getStoreID().equals(storeId)) {
+                                // push cartItem to the Orders database under the current store owner with the same order ID as the shopper's order
+                                dataSnapshot.getRef().push().setValue(cartItem);
                             }
                         }
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Handle any errors that might occur during the query
-                        Log.d("MyCartAdapter", "onCancelled", databaseError.toException());
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
-
-                ordersOwner = storeOwnerRef.child(storeName).child("Orders");
-                for (CartItem cartItem : cartItems) {
-                    if (cartItem.getStoreName().equals(storeName)) {
-                        ordersOwner.push().setValue(cartItem);
-                    }
-                }
             }
         }
     }
+
+
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
