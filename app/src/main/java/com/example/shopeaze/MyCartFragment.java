@@ -1,6 +1,7 @@
 package com.example.shopeaze;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.shopeaze.CartItem;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MyCartFragment extends Fragment {
@@ -34,6 +36,7 @@ public class MyCartFragment extends Fragment {
     private RecyclerView recyclerView;
     private MyCartAdapter cartAdapter;
     private ArrayList<CartItem> products;
+    private ArrayList<String> storesList;
 
     @Nullable
     @Override
@@ -54,7 +57,6 @@ public class MyCartFragment extends Fragment {
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("Cart");
 
-        // access the firebase database at productsRef and update the cartModelList
         productsRef.addChildEventListener(new ChildEventListener() {
 
             @Override
@@ -62,21 +64,7 @@ public class MyCartFragment extends Fragment {
                 CartItem cartItem = dataSnapshot.getValue(CartItem.class);
                 products.add(cartItem);
                 cartAdapter.notifyDataSetChanged();
-                /*if (!isProductDuplicate(product)) {
-                    products.add(product);
-                    cartAdapter.notifyDataSetChanged();
-                }*/
             }
-
-            /*private boolean isProductDuplicate(Product newProduct) {
-                for (Product product : products) {
-                    if (product.getName().equals(newProduct.getName()) && product.getBrand().equals(newProduct.getBrand())) {
-                        return true;
-                    }
-                }
-                return false;
-            }*/
-
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
@@ -159,6 +147,7 @@ public class MyCartFragment extends Fragment {
 
 
     // add a list of Product objects to the Orders database in Firebase, under Shoppers
+
     private void addToOrders(List<CartItem> cartItems) {
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -172,14 +161,54 @@ public class MyCartFragment extends Fragment {
         }
 
         // owners side
-        DatabaseReference ordersOwner = FirebaseDatabase.getInstance().getReference("Orders");
+        DatabaseReference storeOwnerRef = usersRef.child("StoreOwner");
+        DatabaseReference ordersOwner;
 
-        // add each cart item in the list to the Orders database
         for (CartItem cartItem : cartItems) {
-            cartItem.setStatus("Received");
-            ordersOwner.push().setValue(cartItem);
+            // if cartItem.storeName is not in storesList, add it
+            if (!storesList.contains(cartItem.getStoreName())) {
+                storesList.add(cartItem.getStoreName());
+            }
         }
 
+        for (String storeName : storesList) {
+            storeOwnerRef.orderByChild("StoreName").equalTo(storeName).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            for (CartItem cartItem : cartItems) {
+                                if (cartItem.getStoreName().equals(storeName)) {
+                                    // push cartItem to the Orders database under the current store owner
+                                    snapshot.getRef().child("Orders").push().setValue(cartItem);
+
+                                }
+                            }
+
+
+                            CartItem existingCartItem = snapshot.getValue(CartItem.class);
+                            int newQuantity = existingCartItem.getCartQuantity() + 1;
+                            snapshot.getRef().child("cartQuantity").setValue(newQuantity);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle any errors that might occur during the query
+                    Log.d("MyCartAdapter", "onCancelled", databaseError.toException());
+                }
+            });
+
+
+
+                ordersOwner = storeOwnerRef.child(storeName).child("Orders");
+            for (CartItem cartItem : cartItems) {
+                if (cartItem.getStoreName().equals(storeName)) {
+                    ordersOwner.push().setValue(cartItem);
+                }
+            }
+        }
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

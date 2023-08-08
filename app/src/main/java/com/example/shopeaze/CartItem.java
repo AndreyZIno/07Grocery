@@ -15,7 +15,6 @@ public class CartItem {
     private double cartProductPrice;
     private int image;
     private String status;
-
     private String storeName;
 
     public CartItem(){
@@ -54,6 +53,9 @@ public class CartItem {
     public int getImage() {
         return image;
     }
+    public String getStoreName() {
+        return storeName;
+    }
 
     //Necessary setters:
     public String setcartProductID(String productID) {
@@ -74,9 +76,11 @@ public class CartItem {
     public void setQuantity(int quantity){
     this.cartQuantity = quantity;
     }
-
     public void setStatus(String status) {
         this.status = status;
+    }
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
 }
