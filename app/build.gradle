@@ -55,6 +55,4 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.0"
 
     testImplementation 'org.mockito:mockito-all:1.10.19'
-    testImplementation "com.google.firebase:firebase-testing:2.1.0"
-
 }

@@ -2,7 +2,6 @@ package com.example.shopeaze;
 
 import android.text.TextUtils;
 
-
 public class LoginPresenter implements LoginContract.Presenter {
     private LoginContract.Model model;
     private LoginContract.View view;
