@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.shopeaze.CartItem;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -138,6 +139,28 @@ public class MyCartFragment extends Fragment {
                 navController.navigate(R.id.action_Cart_to_order_confirm);
 
                 addToOrders(products);
+
+                // go through all cart items, and for each one, delete it from the cart
+                DatabaseReference productRef = FirebaseDatabase.getInstance().getReference()
+                        .child("Users")
+                        .child("Shoppers")
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .child("Cart");
+
+                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                            productSnapshot.getRef().removeValue();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.d("MyCartAdapter", "onCancelled", error.toException());
+                    }
+                });
+
             }
         });
 
