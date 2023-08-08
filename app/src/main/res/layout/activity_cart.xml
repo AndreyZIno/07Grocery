@@ -5,15 +5,28 @@
     android:background="@drawable/vector2_background"
     android:paddingHorizontal="10dp">
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCartView"
+        android:layout_width="376dp"
+        android:layout_height="651dp"
+        android:layout_above="@+id/navigationBar"/>
+
+    <Button
+        android:id="@+id/CheckoutButton"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Checkout"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/navigationBar" />
+
+    <LinearLayout
+        android:id="@+id/navigationBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal">
-
-
+        android:layout_gravity="center_horizontal"
+        android:gravity="center">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -132,17 +145,6 @@
         </FrameLayout>
 
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerCartView"
-        android:layout_width="376dp"
-        android:layout_height="651dp" />
-
-    <Button
-        android:id="@+id/CheckoutButton"
-        android:layout_width="387dp"
-        android:layout_height="97dp"
-        android:text="Checkout" />
 
 
 </RelativeLayout>
