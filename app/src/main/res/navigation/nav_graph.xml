@@ -176,6 +176,9 @@
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <action
+            android:id="@+id/action_ProductList_to_Logout"
+            app:destination="@id/logout"/>
+        <action
             android:id="@+id/action_product_list_to_product_details"
             app:destination="@id/ProductDetails" />
     </fragment>
