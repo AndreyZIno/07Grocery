@@ -202,8 +202,8 @@ public class MyCartFragment extends Fragment {
                 // go into the store owner with the current storeID and add all cartItems with that storeID to the Orders database
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getStoreID().equals(storeID)) {
-                        // push cartItem to the Orders database under the current store owner
-                        storeOwnerRef.child(storeID).child("Orders").push().setValue(cartItem);
+                        DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").push();
+                        newOrderRef2.push().setValue(cartItem);
                     }
                 }
             }
