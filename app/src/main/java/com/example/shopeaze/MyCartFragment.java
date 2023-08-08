@@ -172,13 +172,12 @@ public class MyCartFragment extends Fragment {
         }
 
         // owners side
-        DatabaseReference ownerRef = usersRef.child("StoreOwner").child(userID);
-        DatabaseReference ordersRefOwners = shopperRef.child("Orders");
+        DatabaseReference ordersOwner = FirebaseDatabase.getInstance().getReference("Orders");
 
         // add each cart item in the list to the Orders database
         for (CartItem cartItem : cartItems) {
             cartItem.setStatus("Received");
-            ordersRef.push().setValue(cartItem);
+            ordersOwner.push().setValue(cartItem);
         }
 
     }
