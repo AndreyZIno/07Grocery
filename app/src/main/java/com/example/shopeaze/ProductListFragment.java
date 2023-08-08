@@ -69,6 +69,16 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
             }
         });
 
+        ImageButton orderButton = view.findViewById(R.id.button_orders);
+
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(ProductListFragment.this);
+                navController.navigate(R.id.action_ProductList_to_OwnerOrders);
+            }
+        });
+
 
         ImageButton inventoryButton = view.findViewById(R.id.button_inventory);
 
@@ -182,10 +192,12 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
     }
 
     private void openProductDetailsFragment(Product product) {
+        String productImageURL = String.valueOf(product.getImage());
+
         NavController navController = NavHostFragment.findNavController(this);
         navController.navigate(
                 R.id.action_product_list_to_product_details,
-                ProductDetailsFragment.newInstance(product).getArguments()
+                ProductDetailsFragment.newInstance(product, productImageURL).getArguments()
         );
     }
 
