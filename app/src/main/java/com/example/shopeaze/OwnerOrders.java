@@ -83,35 +83,54 @@ public class OwnerOrders extends Fragment {
     private void loadOrders(){
         String userId = mAuth.getUid();
         DatabaseReference storeRef = ref.child("Users").child("StoreOwner").child(userId);
-        com.google.firebase.database.Query ordersRef = storeRef.child("Orders");
-        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        com.google.firebase.database.Query storeNameRef = storeRef.child("StoreName");
+        storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot orderSnapshot : snapshot.getChildren()){
-                    String orderID = orderSnapshot.getKey();
-                    String status = orderSnapshot.child("Status").getValue(String.class);
-                    String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
-                    productList = new ArrayList<>();
-                    for(DataSnapshot productSnapshot : orderSnapshot.child("Items").getChildren()){
-                        String sto = productSnapshot.child("Store Name").getValue(String.class);
-                        String name = productSnapshot.child("Name").getValue(String.class);
-                        String brand = productSnapshot.child("Brand").getValue(String.class);
-                        double price = productSnapshot.child("Price").getValue(Double.class);
-                        String description = productSnapshot.child("Description").getValue(String.class);
-                        int quantity = productSnapshot.child("Quantity").getValue(Integer.class);
-                        Product product = new Product(name, brand, price, description, quantity, 0);
-                        productList.add(product);
+                storeName = snapshot.getValue(String.class);
+                Log.d("StoreName", storeName);
+                com.google.firebase.database.Query ordersRef = storeRef.child("Orders");
+                ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot orderSnapshot : snapshot.getChildren()){
+                            String orderID = orderSnapshot.getKey();
+                            String status = orderSnapshot.child("Status").getValue(String.class);
+                            String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
+                            productList = new ArrayList<>();
+                            for(DataSnapshot productSnapshot : orderSnapshot.child("Items").getChildren()){
+                                String sto = productSnapshot.child("Store Name").getValue(String.class);
+                                String name = productSnapshot.child("Name").getValue(String.class);
+                                String brand = productSnapshot.child("Brand").getValue(String.class);
+                                double price = productSnapshot.child("Price").getValue(Double.class);
+                                String description = productSnapshot.child("Description").getValue(String.class);
+                                int quantity = productSnapshot.child("Quantity").getValue(Integer.class);
+                                if(sto.equals(storeName)){
+                                    Product product = new Product(name, brand, price, description, quantity, 0);
+                                    productList.add(product);
+                                }
+                            }
+                            if(productList.size() > 0){
+                                orderList.add(new Order(shopperEmail, status, productList));
+                            }
+                            printOrderList();
+                        }
+                        displayProducts();
                     }
-                    orderList.add(new Order(shopperEmail, status, productList));
-                    printOrderList();
-                }
-                displayProducts();
-            }
 
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+
+                    }
+                });
+
+
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
 
             }
         });
