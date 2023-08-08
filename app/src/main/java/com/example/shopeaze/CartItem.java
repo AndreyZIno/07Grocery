@@ -1,11 +1,5 @@
 package com.example.shopeaze;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.List;
-
 public class CartItem {
 //Represents an item in cart
     private int cartQuantity;
@@ -13,7 +7,7 @@ public class CartItem {
     private String cartProductName;
     private String cartProductBrand;
     private double cartProductPrice;
-    private int image;
+//    private int image;
     private String status;
     private String storeName;
     private String imageURL;
@@ -28,10 +22,10 @@ public class CartItem {
         this.cartProductBrand = product.getBrand();
         this.cartProductPrice = product.getPrice();
         this.cartQuantity = product.getQuantity();
-        this.image = product.getImage();
+//        this.image = product.getImage();
         this.status = product.getStatus();
         this.storeName = product.getStoreName();
-        this.imageURL = product.getImage();
+        this.imageURL = String.valueOf(product.getImage());
     }
 
     //Getters
@@ -73,8 +67,8 @@ public class CartItem {
     public double setcartProductPrice(double productPrice) {
         return this.cartProductPrice = productPrice;
     }
-    public int setImage(int image) {
-        return this.image = image;
+    public String setImage(int imageURL) {
+        return this.imageURL = String.valueOf(imageURL);
     }
     public void setQuantity(int quantity){
     this.cartQuantity = quantity;
