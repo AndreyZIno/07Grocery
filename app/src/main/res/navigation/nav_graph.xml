@@ -181,6 +181,9 @@
         <action
             android:id="@+id/action_product_list_to_product_details"
             app:destination="@id/ProductDetails" />
+        <action
+            android:id="@+id/action_ProductList_to_OwnerOrders"
+            app:destination="@id/OwnerOrders" />
     </fragment>
 
     <fragment
@@ -234,19 +237,6 @@
             app:destination="@id/Order_confirmation"/>
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/Cart"-->
-<!--        android:name="com.example.shopeaze.FragmentMyCart"-->
-<!--        android:label="My Cart"-->
-<!--        tools:layout="@layout/activity_cart">-->
-
-<!--        <action-->
-<!--            android:id="@+id/action_Cart_to_StoreList"-->
-<!--            app:destination="@id/StoreList"/>-->
-<!--    </fragment>-->
-
-
-
     <fragment
         android:id="@+id/Order_confirmation"
         android:name="com.example.shopeaze.OrderConfirm"
@@ -262,16 +252,19 @@
 
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/Cart"-->
-<!--        android:name="com.example.shopeaze.FragmentMyCart"-->
-<!--        android:label="My Cart"-->
-<!--        tools:layout="@layout/activity_cart">-->
 
-<!--        <action-->
-<!--            android:id="@+id/action_Cart_to_StoreList"-->
-<!--            app:destination="@id/StoreList"/>-->
-<!--    </fragment>-->
+    <fragment
+        android:id="@+id/OwnerOrders"
+        android:name="com.example.shopeaze.OwnerOrders"
+        android:label="Owner Orders"
+        tools:layout="@layout/fragment_owner_orders" />
+
+    <fragment
+        android:id="@+id/OwnerProductDetails"
+        android:name="com.example.shopeaze.OwnerOrders"
+        android:label="Owner Orders"
+        tools:layout="@layout/fragment_order_product_details" />
+
 
 
 </navigation>
