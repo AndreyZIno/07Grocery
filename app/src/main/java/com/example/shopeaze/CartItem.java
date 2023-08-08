@@ -7,7 +7,6 @@ public class CartItem {
     private String cartProductName;
     private String cartProductBrand;
     private double cartProductPrice;
-//    private int image;
     private String status;
     private String storeName;
     private String imageURL;
@@ -22,7 +21,6 @@ public class CartItem {
         this.cartProductBrand = product.getBrand();
         this.cartProductPrice = product.getPrice();
         this.cartQuantity = product.getQuantity();
-//        this.image = product.getImage();
         this.status = product.getStatus();
         this.storeName = product.getStoreName();
         this.imageURL = String.valueOf(product.getImage());
