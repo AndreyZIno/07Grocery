@@ -10,13 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.fragment.NavHostFragment;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,7 +52,7 @@ public class OwnerOrders extends Fragment {
 
     // Declare a ListView to display the orders and a Button for refreshing the orders.
     private ListView ownerordersListView;
-    private Button refreshButton;
+    private ImageButton refreshButton;
 
 
     // Declare an ArrayAdapter to handle the list of orders.
@@ -68,6 +75,31 @@ public class OwnerOrders extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_owner_orders, container, false);
+
+        ImageButton inventoryButton = view.findViewById(R.id.button_inventory);
+
+        inventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(OwnerOrders.this);
+                navController.navigate(R.id.action_OwnerOrders_to_ProductList);
+            }
+        });
+
+        ImageButton ordersButton = view.findViewById(R.id.button_orders);
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(OwnerOrders.this);
+                NavDestination currentDestination = navController.getCurrentDestination();
+                if (currentDestination != null && currentDestination.getId() == R.id.OwnerOrders) {
+                    // User is already on OwnerOrders fragment, do nothing
+                    return;
+                }
+            }
+        });
+
+
         ref = FirebaseDatabase.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -106,7 +138,7 @@ public class OwnerOrders extends Fragment {
                                 String description = productSnapshot.child("Description").getValue(String.class);
                                 int quantity = productSnapshot.child("Quantity").getValue(Integer.class);
                                 if(sto.equals(storeName)){
-                                    Product product = new Product(name, brand, price, description, quantity, 0);
+                                    Product product = new Product(name, brand, price, description, quantity, null);
                                     productList.add(product);
                                 }
                             }
@@ -223,8 +255,6 @@ public class OwnerOrders extends Fragment {
     //Create an example  order
 
 
-
-
     private void createExampleOrder(){
         Log.d("Create Order", "Creating Order");
         //Go to a specific Shopper and then push to
@@ -251,7 +281,40 @@ public class OwnerOrders extends Fragment {
         DatabaseReference quantityRef = newItemRef.child("Quantity");
         quantityRef.setValue(1);
         DatabaseReference storeNameRef = newItemRef.child("Store Name");
-        storeNameRef.setValue("Banana Republic");
+        storeNameRef.setValue("Hello Fresh");
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        final NavController navController = NavHostFragment.findNavController(this);
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                ImageButton inventoryButton = view.findViewById(R.id.button_inventory);
+                ImageButton ordersButton = view.findViewById(R.id.button_orders);
+                TextView inventoryText = view.findViewById(R.id.textViewInventoryText);
+                TextView ordersText = view.findViewById(R.id.textViewOrderText);
+                ImageView inventoryIcon = view.findViewById(R.id.inventoryIcon);
+                ImageView ordersIcon = view.findViewById(R.id.orderIcon);
+                if (destination.getId() == R.id.ProductList) {
+                    inventoryButton.setImageResource(R.drawable.focused_nav_button);
+                    ordersButton.setImageResource(R.drawable.nav_gradient);
+                    inventoryText.setTextColor(ContextCompat.getColor(getContext(), R.color.navy_blue));
+                    ordersText.setTextColor(ContextCompat.getColor(getContext(), R.color.light_gray));
+                    inventoryIcon.setImageResource(R.drawable.black_store);
+                    ordersIcon.setImageResource(R.drawable.white_orders);
+                } else if (destination.getId() == R.id.OwnerOrders) {
+                    inventoryButton.setImageResource(R.drawable.nav_gradient);
+                    ordersButton.setImageResource(R.drawable.focused_nav_button);
+                    inventoryText.setTextColor(ContextCompat.getColor(getContext(), R.color.light_gray));
+                    ordersText.setTextColor(ContextCompat.getColor(getContext(), R.color.navy_blue));
+                    inventoryIcon.setImageResource(R.drawable.white_store);
+                    ordersIcon.setImageResource(R.drawable.black_orders);
+                }
+            }
+        });
     }
 
 }
