@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.fragment.app.Fragment;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class Logout extends Fragment {
 
     FirebaseAuth auth;
-    Button button;
+    ImageButton button;
     TextView textView;
     FirebaseUser user;
 
@@ -32,14 +33,11 @@ public class Logout extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_logout, container, false);
         button = view.findViewById(R.id.logout);
-        textView = view.findViewById(R.id.user_details);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
         if (user==null){
-            //Intent intent = new Intent(getActivity(), Login.class);
-            //startActivity(intent);
             NavHostFragment.findNavController(Logout.this)
                     .navigate(R.id.action_logout_to_WelcomeScreen);
         }

@@ -6,11 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewHolder> {
+
     private List<Order> orderList;
 
     public OrdersAdapter(List<Order> orderList) {
@@ -19,20 +21,26 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
 
     @Override
     public OrderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_order, parent, false);
-        return new OrderViewHolder(itemView);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false);
+        return new OrderViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(OrderViewHolder holder, int position) {
         Order order = orderList.get(position);
-        if (!order.getProducts().isEmpty()) {
-            holder.statusView.setText(order.getProducts().get(0).getStatus());
-        }
+        String displayText = "Order " + order.getOrderNumber() + " - Status: " + order.getStatus();
+        holder.status.setText(displayText);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Order clickedOrder = orderList.get(position);
+                OrderDetailDialog dialog = new OrderDetailDialog(clickedOrder);
+                dialog.show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), "OrderDetailDialog");
+            }
+        });
+
     }
-
-
 
 
     @Override
@@ -40,13 +48,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         return orderList.size();
     }
 
-    public static class OrderViewHolder extends RecyclerView.ViewHolder {
-        public TextView statusView;
+    class OrderViewHolder extends RecyclerView.ViewHolder {
+        TextView status;
 
         public OrderViewHolder(View itemView) {
             super(itemView);
-            statusView = itemView.findViewById(R.id.statusView);
+            status = itemView.findViewById(R.id.status_text);
         }
     }
 }
-
