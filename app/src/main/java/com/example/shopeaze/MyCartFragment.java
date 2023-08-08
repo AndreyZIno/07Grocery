@@ -188,34 +188,24 @@ public class MyCartFragment extends Fragment {
 
         // owners side
         DatabaseReference storeOwnerRef = usersRef.child("StoreOwner");
-        DatabaseReference ordersOwner;
 
         storesList = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
-            // if cartItem.storeId is not in storesList, add it
+            // if cartItem.storeName is not in storesList, add it
             if (!storesList.contains(cartItem.getStoreID())) {
                 storesList.add(cartItem.getStoreID());
             }
         }
 
-        for (String storeId : storesList) {
-            if (storeId != null) {
-                storeOwnerRef.child(storeId).child("Orders").child(newOrderRef.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (CartItem cartItem : cartItems) {
-                            if (cartItem.getStoreID().equals(storeId)) {
-                                // push cartItem to the Orders database under the current store owner with the same order ID as the shopper's order
-                                dataSnapshot.getRef().push().setValue(cartItem);
-                            }
-                        }
+        for (String storeID : storesList) {
+            if (storeID != null) {
+                // go into the store owner with the current storeID and add all cartItems with that storeID to the Orders database
+                for (CartItem cartItem : cartItems) {
+                    if (cartItem.getStoreID().equals(storeID)) {
+                        // push cartItem to the Orders database under the current store owner
+                        ordersRef.push().setValue(cartItem);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                }
             }
         }
     }
