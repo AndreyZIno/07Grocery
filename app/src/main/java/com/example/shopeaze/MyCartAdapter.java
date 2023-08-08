@@ -198,9 +198,4 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             subtractButton = itemView.findViewById(R.id.subtractButton);
         }
     }
-
-
-
-
-
 }
