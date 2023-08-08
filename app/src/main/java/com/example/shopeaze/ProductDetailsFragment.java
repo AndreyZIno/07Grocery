@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,10 +43,11 @@ public class ProductDetailsFragment extends Fragment {
     TextView buttonRemoveProduct;
     View rootView;
 
-    public static ProductDetailsFragment newInstance(Product product) {
+    public static ProductDetailsFragment newInstance(Product product, String productImageURL) {
         ProductDetailsFragment fragment = new ProductDetailsFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PRODUCT, product);
+        args.putString("productImageURL", productImageURL);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,6 +80,20 @@ public class ProductDetailsFragment extends Fragment {
             Toast.makeText(requireContext(), "No arguments passed to the fragment.", Toast.LENGTH_SHORT).show();
         }
 
+        String productImageURL = arguments.getString("productImageURL");
+
+        if (product != null) {
+            // Load and display the image using Glide
+            Glide.with(requireContext())
+                    .load(productImageURL)
+                    .placeholder(R.drawable.placeholder_image) // Replace with a placeholder image resource
+                    .error(R.drawable.error_image) // Replace with an error image resource
+                    .into(imageViewProduct);
+            // Rest of your code to initialize other views
+        } else {
+            Toast.makeText(requireContext(), "Product data is null.", Toast.LENGTH_SHORT).show();
+        }
+
         Button buttonGoBack = rootView.findViewById(R.id.buttonGoBack);
         buttonGoBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +103,6 @@ public class ProductDetailsFragment extends Fragment {
                 navController.navigate(R.id.action_product_details_to_product_list);
             }
         });
-
 
         TextView buttonRemoveProduct = rootView.findViewById(R.id.buttonRemoveProduct);
         buttonRemoveProduct.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +116,27 @@ public class ProductDetailsFragment extends Fragment {
     }
 
     private void initializeViews(View rootView) {
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            product = (Product) arguments.getSerializable(ARG_PRODUCT);
+            String productImageURL = arguments.getString("productImageURL");
+
+            if (product != null) {
+                // Load and display the image using Glide
+                Glide.with(requireContext())
+                        .load(productImageURL)
+                        .placeholder(R.drawable.placeholder_image) // Replace with a placeholder image resource
+                        .error(R.drawable.error_image) // Replace with an error image resource
+                        .into(imageViewProduct);
+
+                // Rest of your code to initialize other views
+            } else {
+                Toast.makeText(requireContext(), "Product data is null.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(requireContext(), "No arguments passed to the fragment.", Toast.LENGTH_SHORT).show();
+        }
 
         imageViewProduct.setImageResource(R.drawable.sample);
         textViewProductName.setText(product.getName());
