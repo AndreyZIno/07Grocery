@@ -203,7 +203,7 @@ public class MyCartFragment extends Fragment {
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getStoreID().equals(storeID)) {
                         // push cartItem to the Orders database under the current store owner
-                        ordersRef.push().setValue(cartItem);
+                        storeOwnerRef.child(storeID).child("Orders").push().setValue(cartItem);
                     }
                 }
             }
