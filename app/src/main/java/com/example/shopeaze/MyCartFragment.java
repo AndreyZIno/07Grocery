@@ -118,20 +118,18 @@ public class MyCartFragment extends Fragment {
             }
         });
 
-        ImageButton cartButton = root.findViewById(R.id.button_cart);
-        cartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
-                NavDestination currentDestination = navController.getCurrentDestination();
-                if (currentDestination != null && currentDestination.getId() == R.id.Cart) {
-                    // User is already on Cart fragment, do nothing
-                    return;
-                }
-            }
-        });
-
-        // NEW
+//        ImageButton cartButton = root.findViewById(R.id.button_cart);
+//        cartButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
+//                NavDestination currentDestination = navController.getCurrentDestination();
+//                if (currentDestination != null && currentDestination.getId() == R.id.Cart) {
+//                    // User is already on Cart fragment, do nothing
+//                    return;
+//                }
+//            }
+//        });
 
         Button checkoutButton = root.findViewById(R.id.CheckoutButton);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
@@ -174,16 +172,16 @@ public class MyCartFragment extends Fragment {
 // add a list of Product objects to the Orders database in Firebase, under Shoppers
 
     private void addToOrders(List<CartItem> cartItems) {
+        // shoppers side
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
         DatabaseReference ordersRef = shopperRef.child("Orders");
         DatabaseReference newOrderRef = ordersRef.push();
 
-        // add each cart item in the list to the Orders database under a single order ID
         for (CartItem cartItem : cartItems) {
             cartItem.setStatus("Received");
-            newOrderRef.push().setValue(cartItem);
+            newOrderRef.child(cartItem.getcartProductID()).setValue(cartItem);
         }
 
         // owners side
@@ -191,7 +189,6 @@ public class MyCartFragment extends Fragment {
 
         storesList = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
-            // if cartItem.storeName is not in storesList, add it
             if (!storesList.contains(cartItem.getStoreID())) {
                 storesList.add(cartItem.getStoreID());
             }
@@ -199,11 +196,11 @@ public class MyCartFragment extends Fragment {
 
         for (String storeID : storesList) {
             if (storeID != null) {
-                // go into the store owner with the current storeID and add all cartItems with that storeID to the Orders database
+                DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").push();
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getStoreID().equals(storeID)) {
-                        DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").push();
-                        newOrderRef2.push().setValue(cartItem);
+                        // query into the ProductID, and set its contents to be cartItem
+                        newOrderRef2.child(cartItem.getcartProductID()).setValue(cartItem);
                     }
                 }
             }
