@@ -88,6 +88,7 @@ public class OwnerOrders extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot orderSnapshot : snapshot.getChildren()){
+                    String orderID = orderSnapshot.getKey();
                     String status = orderSnapshot.child("Status").getValue(String.class);
                     String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
                     productList = new ArrayList<>();
@@ -146,7 +147,7 @@ public class OwnerOrders extends Fragment {
                 Order order = getItem(position);
                 // Display order information
                 TextView orderTextView = convertView.findViewById(android.R.id.text1);
-                orderTextView.setText("Shopper: " + shopperEmail + "\nStatus: " + order.getStatus());
+                orderTextView.setText("Status: " + order.getStatus());
                 return convertView;
             }
         };
@@ -214,6 +215,9 @@ public class OwnerOrders extends Fragment {
         DatabaseReference newOrderRef = orderRef.push();
         String orderID = newOrderRef.getKey();
         DatabaseReference statusRef = newOrderRef.child("Status");
+        //User id
+        DatabaseReference shopperEmailRef = newOrderRef.child("User ID");
+        shopperEmailRef.setValue(userID);
         statusRef.setValue("Pending");
         DatabaseReference itemsRef = newOrderRef.child("Items");
         DatabaseReference newItemRef = itemsRef.push();
