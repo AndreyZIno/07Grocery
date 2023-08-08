@@ -164,6 +164,7 @@ public class MyCartFragment extends Fragment {
         DatabaseReference storeOwnerRef = usersRef.child("StoreOwner");
         DatabaseReference ordersOwner;
 
+        storesList = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
             // if cartItem.storeName is not in storesList, add it
             if (!storesList.contains(cartItem.getStoreName())) {
@@ -172,40 +173,40 @@ public class MyCartFragment extends Fragment {
         }
 
         for (String storeName : storesList) {
-            storeOwnerRef.orderByChild("StoreName").equalTo(storeName).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            for (CartItem cartItem : cartItems) {
-                                if (cartItem.getStoreName().equals(storeName)) {
-                                    // push cartItem to the Orders database under the current store owner
-                                    snapshot.getRef().child("Orders").push().setValue(cartItem);
+            if (storeName != null) {
+                storeOwnerRef.orderByChild("StoreName").equalTo(storeName).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                for (CartItem cartItem : cartItems) {
+                                    if (cartItem.getStoreName().equals(storeName)) {
+                                        // push cartItem to the Orders database under the current store owner
+                                        snapshot.getRef().child("Orders").push().setValue(cartItem);
+                                    }
+                                }
 
+                                CartItem existingCartItem = snapshot.getValue(CartItem.class);
+                                if (existingCartItem != null) {
+                                    int newQuantity = existingCartItem.getCartQuantity() + 1;
+                                    snapshot.getRef().child("cartQuantity").setValue(newQuantity);
                                 }
                             }
-
-
-                            CartItem existingCartItem = snapshot.getValue(CartItem.class);
-                            int newQuantity = existingCartItem.getCartQuantity() + 1;
-                            snapshot.getRef().child("cartQuantity").setValue(newQuantity);
                         }
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors that might occur during the query
-                    Log.d("MyCartAdapter", "onCancelled", databaseError.toException());
-                }
-            });
-
-
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle any errors that might occur during the query
+                        Log.d("MyCartAdapter", "onCancelled", databaseError.toException());
+                    }
+                });
 
                 ordersOwner = storeOwnerRef.child(storeName).child("Orders");
-            for (CartItem cartItem : cartItems) {
-                if (cartItem.getStoreName().equals(storeName)) {
-                    ordersOwner.push().setValue(cartItem);
+                for (CartItem cartItem : cartItems) {
+                    if (cartItem.getStoreName().equals(storeName)) {
+                        ordersOwner.push().setValue(cartItem);
+                    }
                 }
             }
         }

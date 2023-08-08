@@ -234,14 +234,6 @@
             app:destination="@id/Order_confirmation"/>
     </fragment>
 
-    <fragment
-        android:id="@+id/Order_confirmation"
-        android:name="com.example.shopeaze.OrderConfirm"
-        android:label="Order Confirmed"
-        tools:layout="@layout/order_confirm">
-
-    </fragment>
-
 <!--    <fragment-->
 <!--        android:id="@+id/Cart"-->
 <!--        android:name="com.example.shopeaze.FragmentMyCart"-->
