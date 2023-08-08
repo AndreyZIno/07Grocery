@@ -6,11 +6,8 @@ import com.google.firebase.ktx.Firebase;
 import java.util.ArrayList;
 
 public class StoreOwner extends Account {
-    String storeName;
-
-
+    public String storeName;
     private ArrayList<Product> products;
-
 
     public StoreOwner(String username, String password, String storeName){
         this.storeName = storeName;

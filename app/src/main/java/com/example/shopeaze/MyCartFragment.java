@@ -150,6 +150,7 @@ public class MyCartFragment extends Fragment {
     // add a list of Product objects to the Orders database in Firebase, under Shoppers
 
     private void addToOrders(List<CartItem> cartItems) {
+        // shoppers side
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
@@ -172,6 +173,8 @@ public class MyCartFragment extends Fragment {
             if (!storesList.contains(cartItem.getStoreName())) {
                 storesList.add(cartItem.getStoreName());
             }
+            Log.d("MyCartAdapter", "cartItem: " + cartItem);
+            Log.d("MyCartAdapter", "storesList: " + storesList);
         }
 
         for (String storeName : storesList) {
@@ -181,13 +184,17 @@ public class MyCartFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Log.d("MyCartAdapter", "storeName: " + storeName);
+                                // this just goes through the cart items, and if the store name
+                                // matches the store name in the list, add it to the storeProductsList
                                 for (CartItem cartItem : cartItems) {
                                     if (cartItem.getStoreName().equals(storeName)) {
-                                        // add each cart item into the products list
+                                        // add each cart item into the products list for the specific store
                                         storeProductsList.add(String.valueOf(cartItem));
 
                                     }
                                 }
+                                // add the products list to the Orders database for the specific store
                                 snapshot.getRef().child("Orders").push().setValue(storeProductsList);
 
                             }
@@ -201,12 +208,6 @@ public class MyCartFragment extends Fragment {
                     }
                 });
 
-                ordersOwner = storeOwnerRef.child(storeName).child("Orders");
-                for (CartItem cartItem : cartItems) {
-                    if (cartItem.getStoreName().equals(storeName)) {
-                        ordersOwner.push().setValue(cartItem);
-                    }
-                }
             }
         }
     }

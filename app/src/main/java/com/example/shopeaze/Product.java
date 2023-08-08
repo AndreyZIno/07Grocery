@@ -12,7 +12,6 @@ public class Product implements Serializable {
     private int cartQuantity;
     private int image;
     private String status;
-
     private String storeName;
 
     public Product() {}

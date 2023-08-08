@@ -138,7 +138,7 @@ public class AddProductDialog extends DialogFragment {
                             newProduct.setPrice(productPrice);
                             newProduct.setDescription(productDescription);
                             newProduct.setQuantity(productQuantity);
-
+                            
                             checkProductExistence(newProduct);
                         }
                     }
