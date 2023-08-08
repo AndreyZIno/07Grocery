@@ -37,6 +37,7 @@ public class MyCartFragment extends Fragment {
     private MyCartAdapter cartAdapter;
     private ArrayList<CartItem> products;
     private ArrayList<String> storesList;
+    private ArrayList<String> storeProductsList;
 
     @Nullable
     @Override
@@ -165,6 +166,7 @@ public class MyCartFragment extends Fragment {
         DatabaseReference ordersOwner;
 
         storesList = new ArrayList<>();
+        storeProductsList = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
             // if cartItem.storeName is not in storesList, add it
             if (!storesList.contains(cartItem.getStoreName())) {
@@ -181,16 +183,13 @@ public class MyCartFragment extends Fragment {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 for (CartItem cartItem : cartItems) {
                                     if (cartItem.getStoreName().equals(storeName)) {
-                                        // push cartItem to the Orders database under the current store owner
-                                        snapshot.getRef().child("Orders").push().setValue(cartItem);
+                                        // add each cart item into the products list
+                                        storeProductsList.add(String.valueOf(cartItem));
+
                                     }
                                 }
+                                snapshot.getRef().child("Orders").push().setValue(storeProductsList);
 
-                                CartItem existingCartItem = snapshot.getValue(CartItem.class);
-                                if (existingCartItem != null) {
-                                    int newQuantity = existingCartItem.getCartQuantity() + 1;
-                                    snapshot.getRef().child("cartQuantity").setValue(newQuantity);
-                                }
                             }
                         }
                     }
