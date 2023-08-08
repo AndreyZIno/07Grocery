@@ -72,6 +72,12 @@
                     android:layout_height="36dp"
                     android:text="+" />
 
+                <Button
+                    android:id="@+id/subtractButton"
+                    android:layout_width="41dp"
+                    android:layout_height="34dp"
+                    android:text="-" />
+
             </LinearLayout>
 
             <Button

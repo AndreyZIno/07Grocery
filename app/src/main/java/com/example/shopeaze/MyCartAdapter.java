@@ -7,14 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -73,16 +80,84 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
                 if (position != RecyclerView.NO_POSITION) {
                     CartItem cartItem = cartItems.get(position);
                     cartItem.setQuantity(cartItem.getCartQuantity() + 1);
+                    Log.d("MyCartAdapter", "Quantity: " + cartItem.getCartQuantity());
+                    addCartItem(cartItem);
                     holder.cartProductQuantity.setText(String.valueOf(cartItem.getCartQuantity()));
                 }
+            }
+        });
 
-//                // update the quantity of the item in the database
-//                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//                DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-//                DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
-//                DatabaseReference cartRef = shopperRef.child("Cart");
-//                cartRef.child(cartItem.getcartProductID()).child("quantity").setValue(cartItem.getCartQuantity());
+        holder.subtractButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // increment the quantity of the item in the cart
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    CartItem cartItem = cartItems.get(position);
+                    cartItem.setQuantity(cartItem.getCartQuantity() - 1);
+                    Log.d("MyCartAdapter", "Quantity: " + cartItem.getCartQuantity());
+                    subtractCartItem(cartItem);
+                    holder.cartProductQuantity.setText(String.valueOf(cartItem.getCartQuantity()));
+                }
+            }
+        });
 
+    }
+
+    private void addCartItem(CartItem cartItem) {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+        DatabaseReference cartRef = shopperRef.child("Cart");
+
+        cartRef.orderByChild("cartProductID").equalTo(cartItem.getcartProductID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        CartItem existingCartItem = snapshot.getValue(CartItem.class);
+                        int newQuantity = existingCartItem.getCartQuantity() + 1;
+                        snapshot.getRef().child("cartQuantity").setValue(newQuantity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle any errors that might occur during the query
+                Log.d("MyCartAdapter", "onCancelled", databaseError.toException());
+            }
+        });
+
+    }
+
+    private void subtractCartItem(CartItem cartItem) {
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
+        DatabaseReference cartRef = shopperRef.child("Cart");
+
+        cartRef.orderByChild("cartProductID").equalTo(cartItem.getcartProductID()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        CartItem existingCartItem = snapshot.getValue(CartItem.class);
+                        int newQuantity = existingCartItem.getCartQuantity() - 1;
+                        if (newQuantity <= 0){
+                            removeCartItem(cartItem);
+                            cartItems.remove(cartItem);
+                            notifyDataSetChanged();
+                        }
+                        snapshot.getRef().child("cartQuantity").setValue(newQuantity);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle any errors that might occur during the query
+                Log.d("MyCartAdapter", "onCancelled", databaseError.toException());
             }
         });
 
@@ -99,16 +174,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
         cartRef.child(cartItem.getcartProductID()).removeValue();
     }
 
-//    private void removeCartItem(CartItem cartItem) {
-//        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-//        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
-//        DatabaseReference ordersRef = shopperRef.child("Orders");
-//        ordersRef.child(cartItem.getcartProductID()).removeValue();
-//
-//        DatabaseReference cartRef = shopperRef.child("Cart");
-//        cartRef.child(cartItem.getcartProductID()).removeValue();
-//    }
+
 
     @Override
     public int getItemCount() {
@@ -119,6 +185,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
         TextView cartProductName, cartProductPrice, cartProductBrand, cartProductQuantity;
         Button removeButton;
         Button addButton;
+        Button subtractButton;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -128,6 +195,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             cartProductQuantity = itemView.findViewById(R.id.productQuantity);
             removeButton = itemView.findViewById(R.id.removeButton);
             addButton = itemView.findViewById(R.id.addButton);
+            subtractButton = itemView.findViewById(R.id.subtractButton);
         }
     }
 
