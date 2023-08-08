@@ -9,7 +9,6 @@ public class Product implements Serializable {
     private String productBrand;
     private String productDescription;
     private double productPrice;
-
     private String status;
     private String storeName;
     private int quantity;
