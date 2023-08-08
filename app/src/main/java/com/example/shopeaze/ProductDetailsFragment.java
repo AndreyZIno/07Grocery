@@ -119,7 +119,7 @@ public class ProductDetailsFragment extends Fragment {
         buttonChangeDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showChangeDescriptionDialog();
+                showChangeDescriptionDialog(textViewProductDescription.getText().toString());
             }
         });
 
@@ -157,7 +157,7 @@ public class ProductDetailsFragment extends Fragment {
                 .show();
     }
 
-    private void showChangeDescriptionDialog() {
+    private void showChangeDescriptionDialog(String initialDescription) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Change Description")
                 .setView(R.layout.dialog_change_description)
@@ -169,6 +169,7 @@ public class ProductDetailsFragment extends Fragment {
                         String newDescription = editTextNewDescription.getText().toString();
                         if (!newDescription.isEmpty()) {
                             updateProductDescription(newDescription);
+                            textViewProductDescription.setText(newDescription);
                         } else {
                             showToast("No changes applied.");
                         }
@@ -179,8 +180,14 @@ public class ProductDetailsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
-                })
-                .show();
+                });
+                // .show();
+        // Set the initial text of the EditText to the current description
+        View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_change_description, null);
+        EditText editTextNewDescription = dialogView.findViewById(R.id.editTextNewDescription);
+        editTextNewDescription.setText(initialDescription);
+
+        builder.setView(dialogView).show();
     }
 
     private void updateProductPrice(String newPrice) {
@@ -190,7 +197,11 @@ public class ProductDetailsFragment extends Fragment {
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("Products");
 
-        Query productQuery = productRef.orderByChild("name").equalTo(product.getName());
+        Query productQuery = productRef
+                .orderByChild("name")
+                .equalTo(product.getName())
+                .orderByChild("brand")
+                .equalTo(product.getBrand());
 
         productQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -221,11 +232,17 @@ public class ProductDetailsFragment extends Fragment {
         productQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean updateSuccessful = false;
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                     productSnapshot.getRef().child("description").setValue(newDescription);
+                    updateSuccessful = true;
                 }
-                showToast("Product description updated successfully.");
-                textViewProductDescription.setText(newDescription);
+                if (updateSuccessful) {
+                    showToast("Product description updated successfully.");
+                    textViewProductDescription.setText(newDescription);
+                } else {
+                    showToast("Failed to update product description.");
+                }
             }
 
             @Override
