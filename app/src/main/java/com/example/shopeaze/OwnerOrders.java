@@ -115,6 +115,7 @@ public class OwnerOrders extends Fragment {
                             String status = orderSnapshot.child("Status").getValue(String.class);
                             String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
                             productList = new ArrayList<>();
+
                             for (DataSnapshot productSnapshot : orderSnapshot.getChildren()) {
                                 String name = productSnapshot.child("cartProductName").getValue(String.class);
                                 String brand = productSnapshot.child("cartProductBrand").getValue(String.class);
@@ -123,6 +124,7 @@ public class OwnerOrders extends Fragment {
                                 int quantity = productSnapshot.child("cartQuantity").getValue(Integer.class);
                                 Product product = new Product(name, brand, price, description, quantity, null, status, userId);
                                 productList.add(product);
+
                             }
                             if (productList.size() > 0) {
                                 orderList.add(new Order(shopperEmail, status, productList, orderID));

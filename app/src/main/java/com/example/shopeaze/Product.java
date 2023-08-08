@@ -17,7 +17,12 @@ public class Product implements Serializable {
     public Product() {}
 
     // Constructor
-    public Product(String name, String brand, double price, String description, int quantity, String imageURL, String status, String storeID){
+    public Product(String name, String brand, double price, String description, int quantity, String imageURL, String status, String storeID){}
+
+    public Product(String name, String brand, double price,
+                   String description, int quantity, String imageURL,
+                   String status, String storeName, String storeID){
+
 
         this.productID = generateProductID();
         this.productName = name;
@@ -25,9 +30,9 @@ public class Product implements Serializable {
         this.productPrice = price;
         this.productDescription = description;
         this.status = status;
-        this.storeID = storeID;
         this.quantity = quantity;
         this.imageURL = imageURL;
+        this.storeID = storeID;
     }
 
     private String generateProductID() {
@@ -50,9 +55,10 @@ public class Product implements Serializable {
 //    public int getQuantity() { return cartQuantity; }
     public String getImage() { return imageURL; }
     public String getStatus() { return status; }
-    public String getStoreID() { return storeID; }
     public int getQuantity() { return quantity; }
     public String getImageURL() { return imageURL; }
+    public String getStoreID() { return storeID; }
+
     // Setters
     public void setProductID(String id) { this.productID = id; }
     public void setName(String name) { this.productName = name; }
