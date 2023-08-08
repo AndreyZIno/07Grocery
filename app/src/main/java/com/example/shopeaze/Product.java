@@ -60,10 +60,10 @@ public class Product implements Serializable {
     public void setDescription(String description) { this.productDescription = description; }
     public void setBrand(String brand) { this.productBrand = brand; }
 //    public void setQuantity(int quantity) { this.cartQuantity = quantity; }
-    public void setImage(int imageURL) { this.imageURL = String.valueOf(imageURL); }
+    public void setImage(String imageURL) { this.imageURL = imageURL; }
     public void setStatus(String status) { this.status = status; }
     public void setStoreName(String storeName) { this.storeName = storeName; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
-    public void setImageURL(String imageURL) { this.imageURL = imageURL; }
+
 
 }
