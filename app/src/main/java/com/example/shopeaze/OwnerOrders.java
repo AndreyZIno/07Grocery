@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,28 +50,12 @@ import java.util.Map;
 public class OwnerOrders extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-
-
-    // Declare a ListView to display the orders and a Button for refreshing the orders.
-    private ListView ownerordersListView;
-    private ImageButton refreshButton;
-
-
-    // Declare an ArrayAdapter to handle the list of orders.
-    private ArrayAdapter<Order> ownerordersAdapter;
-
-
-    // Declare a List to hold the orders data.
-    private List<String> ownerordersList;
-    Query ordersCollection;
-    DatabaseReference ref;
-    List<Product> productList;
-
-
-    List<Order> orderList;
-    String storeName;
-    String shopperEmail;
-    Order order;
+    private DatabaseReference ref;
+    private List<Product> productList;
+    private List<Order> orderList;
+    private String storeName;
+    private RecyclerView ownerordersRecyclerView;
+    private OwnerOrdersAdapter ownerordersAdapter;
 
 
     @Override
@@ -77,7 +63,6 @@ public class OwnerOrders extends Fragment {
         View view = inflater.inflate(R.layout.fragment_owner_orders, container, false);
 
         ImageButton inventoryButton = view.findViewById(R.id.button_inventory);
-
         inventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,12 +84,12 @@ public class OwnerOrders extends Fragment {
             }
         });
 
-
         ref = FirebaseDatabase.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         orderList = new ArrayList<>();
-        ownerordersListView = view.findViewById(R.id.ownerordersListView);
+        ownerordersRecyclerView = view.findViewById(R.id.ownerordersRecyclerView);
+        ownerordersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         loadOrders();
         return view;
     }
@@ -112,7 +97,7 @@ public class OwnerOrders extends Fragment {
 
 
 
-    private void loadOrders(){
+    private void loadOrders() {
         String userId = mAuth.getUid();
         DatabaseReference storeRef = ref.child("Users").child("StoreOwner").child(userId);
         com.google.firebase.database.Query storeNameRef = storeRef.child("StoreName");
@@ -125,41 +110,32 @@ public class OwnerOrders extends Fragment {
                 ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot orderSnapshot : snapshot.getChildren()){
+                        for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                             String orderID = orderSnapshot.getKey();
                             String status = orderSnapshot.child("Status").getValue(String.class);
                             String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
                             productList = new ArrayList<>();
-                            for(DataSnapshot productSnapshot : orderSnapshot.child("Items").getChildren()){
-                                String sto = productSnapshot.child("Store Name").getValue(String.class);
-                                String name = productSnapshot.child("Name").getValue(String.class);
-                                String brand = productSnapshot.child("Brand").getValue(String.class);
-                                double price = productSnapshot.child("Price").getValue(Double.class);
-                                String description = productSnapshot.child("Description").getValue(String.class);
-                                int quantity = productSnapshot.child("Quantity").getValue(Integer.class);
-                                if(sto.equals(storeName)){
-
-                                    Product product = new Product(name, brand, price, description, quantity, null, status, storeName);
-                                    productList.add(product);
-                                }
+                            for (DataSnapshot productSnapshot : orderSnapshot.getChildren()) {
+                                String name = productSnapshot.child("cartProductName").getValue(String.class);
+                                String brand = productSnapshot.child("cartProductBrand").getValue(String.class);
+                                double price = productSnapshot.child("cartProductPrice").getValue(Double.class);
+                                String description = productSnapshot.child("cartProductDescription").getValue(String.class);
+                                int quantity = productSnapshot.child("cartQuantity").getValue(Integer.class);
+                                Product product = new Product(name, brand, price, description, quantity, null, status, userId);
+                                productList.add(product);
                             }
-                            if(productList.size() > 0){
-                                orderList.add(new Order(shopperEmail, status, productList));
+                            if (productList.size() > 0) {
+                                orderList.add(new Order(shopperEmail, status, productList, orderID));
                             }
-                            printOrderList();
                         }
                         displayProducts();
                     }
 
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
 
-
                     }
                 });
-
-
             }
 
             @Override
@@ -167,19 +143,7 @@ public class OwnerOrders extends Fragment {
 
             }
         });
-
-
-
-
     }
-
-
-
-
-
-
-
-
 
 
     private void printOrderList(){
@@ -188,32 +152,8 @@ public class OwnerOrders extends Fragment {
 
 
     private void displayProducts() {
-        // Create a custom adapter to display the list of orders and their products
-        ownerordersAdapter = new ArrayAdapter<Order>(getContext(), android.R.layout.simple_list_item_1, orderList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
-                }
-                // Get the order at the current position
-                Order order = getItem(position);
-                // Display order information
-                TextView orderTextView = convertView.findViewById(android.R.id.text1);
-                orderTextView.setText("Status: " + order.getStatus());
-                return convertView;
-            }
-        };
-
-
-        // Set the custom adapter to the ListView
-        ownerordersListView.setAdapter(ownerordersAdapter);
-
-
-        // Set item click listener to show detailed product information when an order is clicked
-        ownerordersListView.setOnItemClickListener((parent, view, position, id) -> {
-            Order selectedOrder = ownerordersAdapter.getItem(position);
-            showProductDetails(selectedOrder);
-        });
+        ownerordersAdapter = new OwnerOrdersAdapter(orderList);
+        ownerordersRecyclerView.setAdapter(ownerordersAdapter);
     }
 
 
