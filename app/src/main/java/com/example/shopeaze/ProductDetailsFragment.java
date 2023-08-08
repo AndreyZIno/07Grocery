@@ -86,10 +86,9 @@ public class ProductDetailsFragment extends Fragment {
             // Load and display the image using Glide
             Glide.with(requireContext())
                     .load(productImageURL)
-                    .placeholder(R.drawable.placeholder_image) // Replace with a placeholder image resource
-                    .error(R.drawable.error_image) // Replace with an error image resource
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
                     .into(imageViewProduct);
-            // Rest of your code to initialize other views
         } else {
             Toast.makeText(requireContext(), "Product data is null.", Toast.LENGTH_SHORT).show();
         }
