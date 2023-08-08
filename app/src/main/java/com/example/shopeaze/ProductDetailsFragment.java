@@ -199,15 +199,15 @@ public class ProductDetailsFragment extends Fragment {
 
         Query productQuery = productRef
                 .orderByChild("name")
-                .equalTo(product.getName())
-                .orderByChild("brand")
-                .equalTo(product.getBrand());
+                .equalTo(product.getName());
 
         productQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                    productSnapshot.getRef().child("price").setValue(Double.parseDouble(newPrice));
+                    if (productSnapshot.child("brand").getValue(String.class).equals(product.getBrand())) {
+                        productSnapshot.getRef().child("price").setValue(Double.parseDouble(newPrice));
+                    }
                 }
                 showToast("Product price updated successfully.");
                 textViewProductPrice.setText("$ " + newPrice);
@@ -234,7 +234,9 @@ public class ProductDetailsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean updateSuccessful = false;
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                    productSnapshot.getRef().child("description").setValue(newDescription);
+                    if (productSnapshot.child("brand").getValue(String.class).equals(product.getBrand())) {
+                        productSnapshot.getRef().child("description").setValue(newDescription);
+                    }
                     updateSuccessful = true;
                 }
                 if (updateSuccessful) {
@@ -292,7 +294,9 @@ public class ProductDetailsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                    productSnapshot.getRef().child("quantity").setValue(Integer.parseInt(newQuantity));
+                    if (productSnapshot.child("brand").getValue(String.class).equals(product.getBrand())) {
+                        productSnapshot.getRef().child("quantity").setValue(Double.parseDouble(newQuantity));
+                    }
                 }
                 showToast("Product quantity updated successfully.");
                 textViewProductQuantity.setText("Inventory Stock: " + newQuantity);
@@ -338,7 +342,9 @@ public class ProductDetailsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                    productSnapshot.getRef().removeValue();
+                    if (productSnapshot.child("brand").getValue(String.class).equals(product.getBrand())) {
+                        productSnapshot.getRef().removeValue();
+                    }
                 }
                 NavController navController = NavHostFragment.findNavController(ProductDetailsFragment.this);
                 navController.navigate(R.id.action_product_details_to_product_list);
