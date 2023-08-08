@@ -16,6 +16,8 @@ public class CartItem {
     private int image;
     private String status;
 
+    private String storeName;
+
     public CartItem(){
 
     }
@@ -27,6 +29,7 @@ public class CartItem {
         this.cartQuantity = product.getQuantity();
         this.image = product.getImage();
         this.status = product.getStatus();
+        this.storeName = product.getStoreName();
     }
 
     //Getters

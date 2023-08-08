@@ -171,6 +171,7 @@ public class MyCartFragment extends Fragment {
             ordersRef.push().setValue(cartItem);
         }
 
+        // owners side
         DatabaseReference ownerRef = usersRef.child("StoreOwner").child(userID);
         DatabaseReference ordersRefOwners = shopperRef.child("Orders");
 

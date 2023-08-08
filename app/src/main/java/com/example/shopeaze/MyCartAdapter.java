@@ -1,6 +1,7 @@
 package com.example.shopeaze;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +10,22 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
@@ -164,17 +170,30 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
     }
 
     private void removeCartItem(CartItem cartItem) {
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-        DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
-        DatabaseReference ordersRef = shopperRef.child("Orders");
-        ordersRef.child(cartItem.getcartProductID()).removeValue();
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("Shoppers")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("Cart");
 
-        DatabaseReference cartRef = shopperRef.child("Cart");
-        cartRef.child(cartItem.getcartProductID()).removeValue();
+        Query productQuery = productRef.orderByChild("cartProductID").equalTo(cartItem.getcartProductID());
+
+        productQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                    productSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("MyCartAdapter", "onCancelled", error.toException());
+            }
+        });
+
+
     }
-
-
 
     @Override
     public int getItemCount() {

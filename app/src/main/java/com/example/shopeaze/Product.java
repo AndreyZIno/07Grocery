@@ -13,10 +13,12 @@ public class Product implements Serializable {
     private int image;
     private String status;
 
+    private String storeName;
+
     public Product() {}
 
     // Constructor
-    public Product(String name, String brand, double price, String description, int cartQuantity, int image, String status){
+    public Product(String name, String brand, double price, String description, int cartQuantity, int image, String status, String storeName){
         this.productID = generateProductID();
         this.productName = name;
         this.productBrand = brand;
@@ -25,6 +27,7 @@ public class Product implements Serializable {
         this.cartQuantity = cartQuantity;
         this.image = image;
         this.status = status;
+        this.storeName = storeName;
     }
 
     private String generateProductID() {
@@ -47,7 +50,7 @@ public class Product implements Serializable {
     public int getQuantity() { return cartQuantity; }
     public int getImage() { return image; }
     public String getStatus() { return status; }
-    // Setters
+    public String getStoreName() { return storeName; }
     public void setProductID(String id) { this.productID = id; }
     public void setName(String name) { this.productName = name; }
     public void setPrice(double price) { this.productPrice = price; }
@@ -56,5 +59,6 @@ public class Product implements Serializable {
     public void setQuantity(int quantity) { this.cartQuantity = quantity; }
     public void setImage(int image) { this.image = image; }
     public void setStatus(String status) { this.status = status; }
+    public void setStoreName(String storeName) { this.storeName = storeName; }
 
 }
