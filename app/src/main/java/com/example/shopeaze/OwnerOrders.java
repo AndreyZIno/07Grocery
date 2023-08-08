@@ -102,12 +102,11 @@ public class OwnerOrders extends Fragment {
                                 String sto = productSnapshot.child("Store Name").getValue(String.class);
                                 String name = productSnapshot.child("Name").getValue(String.class);
                                 String brand = productSnapshot.child("Brand").getValue(String.class);
-                                String imageUrl = null;
                                 double price = productSnapshot.child("Price").getValue(Double.class);
                                 String description = productSnapshot.child("Description").getValue(String.class);
                                 int quantity = productSnapshot.child("Quantity").getValue(Integer.class);
                                 if(sto.equals(storeName)){
-                                    Product product = new Product(name, brand, price, description, quantity, imageUrl, status, storeName);
+                                    Product product = new Product(name, brand, price, description, quantity, null, status, storeName);
                                     productList.add(product);
                                 }
                             }
