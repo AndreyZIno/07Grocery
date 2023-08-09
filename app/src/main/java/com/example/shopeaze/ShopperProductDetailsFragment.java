@@ -107,7 +107,7 @@ public class ShopperProductDetailsFragment extends Fragment {
                 } else {
                     //Product is not in Cart, add it with an initial quantity of 1
                     cartItem.setQuantity(1);
-                    cartRef.push().setValue(cartItem)
+                    cartRef.child(cartItem.getcartProductID()).setValue(cartItem)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

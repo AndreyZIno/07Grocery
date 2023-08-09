@@ -259,11 +259,6 @@
         android:label="Owner Orders"
         tools:layout="@layout/fragment_owner_orders" />
 
-    <fragment
-        android:id="@+id/OwnerProductDetails"
-        android:name="com.example.shopeaze.OwnerOrders"
-        android:label="Owner Orders"
-        tools:layout="@layout/fragment_order_product_details" />
 
 
 
