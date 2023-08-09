@@ -56,9 +56,32 @@ public class ExampleUnitTest {
         order.verify(view).showErrorMessage("Please enter email");
     }
 
-    //left to test:
-    /*
+   /*
+  left to test:
     test login success (succeeds with correct credentials)
     test login fail (fails with wrong credentials) */
+
+    @Test
+    public void userFound(){
+       when(view.getEmail()).thenReturn("shopper1@sample.com");
+       when(view.getPassword()).thenReturn("123456");
+       //...code that idk yet...
+        LoginContract.Presenter presenter = new LoginPresenter(view, model);
+        presenter.loginUser();
+        verify(view).showLoginSuccessMessage();
+
+
+    }
+
+    @Test
+    public void userNotFound(){
+        when(view.getEmail()).thenReturn("foobar@email.com");
+        when(view.getPassword()).thenReturn("123456");
+        //...code that idk yet...
+        LoginContract.Presenter presenter = new LoginPresenter(view, model);
+        presenter.loginUser();
+        verify(view).showErrorMessage("Authentication failed");
+
+    }
 
 }
