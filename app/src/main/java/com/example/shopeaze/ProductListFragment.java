@@ -94,16 +94,6 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
             }
         });
 
-        ImageButton ordersButton = view.findViewById(R.id.button_orders);
-        // UNCOMMENT WHEN OWNER ORDERS FRAGMENT IS IMPLEMENTED
-        /*ordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = NavHostFragment.findNavController(ProductListFragment.this);
-                navController.navigate(R.id.action_ProductList_to_OwnerOrders);
-            }
-        });*/
-
 
         textViewStoreName = view.findViewById(R.id.textViewStoreName);
 
