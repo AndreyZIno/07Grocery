@@ -23,36 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 public class SplashScreenFragment extends Fragment {
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//
-//        DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
-//                .child("Users")
-//                .child("StoreOwner")
-//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                .child("StoreName");
-//        storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String storeName = dataSnapshot.getValue(String.class);
-//                if (storeName != null) {
-//                    NavHostFragment.findNavController(SplashScreenFragment.this)
-//                            .navigate(R.id.action_WelcomeScreen_to_productlist);
-//                } else {
-//                    NavHostFragment.findNavController(SplashScreenFragment.this)
-//                            .navigate(R.id.action_WelcomeScreen_to_storelist);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                String errorMessage = "Error fetching store name: " + databaseError.getMessage();
-//            }
-//        });
-//    }
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,12 +61,39 @@ public class SplashScreenFragment extends Fragment {
                         view.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                navigateToWelcomeScreen(navController);
+                                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                                    DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
+                                            .child("Users")
+                                            .child("StoreOwner")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .child("StoreName");
+                                    storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String storeName = dataSnapshot.getValue(String.class);
+                                            if (storeName != null) {
+                                                NavHostFragment.findNavController(SplashScreenFragment.this)
+                                                        .navigate(R.id.action_splashScreen_to_productList);
+                                            } else {
+                                                NavHostFragment.findNavController(SplashScreenFragment.this)
+                                                        .navigate(R.id.action_splashScreen_to_storeList);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            String errorMessage = "Error fetching store name: " + databaseError.getMessage();
+                                        }
+                                    });
+                                }
+                                else{
+                                    navigateToWelcomeScreen(navController);
+                                }
                             }
                         }, 200
 
-                        );
 
+                        );
 
                     }
 
@@ -116,31 +113,6 @@ public class SplashScreenFragment extends Fragment {
         logoImageView.startAnimation(fadeInAnimation);
 
 
-        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
-                    .child("Users")
-                    .child("StoreOwner")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .child("StoreName");
-            storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String storeName = dataSnapshot.getValue(String.class);
-                    if (storeName != null) {
-                        NavHostFragment.findNavController(SplashScreenFragment.this)
-                                .navigate(R.id.action_splashScreen_to_productList);
-                    } else {
-                        NavHostFragment.findNavController(SplashScreenFragment.this)
-                                .navigate(R.id.action_splashScreen_to_storeList);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    String errorMessage = "Error fetching store name: " + databaseError.getMessage();
-                }
-            });
-        }
 
     }
 
