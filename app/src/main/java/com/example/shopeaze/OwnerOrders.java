@@ -128,7 +128,7 @@ public class OwnerOrders extends Fragment {
         ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot orderSnapshot : snapshot.getChildren()){
+                for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                     String orderID = orderSnapshot.getKey();
                     productList = new ArrayList<>();
                     for (DataSnapshot productSnapshot : orderSnapshot.getChildren()) {
@@ -158,7 +158,7 @@ public class OwnerOrders extends Fragment {
         });
     }
 
-    private void printOrderList(){
+    private void printOrderList() {
         Log.d("OrderList", orderList.toString());
     }
 
@@ -178,16 +178,16 @@ public class OwnerOrders extends Fragment {
                     TextView orderTextView = convertView.findViewById(R.id.orderTextView);
                     //CheckBox orderCheckBox = convertView.findViewById(R.id.orderCheckBox);
                     StringBuilder textBuilder = new StringBuilder();
-                    if (order.getProducts().size() == 1){
+                    if (order.getProducts().size() == 1) {
                         Product product = order.getProducts().get(0);
                         textBuilder.append("• ").append(product.getName());
-                    } else if (order.getProducts().size() > 1){
+                    } else if (order.getProducts().size() > 1) {
                         for (int i = 0; i < 2; i++) {
                             Product product = order.getProducts().get(i);
                             textBuilder.append("\n• ").append(product.getName());
                         }
                     }
-                    if (order.getProducts().size() > 2){
+                    if (order.getProducts().size() > 2) {
                         textBuilder.append("•••").append("\n");
                     }
                     orderTextView.setText(textBuilder.toString());
@@ -213,7 +213,6 @@ public class OwnerOrders extends Fragment {
     }
 
 
-
     private void showProductDetails(Order order) {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.fragment_order_product_details);
@@ -234,8 +233,8 @@ public class OwnerOrders extends Fragment {
                     .append("\nPrice: ").append(product.getPrice())
                     .append("\nDescription: ").append(product.getDescription())
                     .append("\nQuantity: ").append(product.getQuantity());
-                           // .append("\nProductID: ").append(product.getProductID());
-                    //.append("\nStatus: ").append(product.getStatus());
+            // .append("\nProductID: ").append(product.getProductID());
+            //.append("\nStatus: ").append(product.getStatus());
 
             if ("Complete".equals(product.getStatus())) {
                 productCheckBox.setChecked(true);
@@ -274,6 +273,23 @@ public class OwnerOrders extends Fragment {
         }
 
         CheckBox completeCheckBox = dialog.findViewById(R.id.markAsCompleteCheckBox);
+        completeCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // Delete the order from the database
+                    String userId = mAuth.getUid();
+                    DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Users").child("StoreOwner").child(userId).child("Orders").child(order.getOrderNumber());
+                    orderRef.removeValue();
+
+                    // Update the data source of the ListView
+                    orderList.remove(order);
+                    ownerordersAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+
 
         dialog.show();
     }
@@ -341,6 +357,7 @@ public class OwnerOrders extends Fragment {
             }
         });
     }
+
     private void fetchStoreName() {
         DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users")
@@ -379,34 +396,41 @@ public class OwnerOrders extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String shopperId = snapshot.getKey();
-                    DatabaseReference orderRef = shopperRef.child(shopperId).child("Orders").child(orderID);
-                    orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    Log.d("Checking shopper", "Checking shopper with ID: " + shopperId);
+                    DatabaseReference ordersRef = shopperRef.child(shopperId).child("Orders");
+                    ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                // Found the order, now query for the product
-                                DatabaseReference productRef = orderRef.child("Products").child(productID);
-                                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()) {
-                                            // Found the product, retrieve data from the snapshot
-                                            String productName = dataSnapshot.child("name").getValue(String.class);
-                                            // ...
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                String tempOrderID = snapshot.getKey();
+                                Log.d("Checking order", "Checking order with ID: " + tempOrderID);
+                                if (tempOrderID.equals(orderID)) {
+                                    // Found the order, now query for the product
+                                    Log.d("Found order", "Found order with ID: " + orderID + " for shopper with ID: " + shopperId);
+                                    DatabaseReference productRef = ordersRef.child(orderID).child("Products").child(productID);
+                                    productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                // Found the product, retrieve data from the snapshot
+                                                Log.d("Found product", "Found product with ID: " + productID + " for order with ID: " + orderID + " and shopper with ID: " + shopperId);
+                                                productRef.child("status").setValue(tag);
+                                                // ...
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                        // Handle error
-                                    }
-                                });
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                            Log.e("DatabaseError", databaseError.getMessage());
+                                        }
+                                    });
+                                }
                             }
                         }
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            // Handle error
+                            Log.e("DatabaseError", databaseError.getMessage());
                         }
                     });
                 }
@@ -414,15 +438,9 @@ public class OwnerOrders extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Handle error
+                Log.e("DatabaseError", databaseError.getMessage());
             }
         });
-
-
     }
-
-
-
 }
-
 
