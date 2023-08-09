@@ -13,7 +13,8 @@
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:layout_weight="1"
-        android:layout_below="@+id/refreshButton" />
+        android:layout_below="@+id/refreshButton"
+        android:layout_marginTop="8dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -138,10 +139,17 @@
 
         <Button
             android:id="@+id/refreshButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Refresh"
-            android:layout_marginLeft="5dp" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/refresh_button"
+            android:textColor="@android:color/white"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
