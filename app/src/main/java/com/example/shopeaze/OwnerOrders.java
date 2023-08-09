@@ -216,6 +216,7 @@ public class OwnerOrders extends Fragment {
     private void showProductDetails(Order order) {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.fragment_order_product_details);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.scrollview_background);
 
         TextView productTitleTextView = dialog.findViewById(R.id.productTitleTextView);
         LinearLayout productsLinearLayout = dialog.findViewById(R.id.productsLinearLayout);
@@ -232,7 +233,7 @@ public class OwnerOrders extends Fragment {
                     .append("\nBrand: ").append(product.getBrand())
                     .append("\nPrice: ").append(product.getPrice())
                     .append("\nDescription: ").append(product.getDescription())
-                    .append("\nQuantity: ").append(product.getQuantity());
+                    .append("\nQuantity: ").append(product.getQuantity()).append("\n");
             // .append("\nProductID: ").append(product.getProductID());
             //.append("\nStatus: ").append(product.getStatus());
 
@@ -445,5 +446,6 @@ public class OwnerOrders extends Fragment {
             }
         });
     }
+
 }
 
