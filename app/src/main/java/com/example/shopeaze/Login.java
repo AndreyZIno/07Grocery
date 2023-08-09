@@ -39,7 +39,7 @@ public class Login extends Fragment implements LoginContract.View {
         progressBar = view.findViewById(R.id.progressBar);
         textView = view.findViewById(R.id.signUpNow);
 
-        presenter = new LoginPresenter(this);
+        presenter = new LoginPresenter(this, new LoginModel());
 
         textView.setOnClickListener(v -> {
             NavHostFragment.findNavController(Login.this)
@@ -47,9 +47,6 @@ public class Login extends Fragment implements LoginContract.View {
         });
 
         buttonLogin.setOnClickListener(v -> {
-            String email = String.valueOf(editTextEmail.getText());
-            String password = String.valueOf(editTextPassword.getText());
- //           presenter.loginUser(email, password);                           //commented this out
             presenter.loginUser();
         });
     }

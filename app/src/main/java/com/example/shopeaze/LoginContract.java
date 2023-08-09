@@ -4,6 +4,7 @@ public interface LoginContract {
 
     public interface Model{
         public void loginUser(String email, String password, final com.example.shopeaze.LoginModel.OnLoginFinishedListener listener);
+        public boolean getStatus();
     }
     public interface View {
         public void showProgressBar();
