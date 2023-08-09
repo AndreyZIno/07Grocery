@@ -44,6 +44,8 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
     private DatabaseReference productsRef;
     private TextView textViewStoreName;
     private View view;
+
+    private FirebaseAuth mAuth;
     @Override
     public void onProductAdded(Product product) {
         if (!products.contains(product)) {
@@ -58,8 +60,9 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_product_list, container, false);
-
         Button logoutButton = view.findViewById(R.id.logoutButton);
+        mAuth = FirebaseAuth.getInstance();
+        isShopper();
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +72,7 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
             }
         });
 
-        ImageButton orderButton = view.findViewById(R.id.button_orders);
+        /*ImageButton orderButton = view.findViewById(R.id.button_orders);
 
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +80,7 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                 NavController navController = NavHostFragment.findNavController(ProductListFragment.this);
                 navController.navigate(R.id.action_ProductList_to_OwnerOrders);
             }
-        });
+        });*/
 
 
         ImageButton inventoryButton = view.findViewById(R.id.button_inventory);
@@ -95,14 +98,13 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
         });
 
         ImageButton ordersButton = view.findViewById(R.id.button_orders);
-        // UNCOMMENT WHEN OWNER ORDERS FRAGMENT IS IMPLEMENTED
-        /*ordersButton.setOnClickListener(new View.OnClickListener() {
+        ordersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavController navController = NavHostFragment.findNavController(ProductListFragment.this);
                 navController.navigate(R.id.action_ProductList_to_OwnerOrders);
             }
-        });*/
+        });
 
 
         textViewStoreName = view.findViewById(R.id.textViewStoreName);
@@ -184,6 +186,30 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
         });
 
         return view;
+    }
+
+    public void isShopper(){
+        String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child("StoreOwner").child(user);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    //navigate back to WelcomeScreen
+
+                }
+                else{
+                    NavController navController = NavHostFragment.findNavController(ProductListFragment.this);
+                    navController.navigate(R.id.action_ProductList_to_WelcomeScreen);
+                    Toast.makeText(getActivity(), "You are a shopper", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -290,14 +316,14 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                     ordersText.setTextColor(ContextCompat.getColor(getContext(), R.color.light_gray));
                     inventoryIcon.setImageResource(R.drawable.black_store);
                     ordersIcon.setImageResource(R.drawable.white_orders);
-                } /*else if (destination.getId() == R.id.OrderFragment) {
+                } else if (destination.getId() == R.id.OwnerOrders) {
                     inventoryButton.setImageResource(R.drawable.nav_gradient);
                     ordersButton.setImageResource(R.drawable.focused_nav_button);
                     inventoryText.setTextColor(ContextCompat.getColor(getContext(), R.color.light_gray));
                     ordersText.setTextColor(ContextCompat.getColor(getContext(), R.color.navy_blue));
                     inventoryIcon.setImageResource(R.drawable.white_store);
                     ordersIcon.setImageResource(R.drawable.black_orders);
-                }*/ //UNCOMMENT WHEN OWNER ORDER FRAGMENT IS IMPLEMENTED
+                }
             }
         });
     }
