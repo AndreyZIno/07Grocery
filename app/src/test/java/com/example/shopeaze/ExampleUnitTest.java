@@ -27,29 +27,16 @@ public class ExampleUnitTest {
     LoginContract.Model model;
 
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }   //works
-
-    @Test
     public void nullViewObject(){               //works
         assertEquals(view.getEmail(), null);
     }
     @Test
     public void checkEmptyUsername(){
-        //when(view.getUsername()).thenReturn("abc");     //when getUsername of view is invoked, return abc
-        //when(model.isFound("abc")).thenReturn(true);
-        //Presenter presenter = new Presenter(model, view);
-        //presenter.checkUsername();
-        //verify(view).displayMessage("user found");
-
         when(view.getEmail()).thenReturn("");
         LoginContract.Presenter presenter = new LoginPresenter(view, model);
         presenter.loginUser();
         verify(view).showErrorMessage("Please enter email");
-
     }
-
     @Test
     public void checkEmptyPassword(){
         when(view.getEmail()).thenReturn("anyemail@email.com");
@@ -68,4 +55,10 @@ public class ExampleUnitTest {
         order.verify(view).getEmail();
         order.verify(view).showErrorMessage("Please enter email");
     }
+
+    //left to test:
+    /*
+    test login success (succeeds with correct credentials)
+    test login fail (fails with wrong credentials) */
+
 }
