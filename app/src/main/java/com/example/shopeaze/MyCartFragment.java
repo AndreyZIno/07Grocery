@@ -25,10 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import com.example.shopeaze.CartItem;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -182,13 +179,13 @@ public class MyCartFragment extends Fragment {
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
         DatabaseReference ordersRef = shopperRef.child("Orders");
         DatabaseReference newOrderRef = ordersRef.push();
-        String newOrderKey = newOrderRef.getKey();
-        Log.d("Order ID when pushing", "OrderID is " + newOrderKey);
+        String orderKey = newOrderRef.getKey();
+        Log.d("MyCartFrgament", "OrderKey is" + orderKey);
 
         // add each cart item in the list to the Orders database under a single order ID
         for (CartItem cartItem : cartItems) {
             cartItem.setStatus("Received");
-            newOrderRef.push().setValue(cartItem);
+            newOrderRef.child(cartItem.getcartProductID()).setValue(cartItem);
         }
 
         // owners side
@@ -203,18 +200,13 @@ public class MyCartFragment extends Fragment {
         }
 
         for (String storeID : storesList) {
+            Log.d("MyCartFrgament", "Processing for storeID " + storeID);
             if (storeID != null) {
                 // go into the store owner with the current storeID and add all cartItems with that storeID to the Orders database
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getStoreID().equals(storeID)) {
-                        DatabaseReference ordersFieldRef = storeOwnerRef.child(storeID).child("Orders");
-                        DatabaseReference newOrderRef3 = ordersFieldRef.child(newOrderKey);
-                        //Map<String, Object> data = new HashMap<>();
-                        //data.put("orderID", newOrderKey);
-                        //data.put("cartItem", cartItem);
-                        //newOrderRef2.push().setValue(data);
-
-                        newOrderRef3.push().setValue(cartItem);
+                        DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").child(orderKey);
+                        newOrderRef2.child(cartItem.getcartProductID()).setValue(cartItem);
                     }
                 }
             }

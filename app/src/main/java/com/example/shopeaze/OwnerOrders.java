@@ -258,6 +258,7 @@ public class OwnerOrders extends Fragment {
                         // Update the status to "Complete"
                         productRef.child("status").setValue("Complete");
                         // Update the status on the shopper's side
+                        Log.d("If statement", "OrderNumber: " + order.getOrderNumber() + " ProductID: " + product.getProductID());
                         queryShoppers(order.getOrderNumber(), product.getProductID(), "Ready for Pickup");
                     } else {
                         // Update the status to "Received"
@@ -407,17 +408,19 @@ public class OwnerOrders extends Fragment {
                                 if (tempOrderID.equals(orderID)) {
                                     // Found the order, now query for the product
                                     Log.d("Found order", "Found order with ID: " + orderID + " for shopper with ID: " + shopperId);
-                                    DatabaseReference productRef = ordersRef.child(orderID).child("Products").child(productID);
+                                    DatabaseReference productRef = shopperRef.child(shopperId).child("Orders").child(orderID);
                                     productRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.exists()) {
-                                                // Found the product, retrieve data from the snapshot
-                                                Log.d("Found product", "Found product with ID: " + productID + " for order with ID: " + orderID + " and shopper with ID: " + shopperId);
-                                                productRef.child("status").setValue(tag);
-                                                // ...
-                                            }
-                                        }
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                String tempProductID = snapshot.getKey();
+                                                Log.d("Checking products", "Checking product with ID: " + tempProductID);
+                                                if (tempProductID.equals(productID)) {
+                                                    Log.d("Found product", "Found product with ID: " + productID + " for order with ID: " + orderID + " and shopper with ID: " + shopperId);
+                                                    productRef.child(productID).child("status").setValue(tag);
+                                                    return;
+                                                }
+                                            }}
 
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {

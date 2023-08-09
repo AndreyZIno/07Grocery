@@ -94,7 +94,10 @@ public class ShopperProductDetailsFragment extends Fragment {
     }
 
     private void addToCart(Product product) {
-        CartItem cartItem = new CartItem(product);
+        Product product2 = new Product(product.getName(), product.getBrand(), product.getPrice(), product.getQuantity(), product.getStatus(), store.getStoreID(), product.getProductID());
+        Log.d("ShopperPorductdetailsFragment", "StoreID is " + store.getStoreID());
+        Log.d("ShopperPorductdetailsFragment", "StoreID is " + product2.getStoreID());
+        CartItem cartItem = new CartItem(product2);
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
