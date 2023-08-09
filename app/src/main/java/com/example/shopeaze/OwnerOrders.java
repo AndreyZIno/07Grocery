@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -86,6 +88,13 @@ public class OwnerOrders extends Fragment {
                 NavController navController = NavHostFragment.findNavController(OwnerOrders.this);
                 navController.navigate(R.id.action_owner_orders_to_product_list);
             }
+        });
+
+        refreshButton = view.findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(v -> {
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
+            refreshButton.startAnimation(animation);
+            loadOrders();
         });
 
         return view;
