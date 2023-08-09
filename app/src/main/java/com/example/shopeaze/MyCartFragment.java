@@ -207,13 +207,14 @@ public class MyCartFragment extends Fragment {
                 // go into the store owner with the current storeID and add all cartItems with that storeID to the Orders database
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getStoreID().equals(storeID)) {
-                        DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").push();
+                        DatabaseReference ordersFieldRef = storeOwnerRef.child(storeID).child("Orders");
+                        DatabaseReference newOrderRef3 = ordersFieldRef.child(newOrderKey);
                         //Map<String, Object> data = new HashMap<>();
                         //data.put("orderID", newOrderKey);
                         //data.put("cartItem", cartItem);
                         //newOrderRef2.push().setValue(data);
 
-                        newOrderRef2.push().setValue(cartItem);
+                        newOrderRef3.push().setValue(cartItem);
                     }
                 }
             }
