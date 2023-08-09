@@ -149,7 +149,9 @@
             android:paddingEnd="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:onClick="onRefreshButtonClick"
+            android:animation="@anim/rotate" />
 
     </LinearLayout>
 
