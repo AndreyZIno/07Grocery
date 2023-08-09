@@ -239,6 +239,8 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                 .child("StoreOwner")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("StoreName");
+
+        /* Removed Store Name not found, because it's redundant to Store Name check
         storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -250,12 +252,15 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                 }
             }
 
+
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 String errorMessage = "Error fetching store name: " + databaseError.getMessage();
                 showToast(errorMessage);
             }
         });
+         */
     }
 
     private void showToast(String message) {
