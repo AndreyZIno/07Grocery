@@ -44,7 +44,13 @@ public class Login extends Fragment {       //shopper login
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
+        // Check if user is already signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        //Check if current user is a shopper or a seller
+        if(currentUser != null){
+            NavHostFragment.findNavController(Login.this)
+                    .navigate(R.id.action_Login_to_StoreList);
+        }
     }
 
     @Nullable
@@ -108,36 +114,14 @@ public class Login extends Fragment {       //shopper login
                                 if (task.isSuccessful()) {
                                     //Get the current user:
                                     FirebaseUser user = mAuth.getCurrentUser();
-
-                                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                                        DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
-                                                .child("Users")
-                                                .child("StoreOwner")
-                                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .child("StoreName");
-                                        storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                String storeName = dataSnapshot.getValue(String.class);
-                                                if (storeName != null) {
-                                                    Toast.makeText(getActivity(), "Please login via StoreOwner", Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    NavHostFragment.findNavController(Login.this).navigate(R.id.action_Login_to_StoreList);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                            }
-                                        });
-                                    } else {
-                                        Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                                    }
+                                    // Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
+                                    NavHostFragment.findNavController(Login.this).navigate(R.id.action_Login_to_StoreList);
+                                } else {
+                                    Toast.makeText(getActivity(), "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-
             }
         });
     }
