@@ -44,7 +44,7 @@
             android:layout_marginTop="52dp"
             android:layout_marginLeft="85dp"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/primary_blue"
+            android:backgroundTint="@color/turquoise_shadow"
             android:clipToOutline="true"
             android:fontFamily="@font/red_hat_display"
             android:text="@string/logout"

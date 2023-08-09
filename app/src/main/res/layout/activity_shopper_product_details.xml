@@ -16,16 +16,16 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/primary_blue"
+            android:backgroundTint="@color/turquoise_shadow"
             android:clipToOutline="true"
             android:fontFamily="@font/red_hat_display"
-            android:text="Back to Products"
+            android:text="@string/back_to_products"
             android:textAllCaps="false"
-            android:textColor="@color/navy_blue"
+            android:textColor="@color/white"
             android:textSize="11sp"
             android:textStyle="bold" />
 
-    <include
+        <include
         layout="@layout/item_store"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

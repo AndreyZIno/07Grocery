@@ -26,19 +26,6 @@
             android:textSize="11sp"
             android:textStyle="bold" />
 
-        <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/red_hat_display"
-            android:gravity="center_vertical"
-            android:text="@string/manage_your_product"
-            android:textColor="@color/light_gray"
-            android:textSize="16sp" />-->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,13 +76,16 @@
 
                 <TextView
                     android:id="@+id/textViewProductPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical"
+                    android:text="@string/product_price"
                     android:fontFamily="@font/red_hat_display"
                     android:textColor="@color/light_gray"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
 
                 <ImageButton
                     android:id="@+id/buttonChangePrice"
@@ -118,11 +108,12 @@
 
                 <TextView
                     android:id="@+id/textViewProductQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:text="@string/inventory"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/red_hat_display"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:textColor="@color/light_gray"
                     android:textSize="15sp" />
 

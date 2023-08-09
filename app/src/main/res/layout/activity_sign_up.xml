@@ -56,8 +56,9 @@
             android:layout_height="48dp"
             android:layout_gravity="top|end"
             android:layout_marginStart="85dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/primary_blue"
+            android:backgroundTint="@color/turquoise_shadow"
             android:clipToOutline="true"
             android:fontFamily="@font/red_hat_display"
             android:text="@string/back_to_login"
@@ -65,7 +66,6 @@
             android:textColor="@color/light_gray"
             android:textSize="14sp"
             android:textStyle="bold" />
-
     </LinearLayout>
 
     <TextView
