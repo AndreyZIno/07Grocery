@@ -117,6 +117,9 @@
         <action
             android:id="@+id/action_StoreList_to_OrderFragment"
             app:destination="@id/OrderFragment" />
+        <action
+            android:id="@+id/action_StoreList_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen" />
     </fragment>
 
     <fragment
@@ -133,6 +136,9 @@
         <action
             android:id="@+id/action_OwnerSignUp_to_ProductList"
             app:destination="@id/ProductList" />
+        <action
+            android:id="@+id/action_ShopperProductDetails_to_ProductDetails"
+            app:destination="@id/ProductDetails" />
     </fragment>
 
 
@@ -143,8 +149,10 @@
         tools:layout="@layout/activity_shopper_product_details">
         <action
             android:id="@+id/action_ShopperProductDetails_to_ProductsOffered"
-            app:destination="@id/ProductsOffered"
-            />
+            app:destination="@id/ProductsOffered" />
+        <action
+            android:id="@+id/action_ShopperProductDetails_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen" />
     </fragment>
 
     <fragment
@@ -173,6 +181,9 @@
         android:label="fragment_product_list"
         tools:layout="@layout/fragment_product_list" >
         <action
+            android:id="@+id/action_ProductList_to_WelcomeScreen"
+            app:destination="@id/WelcomeScreen" />
+        <action
             android:id="@+id/action_ProductList_to_Logout"
             app:destination="@id/logout"/>
         <action
@@ -181,6 +192,9 @@
         <action
             android:id="@+id/action_ProductList_to_OwnerOrders"
             app:destination="@id/OwnerOrders" />
+        <action
+            android:id="@+id/action_ProductList_to_ShopperHome"
+            app:destination="@id/ShopperProductDetails" />
     </fragment>
 
     <fragment
