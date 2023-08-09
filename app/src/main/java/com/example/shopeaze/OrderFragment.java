@@ -108,7 +108,7 @@ public class OrderFragment extends Fragment {
                 int orderNumber = 1;
                 for (DataSnapshot orderSnapshot : dataSnapshot.getChildren()) {
                     String orderId = orderSnapshot.getKey();
-                    String status = orderSnapshot.child("Status").getValue(String.class);
+                    String status = orderSnapshot.child("status").getValue(String.class);
                     String brand = orderSnapshot.child("cartProductBrand").getValue(String.class);
                     Double price = orderSnapshot.child("cartProductPrice").getValue(Double.class);
                     int quantity = orderSnapshot.child("cartQuantity").getValue(Integer.class);
