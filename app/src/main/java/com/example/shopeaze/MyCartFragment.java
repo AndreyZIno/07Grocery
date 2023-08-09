@@ -133,6 +133,15 @@ public class MyCartFragment extends Fragment {
             }
         });
 
+        ImageButton ordersButton = root.findViewById(R.id.button_orders);
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
+                navController.navigate(R.id.action_Cart_to_Orders);
+            }
+        });
+
         Button checkoutButton = root.findViewById(R.id.CheckoutButton);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
