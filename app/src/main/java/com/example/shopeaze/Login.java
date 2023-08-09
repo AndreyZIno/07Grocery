@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class Login extends Fragment implements LoginContract.View {
         editTextEmail = view.findViewById(R.id.email);
         editTextPassword = view.findViewById(R.id.password);
         buttonLogin = view.findViewById(R.id.btn_login);
+        Button buttonBackToWelcome = view.findViewById(R.id.buttonBackToWelcome);
         progressBar = view.findViewById(R.id.progressBar);
         textView = view.findViewById(R.id.signUpNow);
 
@@ -44,6 +46,13 @@ public class Login extends Fragment implements LoginContract.View {
         textView.setOnClickListener(v -> {
             NavHostFragment.findNavController(Login.this)
                     .navigate(R.id.action_Login_to_SignUp);
+        });
+        buttonBackToWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(Login.this)
+                        .navigate(R.id.action_Login_to_Welcome);
+            }
         });
 
         buttonLogin.setOnClickListener(v -> {

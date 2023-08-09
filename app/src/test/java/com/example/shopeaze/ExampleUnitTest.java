@@ -8,7 +8,6 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.ArgumentCaptor;
-
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,7 +19,7 @@ public class ExampleUnitTest {
     LoginContract.Model model;
 
     @Test
-    public void nullViewObject(){               //works
+    public void nullViewObject(){
         assertEquals(view.getEmail(), null);
     }
     @Test
@@ -37,7 +36,6 @@ public class ExampleUnitTest {
         LoginContract.Presenter presenter = new LoginPresenter(view, model);
         presenter.loginUser();
         verify(view).showErrorMessage("Please enter password");
-
     }
     @Test
     public void emptyEmailOrder(){
@@ -49,11 +47,6 @@ public class ExampleUnitTest {
         order.verify(view).showErrorMessage("Please enter email");
     }
 
-   /*
-  left to test:
-    test login success (succeeds with correct credentials)
-    test login fail (fails with wrong credentials) */
-
     @Test
     public void userFound(){
         when(view.getEmail()).thenReturn("shopper1@sample.com");
@@ -64,7 +57,6 @@ public class ExampleUnitTest {
 
         ArgumentCaptor<LoginModel.OnLoginFinishedListener> argumentCaptor = ArgumentCaptor.forClass(LoginModel.OnLoginFinishedListener.class);
         verify(model).loginUser(anyString(), anyString(), argumentCaptor.capture());
-
         LoginModel.OnLoginFinishedListener listener = argumentCaptor.getValue();
         listener.onLoginSuccess();
 
@@ -72,7 +64,6 @@ public class ExampleUnitTest {
         verify(view).hideProgressBar();
         verify(view).showLoginSuccessMessage();
         verify(view).navigateToStoreList();
-
     }
 
     @Test
@@ -88,7 +79,6 @@ public class ExampleUnitTest {
         verify(model).loginUser(anyString(), anyString(), argumentCaptor.capture());
         LoginModel.OnLoginFinishedListener listener = argumentCaptor.getValue();
         listener.onLoginFailure();
-
         verify(view).showProgressBar();
         verify(view).hideProgressBar();
         verify(view).showErrorMessage("Authentication failed");

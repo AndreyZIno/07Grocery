@@ -115,7 +115,6 @@ public class OwnerLogin extends Fragment {
                                 if (task.isSuccessful()) {
                                     //Get the current user:
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    // Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
                                     NavHostFragment.findNavController(OwnerLogin.this).navigate(R.id.action_ownerLogin_to_ProductList);
                                 } else {
                                     Toast.makeText(getActivity(), "Authentication failed.",
