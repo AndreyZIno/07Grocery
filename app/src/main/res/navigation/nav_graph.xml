@@ -12,6 +12,12 @@
         <action
             android:id="@+id/action_splashScreenFragment_to_welcomeScreenFragment"
             app:destination="@id/WelcomeScreen" />
+        <action
+            android:id="@+id/action_splashScreen_to_storeList"
+            app:destination="@id/StoreList" />
+        <action
+            android:id="@+id/action_splashScreen_to_productList"
+            app:destination="@id/ProductList" />
     </fragment>
 
 
@@ -56,6 +62,12 @@
         <action
             android:id="@+id/action_WelcomeScreen_to_ownerLogin"
             app:destination="@id/ownerLogin" />
+        <action
+            android:id="@+id/action_WelcomeScreen_to_storelist"
+            app:destination="@id/StoreList" />
+        <action
+            android:id="@+id/action_WelcomeScreen_to_productlist"
+            app:destination="@id/ProductList" />
 
     </fragment>
     <fragment
