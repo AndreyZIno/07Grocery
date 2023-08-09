@@ -6,7 +6,8 @@
         <item name="android:windowFullscreen">true</item>
 
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<!--         <item name="colorPrimary">@color/#AB8971</item>-->
+
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -19,4 +20,16 @@
     </style>
 
     <style name="Theme.ShopEaze" parent="Base.Theme.ShopEaze" />
+
+    <style name="BlurDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.9</item>
+    </style>
+
+    <style name="RoundedDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/scrollview_background</item>
+        <item name="android:textColor">@color/light_gray</item>
+    </style>
+
+
 </resources>
