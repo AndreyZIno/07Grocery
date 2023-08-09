@@ -11,19 +11,21 @@ public class LoginPresenter implements LoginContract.Presenter {
         model = new LoginModel();
     }
     @Override
-    public void loginUser(String email, String password) {
-        if (TextUtils.isEmpty(email)) {
+    public void loginUser() {
+        String email1 = view.getEmail();
+        String pass = view.getPassword();
+        if (TextUtils.isEmpty(email1)) {
             view.showErrorMessage("Please enter email");
             return;
         }
 
-        if (TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(pass)) {
             view.showErrorMessage("Please enter password");
             return;
         }
 
         view.showProgressBar();
-        model.loginUser(email, password, new LoginModel.OnLoginFinishedListener() {
+        model.loginUser(email1, pass, new LoginModel.OnLoginFinishedListener() {
             @Override
             public void onLoginSuccess() {
                 view.hideProgressBar();

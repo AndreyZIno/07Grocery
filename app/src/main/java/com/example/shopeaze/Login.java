@@ -49,8 +49,21 @@ public class Login extends Fragment implements LoginContract.View {
         buttonLogin.setOnClickListener(v -> {
             String email = String.valueOf(editTextEmail.getText());
             String password = String.valueOf(editTextPassword.getText());
-            presenter.loginUser(email, password);
+ //           presenter.loginUser(email, password);                           //commented this out
+            presenter.loginUser();
         });
+    }
+    public String getEmail() {
+        if (editTextEmail != null) {
+            return String.valueOf(editTextEmail.getText());
+        }
+        return null;
+    }
+    public String getPassword() {
+        if (editTextPassword != null) {
+            return String.valueOf(editTextPassword.getText());
+        }
+        return null;
     }
 
     @Override

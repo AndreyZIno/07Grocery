@@ -11,9 +11,11 @@ public interface LoginContract {
         public void showErrorMessage(String message);
         public void showLoginSuccessMessage();
         public void navigateToStoreList();
+        public String getEmail();
+        public String getPassword();
     }
 
     public interface Presenter {
-        public void loginUser(String email, String password);
+        public void loginUser();
     }
 }
