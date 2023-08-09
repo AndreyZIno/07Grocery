@@ -16,6 +16,7 @@
         android:layout_marginBottom="-10dp"
         android:layout_marginStart="17dp"
         android:layout_marginTop="20dp"
+
         android:fontFamily="@font/red_hat_display"
         android:text="@string/welcome_to"
         android:textColor="@color/white"

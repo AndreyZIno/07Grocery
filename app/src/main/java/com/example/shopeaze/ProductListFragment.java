@@ -234,14 +234,12 @@ public class ProductListFragment extends Fragment implements AddProductDialog.On
                 if (storeName != null) {
                     textViewStoreName.setText(storeName);
                 } else {
-                    showToast("Store name not found");
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                String errorMessage = "Error fetching store name: " + databaseError.getMessage();
-                showToast(errorMessage);
+                //
             }
         });
     }
