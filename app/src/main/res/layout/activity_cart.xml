@@ -91,7 +91,8 @@
                 android:background="@drawable/rounded_nav_button"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"/>
 
             <ImageView
                 android:id="@+id/cartIcon"
