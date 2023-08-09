@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class ShopperProductDetailsFragment extends Fragment {
@@ -31,6 +33,8 @@ public class ShopperProductDetailsFragment extends Fragment {
     private Product product;
     private Store store;
     ImageButton addToCartButton;         //new
+
+    private FirebaseAuth mAuth;          //new
     private static final String TAG = "ShopperProductDetails";  //new
 
     public static ShopperProductDetailsFragment newInstance(Store store, Product product) {
@@ -45,11 +49,9 @@ public class ShopperProductDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_shopper_product_details, container, false);
-
         // Retrieve storeID and product from arguments
         store = (Store) getArguments().getSerializable(ARG_STORE);
         product = (Product) getArguments().getSerializable(ARG_PRODUCT);
-
         Button backToProductsButton = rootView.findViewById(R.id.buttonBackToProducts);
         backToProductsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +94,6 @@ public class ShopperProductDetailsFragment extends Fragment {
 
         return rootView;
     }
-
     private void addToCart(Product product) {
         Product product2 = new Product(product.getName(), product.getBrand(), product.getPrice(), product.getQuantity(), product.getStatus(), store.getStoreID(), product.getProductID());
         Log.d("ShopperPorductdetailsFragment", "StoreID is " + store.getStoreID());
@@ -117,7 +118,7 @@ public class ShopperProductDetailsFragment extends Fragment {
                 } else {
                     //Product is not in Cart, add it with an initial quantity of 1
                     cartItem.setQuantity(1);
-                    cartRef.push().setValue(cartItem)
+                    cartRef.child(cartItem.getcartProductID()).setValue(cartItem)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
