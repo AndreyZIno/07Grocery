@@ -4,32 +4,39 @@ import java.util.List;
 
 public class Order {
     private String orderNumber;
-    private String orderID;
     private String status;
     private String cartProductBrand;
     private Double cartProductPrice;
     private int cartQuantity;
+
     private List<Product> products;
 
     // Constructor
+    public Order(){};
+
     public Order(String orderNumber, String status, String cartProductBrand,
-                 Double cartProductPrice, int cartQuantity, String orderID) {
+                 Double cartProductPrice, int cartQuantity) {
         this.orderNumber = orderNumber;
         this.status = status;
         this.cartProductBrand = cartProductBrand;
         this.cartProductPrice = cartProductPrice;
         this.cartQuantity = cartQuantity;
-        this.orderID = orderID;
     }
 
-    public Order(String orderNumber, String status, List<Product> products, String orderID) {
+    public Order(String orderNumber, List<Product> products) {
+        this.orderNumber = orderNumber;
+        this.products = products;
+    }
+
+
+    public Order(String orderNumber, String status, List<Product> products) {
         this.orderNumber = orderNumber;
         this.status = status;
         this.products = products;
-        this.orderID = orderID;
     }
 
     // Getters
+
     public String getOrderNumber() {
         return orderNumber;
     }
@@ -50,11 +57,8 @@ public class Order {
         return cartQuantity;
     }
 
-    public String getOrderID() {
-        return orderID;
-    }
-
     // Setters
+
     public void setOrderNumber(String orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -75,16 +79,7 @@ public class Order {
         this.cartQuantity = cartQuantity;
     }
 
-    public void setOrderID(String orderID) {this.orderID = orderID;}
-
     public List<Product> getProducts() {
         return products;
-    }
-
-    public String getStoreID() {
-        if (products != null && !products.isEmpty()) {
-            return products.get(0).getStoreID();
-        }
-        return null;
     }
 }

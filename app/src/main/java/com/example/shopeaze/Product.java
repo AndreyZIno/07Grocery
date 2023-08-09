@@ -17,7 +17,28 @@ public class Product implements Serializable {
     public Product() {}
 
     // Constructor
-    public Product(String name, String brand, double price, String description, int quantity, String imageURL, String status, String storeID){}
+
+    public Product(String name, String brand, double price, String description, int quantity, String status, String storeID, String productID){
+        this.productID = productID;
+        this.productName = name;
+        this.productBrand = brand;
+        this.productPrice = price;
+        this.productDescription = description;
+        this.status = status;
+        this.quantity = quantity;
+        this.storeID = storeID;
+    }
+
+    /*public Product(String name, String brand, double price, String description, int quantity, String imageURL, String status, String storeID){
+        this.productName = name;
+        this.productBrand = brand;
+        this.productPrice = price;
+        this.productDescription = description;
+        this.status = status;
+        this.imageURL = imageURL;
+        this.quantity = quantity;
+        this.storeID = storeID;
+    }*/
 
     public Product(String name, String brand, double price,
                    String description, int quantity, String imageURL,

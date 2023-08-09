@@ -235,24 +235,6 @@
         <action
             android:id="@+id/action_Cart_to_order_confirm"
             app:destination="@id/Order_confirmation"/>
-<<<<<<< HEAD
-    </fragment>
-
-    <fragment
-        android:id="@+id/Order_confirmation"
-        android:name="com.example.shopeaze.OrderConfirm"
-        android:label="Order Confirmed"
-        tools:layout="@layout/order_confirm">
-
-        <action
-            android:id="@+id/action_Order_confirm_to_StoreList"
-            app:destination="@id/StoreList"/>
-        <action
-            android:id="@+id/action_Order_confirm_to_Cart"
-            app:destination="@id/Cart"/>"
-
-=======
->>>>>>> origin
     </fragment>
 
 

@@ -3,15 +3,21 @@ package com.example.shopeaze;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +30,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,24 +49,44 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class OwnerOrders extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private DatabaseReference ref;
-    private List<Product> productList;
-    private List<Order> orderList;
-    private String storeName;
-    private RecyclerView ownerordersRecyclerView;
-    private OwnerOrdersAdapter ownerordersAdapter;
+
+
+    // Declare a ListView to display the orders and a Button for refreshing the orders.
+    private ListView ownerordersListView;
+    private Button refreshButton;
+    private TextView textViewStoreName;
+
+
+    // Declare an ArrayAdapter to handle the list of orders.
+    private ArrayAdapter<Order> ownerordersAdapter;
+
+
+    // Declare a List to hold the orders data.
+    private List<String> ownerordersList;
+    Query ordersCollection;
+    DatabaseReference ref;
+    List<Product> productList;
+
+
+    List<Order> orderList;
+    String storeName;
+    String shopperEmail;
+    Order order;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_owner_orders, container, false);
 
+
         ImageButton inventoryButton = view.findViewById(R.id.button_inventory);
+
         inventoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,63 +105,50 @@ public class OwnerOrders extends Fragment {
                     // User is already on OwnerOrders fragment, do nothing
                     return;
                 }
+
             }
         });
+
+        textViewStoreName = view.findViewById(R.id.textViewStoreName);
 
         ref = FirebaseDatabase.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         orderList = new ArrayList<>();
-        ownerordersRecyclerView = view.findViewById(R.id.ownerordersRecyclerView);
-        ownerordersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ownerordersListView = view.findViewById(R.id.ownerordersListView);
+        fetchStoreName();
         loadOrders();
         return view;
     }
 
 
-
-
     private void loadOrders() {
         String userId = mAuth.getUid();
-        DatabaseReference storeRef = ref.child("Users").child("StoreOwner").child(userId);
-        com.google.firebase.database.Query storeNameRef = storeRef.child("StoreName");
-        storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference ordersRef = ref.child("Users").child("StoreOwner").child(userId).child("Orders");
+        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                storeName = snapshot.getValue(String.class);
-                Log.d("StoreName", storeName);
-                com.google.firebase.database.Query ordersRef = storeRef.child("Orders");
-                ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
-                            String orderID = orderSnapshot.getKey();
-                            String status = orderSnapshot.child("Status").getValue(String.class);
-                            String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
-                            productList = new ArrayList<>();
-
-                            for (DataSnapshot productSnapshot : orderSnapshot.getChildren()) {
-                                String name = productSnapshot.child("cartProductName").getValue(String.class);
-                                String brand = productSnapshot.child("cartProductBrand").getValue(String.class);
-                                double price = productSnapshot.child("cartProductPrice").getValue(Double.class);
-                                String description = productSnapshot.child("cartProductDescription").getValue(String.class);
-                                int quantity = productSnapshot.child("cartQuantity").getValue(Integer.class);
-                                Product product = new Product(name, brand, price, description, quantity, null, status, userId);
-                                productList.add(product);
-
-                            }
-                            if (productList.size() > 0) {
-                                orderList.add(new Order(shopperEmail, status, productList, orderID));
-                            }
-                        }
-                        displayProducts();
+                for(DataSnapshot orderSnapshot : snapshot.getChildren()){
+                    String orderID = orderSnapshot.getKey();
+                    productList = new ArrayList<>();
+                    for (DataSnapshot productSnapshot : orderSnapshot.getChildren()) {
+                        String productID = productSnapshot.getKey();
+                        Log.d("loadOrders()", "ProductID is: " + productID);
+                        String name = productSnapshot.child("cartProductName").getValue(String.class);
+                        String brand = productSnapshot.child("cartProductBrand").getValue(String.class);
+                        double price = productSnapshot.child("cartProductPrice").getValue(Double.class);
+                        String description = productSnapshot.child("cartProductDescription").getValue(String.class);
+                        int quantity = productSnapshot.child("cartQuantity").getValue(Integer.class);
+                        String status = productSnapshot.child("status").getValue(String.class);
+                        Product product = new Product(name, brand, price, description, quantity, status, userId, productID);
+                        productList.add(product);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                    if (productList.size() > 0) {
+                        orderList.add(new Order(orderID, productList));
                     }
-                });
+                    printOrderList();
+                }
+                displayProducts();
             }
 
             @Override
@@ -147,58 +158,130 @@ public class OwnerOrders extends Fragment {
         });
     }
 
-
     private void printOrderList(){
         Log.d("OrderList", orderList.toString());
     }
 
 
     private void displayProducts() {
-        ownerordersAdapter = new OwnerOrdersAdapter(orderList);
-        ownerordersRecyclerView.setAdapter(ownerordersAdapter);
+        // Create a custom adapter to display the list of orders and their products
+        ownerordersAdapter = new ArrayAdapter<Order>(getContext(), R.layout.order_list_view_item, orderList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.order_list_view_item, parent, false);
+                }
+                // Get the order at the current position
+                Order order = getItem(position);
+                if (order != null) {
+                    // Display order information
+                    TextView orderTextView = convertView.findViewById(R.id.orderTextView);
+                    //CheckBox orderCheckBox = convertView.findViewById(R.id.orderCheckBox);
+                    StringBuilder textBuilder = new StringBuilder();
+                    if (order.getProducts().size() == 1){
+                        Product product = order.getProducts().get(0);
+                        textBuilder.append("• ").append(product.getName());
+                    } else if (order.getProducts().size() > 1){
+                        for (int i = 0; i < 2; i++) {
+                            Product product = order.getProducts().get(i);
+                            textBuilder.append("\n• ").append(product.getName());
+                        }
+                    }
+                    if (order.getProducts().size() > 2){
+                        textBuilder.append("•••").append("\n");
+                    }
+                    orderTextView.setText(textBuilder.toString());
+                    //orderCheckBox.setChecked(order.isComplete());
+                }
+                return convertView;
+            }
+        };
+
+        // Set the custom adapter to the ListView
+        ownerordersListView.setAdapter(ownerordersAdapter);
+
+        // Set item click listener to show detailed product information when an order is clicked
+        ownerordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the selected order
+                Order selectedOrder = ownerordersAdapter.getItem(position);
+                // Show the product details
+                showProductDetails(selectedOrder);
+            }
+        });
     }
+
 
 
     private void showProductDetails(Order order) {
         Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.fragment_order_product_details);
 
-
         TextView productTitleTextView = dialog.findViewById(R.id.productTitleTextView);
-        TextView productDetailsTextView = dialog.findViewById(R.id.productDetailsTextView);
-
+        LinearLayout productsLinearLayout = dialog.findViewById(R.id.productsLinearLayout);
 
         productTitleTextView.setText("Order Details for " + order.getOrderNumber());
 
-
-        StringBuilder detailsBuilder = new StringBuilder();
         for (Product product : order.getProducts()) {
+            View productView = LayoutInflater.from(getContext()).inflate(R.layout.owner_order_item, productsLinearLayout, false);
+            CheckBox productCheckBox = productView.findViewById(R.id.productCheckBox);
+            TextView productDetailsTextView = productView.findViewById(R.id.productDetailsTextView);
+
+            StringBuilder detailsBuilder = new StringBuilder();
             detailsBuilder.append("Product: ").append(product.getName())
                     .append("\nBrand: ").append(product.getBrand())
                     .append("\nPrice: ").append(product.getPrice())
                     .append("\nDescription: ").append(product.getDescription())
-                    .append("\nQuantity: ").append(product.getQuantity())
-                    .append("\n\n");
+                    .append("\nQuantity: ").append(product.getQuantity());
+                           // .append("\nProductID: ").append(product.getProductID());
+                    //.append("\nStatus: ").append(product.getStatus());
+
+            if ("Complete".equals(product.getStatus())) {
+                productCheckBox.setChecked(true);
+            } else {
+                productCheckBox.setChecked(false);
+            }
+
+            productCheckBox.setText(product.getName());
+            productCheckBox.setTextColor(getResources().getColor(R.color.light_gray));
+            ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.light_gray));
+            productCheckBox.setButtonTintList(colorStateList);
+            productDetailsTextView.setTextColor(getResources().getColor(R.color.gray));
+            productDetailsTextView.setPadding(20, 5, 0, 0);
+
+            productCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    String userId = mAuth.getUid();
+                    DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("Users").child("StoreOwner").child(userId).child("Orders").child(order.getOrderNumber()).child(product.getProductID());
+                    if (isChecked) {
+                        // Update the status to "Complete"
+                        productRef.child("status").setValue("Complete");
+                        // Update the status on the shopper's side
+                        queryShoppers(order.getOrderNumber(), product.getProductID(), "Ready for Pickup");
+                    } else {
+                        // Update the status to "Received"
+                        productRef.child("status").setValue("Received");
+                        queryShoppers(order.getOrderNumber(), product.getProductID(), "Received");
+                    }
+                }
+            });
+
+            productDetailsTextView.setText(detailsBuilder.toString());
+
+            productsLinearLayout.addView(productView);
         }
 
-
-        productDetailsTextView.setText(detailsBuilder.toString());
-
+        CheckBox completeCheckBox = dialog.findViewById(R.id.markAsCompleteCheckBox);
 
         dialog.show();
     }
 
 
-
-
-
-
-
-
     //Create an example  order
 
-
-    private void createExampleOrder(){
+    /*private void createExampleOrder(){
         Log.d("Create Order", "Creating Order");
         //Go to a specific Shopper and then push to
         String userID = mAuth.getUid();
@@ -224,9 +307,8 @@ public class OwnerOrders extends Fragment {
         DatabaseReference quantityRef = newItemRef.child("Quantity");
         quantityRef.setValue(1);
         DatabaseReference storeNameRef = newItemRef.child("Store Name");
-        storeNameRef.setValue("Hello Fresh");
-    }
-
+        storeNameRef.setValue("Banana Republic");
+    }*/
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -259,6 +341,88 @@ public class OwnerOrders extends Fragment {
             }
         });
     }
+    private void fetchStoreName() {
+        DatabaseReference storeNameRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child("StoreOwner")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("StoreName");
+        storeNameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String storeName = dataSnapshot.getValue(String.class);
+                if (storeName != null) {
+                    textViewStoreName.setText(storeName);
+                } else {
+                    showToast("Store name not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                String errorMessage = "Error fetching store name: " + databaseError.getMessage();
+                showToast(errorMessage);
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void queryShoppers(String orderID, String productID, String tag){
+        Log.d("In order query", "OrderID is " + orderID);
+        Log.d("In product query", "ProductID is " + productID);
+        DatabaseReference shopperRef = FirebaseDatabase.getInstance().getReference("Users").child("Shoppers");
+        shopperRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String shopperId = snapshot.getKey();
+                    DatabaseReference orderRef = shopperRef.child(shopperId).child("Orders").child(orderID);
+                    orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                // Found the order, now query for the product
+                                DatabaseReference productRef = orderRef.child("Products").child(productID);
+                                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            // Found the product, retrieve data from the snapshot
+                                            String productName = dataSnapshot.child("name").getValue(String.class);
+                                            // ...
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // Handle error
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Handle error
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+
+
+    }
+
+
 
 }
+
 
