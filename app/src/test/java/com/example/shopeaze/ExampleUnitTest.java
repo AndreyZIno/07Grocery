@@ -1,23 +1,16 @@
 package com.example.shopeaze;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import android.text.TextUtils;
+import org.mockito.ArgumentCaptor;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import android.text.Editable;
-import android.view.View;
-import android.widget.EditText;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExampleUnitTest {
@@ -63,13 +56,22 @@ public class ExampleUnitTest {
 
     @Test
     public void userFound(){
-       when(view.getEmail()).thenReturn("shopper1@sample.com");
-       when(view.getPassword()).thenReturn("123456");
-       //...code that idk yet...
+        when(view.getEmail()).thenReturn("shopper1@sample.com");
+        when(view.getPassword()).thenReturn("123456");
+
         LoginContract.Presenter presenter = new LoginPresenter(view, model);
         presenter.loginUser();
-        verify(view).showLoginSuccessMessage();
 
+        ArgumentCaptor<LoginModel.OnLoginFinishedListener> argumentCaptor = ArgumentCaptor.forClass(LoginModel.OnLoginFinishedListener.class);
+        verify(model).loginUser(anyString(), anyString(), argumentCaptor.capture());
+
+        LoginModel.OnLoginFinishedListener listener = argumentCaptor.getValue();
+        listener.onLoginSuccess();
+
+        verify(view).showProgressBar();
+        verify(view).hideProgressBar();
+        verify(view).showLoginSuccessMessage();
+        verify(view).navigateToStoreList();
 
     }
 
@@ -77,9 +79,18 @@ public class ExampleUnitTest {
     public void userNotFound(){
         when(view.getEmail()).thenReturn("foobar@email.com");
         when(view.getPassword()).thenReturn("123456");
-        //...code that idk yet...
+
+        ArgumentCaptor<LoginModel.OnLoginFinishedListener> argumentCaptor = ArgumentCaptor.forClass(LoginModel.OnLoginFinishedListener.class);
+
         LoginContract.Presenter presenter = new LoginPresenter(view, model);
         presenter.loginUser();
+
+        verify(model).loginUser(anyString(), anyString(), argumentCaptor.capture());
+        LoginModel.OnLoginFinishedListener listener = argumentCaptor.getValue();
+        listener.onLoginFailure();
+
+        verify(view).showProgressBar();
+        verify(view).hideProgressBar();
         verify(view).showErrorMessage("Authentication failed");
 
     }
