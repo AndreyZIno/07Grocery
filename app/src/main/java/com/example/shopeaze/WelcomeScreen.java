@@ -46,17 +46,36 @@ public class WelcomeScreen extends Fragment {
         shopperButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(WelcomeScreen.this)
-                        .navigate(R.id.action_WelcomeScreen_to_Login);
+
+                FirebaseDatabase db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if(currentUser != null){
+                    NavHostFragment.findNavController(WelcomeScreen.this)
+                            .navigate(R.id.action_WelcomeScreen_to_storelist);
+                }
+                else{
+                    NavHostFragment.findNavController(WelcomeScreen.this)
+                            .navigate(R.id.action_WelcomeScreen_to_Login);
+                }
             }
+
+
         });
 
         Button ownerButton = view.findViewById(R.id.button_owner);
         ownerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(WelcomeScreen.this)
-                        .navigate(R.id.action_WelcomeScreen_to_ownerLogin);
+                FirebaseDatabase db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if(currentUser != null){
+                    NavHostFragment.findNavController(WelcomeScreen.this)
+                            .navigate(R.id.action_WelcomeScreen_to_productlist);
+                }
+                else{
+                    NavHostFragment.findNavController(WelcomeScreen.this)
+                            .navigate(R.id.action_WelcomeScreen_to_ownerLogin);
+                }
             }
         });
     }

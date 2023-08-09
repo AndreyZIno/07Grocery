@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -120,6 +119,15 @@ public class MyCartFragment extends Fragment {
             }
         });
 
+        ImageButton ordersButton = root.findViewById(R.id.button_orders);
+        ordersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
+                navController.navigate(R.id.action_Cart_to_Orders);
+            }
+        });
+
         ImageButton cartButton = root.findViewById(R.id.button_cart);
         cartButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,15 +138,6 @@ public class MyCartFragment extends Fragment {
                     // User is already on Cart fragment, do nothing
                     return;
                 }
-            }
-        });
-
-        ImageButton ordersButton = root.findViewById(R.id.button_orders);
-        ordersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
-                navController.navigate(R.id.action_Cart_to_Orders);
             }
         });
 
@@ -195,7 +194,10 @@ public class MyCartFragment extends Fragment {
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);
         DatabaseReference ordersRef = shopperRef.child("Orders");
         DatabaseReference newOrderRef = ordersRef.push();
+        String orderKey = newOrderRef.getKey();
+        Log.d("MyCartFrgament", "OrderKey is" + orderKey);
 
+        // add each cart item in the list to the Orders database under a single order ID
         for (CartItem cartItem : cartItems) {
             cartItem.setStatus("Received");
             newOrderRef.child(cartItem.getcartProductID()).setValue(cartItem);
@@ -206,17 +208,18 @@ public class MyCartFragment extends Fragment {
 
         storesList = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
+            // if cartItem.storeName is not in storesList, add it
             if (!storesList.contains(cartItem.getStoreID())) {
                 storesList.add(cartItem.getStoreID());
             }
         }
 
         for (String storeID : storesList) {
+            Log.d("MyCartFrgament", "Processing for storeID " + storeID);
             if (storeID != null) {
-                DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").push();
                 for (CartItem cartItem : cartItems) {
                     if (cartItem.getStoreID().equals(storeID)) {
-                        // query into the ProductID, and set its contents to be cartItem
+                        DatabaseReference newOrderRef2 = storeOwnerRef.child(storeID).child("Orders").child(orderKey);
                         newOrderRef2.child(cartItem.getcartProductID()).setValue(cartItem);
                     }
                 }

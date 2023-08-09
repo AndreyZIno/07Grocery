@@ -54,4 +54,10 @@
     <string name="i_m_a_shopper">I\'m a Shopper</string>
     <string name="i_m_a_store_owner">I\'m a Store Owner</string>
     <string name="status">Status:</string>
+    <string-array name="order_statuses">
+        <item>Received</item>
+        <item>Processed</item>
+        <item>Ready to pickup</item>
+    </string-array>
+
 </resources>
