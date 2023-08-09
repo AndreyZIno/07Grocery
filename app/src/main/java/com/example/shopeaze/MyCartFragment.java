@@ -118,18 +118,18 @@ public class MyCartFragment extends Fragment {
             }
         });
 
-//        ImageButton cartButton = root.findViewById(R.id.button_cart);
-//        cartButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
-//                NavDestination currentDestination = navController.getCurrentDestination();
-//                if (currentDestination != null && currentDestination.getId() == R.id.Cart) {
-//                    // User is already on Cart fragment, do nothing
-//                    return;
-//                }
-//            }
-//        });
+        ImageButton cartButton = root.findViewById(R.id.button_cart);
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
+                NavDestination currentDestination = navController.getCurrentDestination();
+                if (currentDestination != null && currentDestination.getId() == R.id.Cart) {
+                    // User is already on Cart fragment, do nothing
+                    return;
+                }
+            }
+        });
 
         Button checkoutButton = root.findViewById(R.id.CheckoutButton);
         checkoutButton.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +172,6 @@ public class MyCartFragment extends Fragment {
 // add a list of Product objects to the Orders database in Firebase, under Shoppers
 
     private void addToOrders(List<CartItem> cartItems) {
-        // shoppers side
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
         DatabaseReference shopperRef = usersRef.child("Shoppers").child(userID);

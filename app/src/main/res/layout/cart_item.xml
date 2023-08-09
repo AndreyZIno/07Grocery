@@ -96,5 +96,4 @@
             android:text="Remove"
             android:textColor="@android:color/white" />
     </LinearLayout>
-
 </RelativeLayout>
