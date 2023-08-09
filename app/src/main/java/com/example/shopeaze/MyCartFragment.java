@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -136,9 +138,10 @@ public class MyCartFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
-                navController.navigate(R.id.action_Cart_to_order_confirm);
+                navController.navigate(R.id.action_Cart_to_StoreList);
 
                 addToOrders(products);
+                Toast.makeText(getActivity(), "Your order is on it's way!", Toast.LENGTH_SHORT).show();
 
                 // go through all cart items, and for each one, delete it from the cart
                 DatabaseReference productRef = FirebaseDatabase.getInstance().getReference()
