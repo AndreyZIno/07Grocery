@@ -20,18 +20,14 @@
             app:destination="@id/ProductList" />
     </fragment>
 
-
-
     <fragment
         android:id="@+id/Login"
         android:name="com.example.shopeaze.Login"
         android:label="@string/ShopperLogin"
         tools:layout="@layout/activity_login">
-
         <action
             android:id="@+id/action_Login_to_Welcome"
             app:destination="@id/WelcomeScreen"/>
-
         <action
             android:id="@+id/action_Login_to_SignUp"
             app:destination="@id/signUp"   />
@@ -68,8 +64,8 @@
         <action
             android:id="@+id/action_WelcomeScreen_to_productlist"
             app:destination="@id/ProductList" />
-
     </fragment>
+
     <fragment
         android:id="@+id/signUp"
         android:name="com.example.shopeaze.SignUp"
@@ -83,15 +79,12 @@
             android:id="@+id/action_signUp_to_Login"
             app:destination="@id/Login" />
     </fragment>
+
     <fragment
         android:id="@+id/OwnerSignUp"
         android:name="com.example.shopeaze.OwnerSignUp"
         android:label="activity_sign_up_owner"
         tools:layout="@layout/activity_sign_up_owner" >
-
-        <!--<action
-            android:id="@+id/action_OwnerSignUp_to_Login"
-            app:destination="@id/Login" />-->
         <action
             android:id="@+id/action_OwnerSignUp_to_ownerLogin"
             app:destination="@id/ownerLogin" />
@@ -104,7 +97,6 @@
         <action
             android:id="@+id/action_OwnerSignUp_to_ProductList2"
             app:destination="@id/ProductList" />
-
     </fragment>
 
     <fragment
@@ -132,7 +124,6 @@
         android:name="com.example.shopeaze.ProductsOfferedFragment"
         android:label="Products Offered"
         tools:layout="@layout/activity_products_offered" >
-
         <action
             android:id="@+id/action_ProductsOffered_to_logout"
             app:destination="@id/logout" />
@@ -142,7 +133,6 @@
         <action
             android:id="@+id/action_OwnerSignUp_to_ProductList"
             app:destination="@id/ProductList" />
-
     </fragment>
 
 
@@ -151,13 +141,10 @@
         android:name="com.example.shopeaze.ShopperProductDetailsFragment"
         android:label="Product Details"
         tools:layout="@layout/activity_shopper_product_details">
-
         <action
             android:id="@+id/action_ShopperProductDetails_to_ProductsOffered"
             app:destination="@id/ProductsOffered"
             />
-
-
     </fragment>
 
     <fragment
@@ -165,11 +152,9 @@
         android:name="com.example.shopeaze.ProductDetailsFragment"
         android:label="product_details"
         tools:layout="@layout/fragment_product_details">
-
         <action
             android:id="@+id/action_product_details_to_product_list"
             app:destination="@id/ProductList" />
-
     </fragment>
 
     <fragment
@@ -216,7 +201,6 @@
         android:name="com.example.shopeaze.OwnerLogin"
         android:label="OwnerLogin"
         tools:layout="@layout/fragment_owner_login">
-
         <action
             android:id="@+id/action_OwnerLogin_to_Welcome"
             app:destination="@id/WelcomeScreen"/>
@@ -229,7 +213,6 @@
         <action
             android:id="@+id/action_ownerLogin_to_ProductList"
             app:destination="@id/ProductList" />
-
     </fragment>
 
     <fragment
@@ -237,33 +220,13 @@
         android:name="com.example.shopeaze.MyCartFragment"
         android:label="My Cart"
         tools:layout="@layout/activity_cart">
-
         <action
             android:id="@+id/action_Cart_to_StoreList"
             app:destination="@id/StoreList"/>
         <action
             android:id="@+id/action_Cart_to_Orders"
             app:destination="@id/OrderFragment"/>
-        <action
-            android:id="@+id/action_Cart_to_order_confirm"
-            app:destination="@id/Order_confirmation"/>
     </fragment>
-
-    <fragment
-        android:id="@+id/Order_confirmation"
-        android:name="com.example.shopeaze.OrderConfirm"
-        android:label="Order Confirmed"
-        tools:layout="@layout/order_confirm">
-
-        <action
-            android:id="@+id/action_Order_confirm_to_StoreList"
-            app:destination="@id/StoreList"/>
-        <action
-            android:id="@+id/action_Order_confirm_to_Cart"
-            app:destination="@id/Cart"/>"
-
-    </fragment>
-
 
     <fragment
         android:id="@+id/OwnerOrders"
@@ -273,9 +236,4 @@
         <action
             android:id="@+id/action_owner_orders_to_product_list"
             app:destination="@id/ProductList"/>
-
-
-
-
-
 </navigation>

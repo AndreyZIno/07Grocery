@@ -92,6 +92,7 @@
             android:textColorHint="@color/gray"
             android:textColor="@color/secondary_gray"
             android:layout_width="match_parent"
+            android:singleLine="true"
             android:layout_height="wrap_content">
 
         </com.google.android.material.textfield.TextInputEditText>
@@ -113,6 +114,7 @@
             android:inputType="textPassword"
             android:hint="@string/Password"
             android:textSize="18sp"
+            android:singleLine="true"
             android:fontFamily="@font/red_hat_display"
             android:textColorHint="@color/gray"
             android:textColor="@color/secondary_gray"

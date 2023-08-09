@@ -16,6 +16,7 @@
         android:padding="8dp"
         android:background="@drawable/gradient_button"
         android:textColorHint="@color/black"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:gravity="top"

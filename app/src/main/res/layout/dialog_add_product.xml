@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Product Name"
+        android:singleLine="true"
         android:textColor="@color/white"
         style="@style/AppTheme"/>
 
@@ -19,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Product Brand"
+        android:singleLine="true"
         android:textColor="@color/white"
         style="@style/AppTheme"/>
 
@@ -28,6 +30,7 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:hint="Product Price"
+        android:singleLine="true"
         android:textColor="@color/white"
         style="@style/AppTheme"/>
 
@@ -37,6 +40,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:hint="Product Quantity"
+        android:singleLine="true"
         android:textColor="@color/white"
         style="@style/AppTheme"/>
 
@@ -46,6 +50,7 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:hint="Product Description"
+        android:singleLine="true"
         android:textColor="@color/white"
         style="@style/AppTheme"/>
 
@@ -54,6 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Image URL"
+        android:singleLine="true"
         android:inputType="text"
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
