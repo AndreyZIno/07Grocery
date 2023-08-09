@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.fragment.NavHostFragment;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,11 +78,18 @@ public class OwnerOrders extends Fragment {
         orderList = new ArrayList<>();
         ownerordersListView = view.findViewById(R.id.ownerordersListView);
         loadOrders();
+
+        ImageButton inventoryButton = view.findViewById(R.id.button_stores);
+        inventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = NavHostFragment.findNavController(OwnerOrders.this);
+                navController.navigate(R.id.action_owner_orders_to_product_list);
+            }
+        });
+
         return view;
     }
-
-
-
 
     private void loadOrders(){
         String userId = mAuth.getUid();
