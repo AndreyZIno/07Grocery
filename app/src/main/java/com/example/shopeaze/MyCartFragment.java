@@ -149,29 +149,35 @@ public class MyCartFragment extends Fragment {
                 NavController navController = NavHostFragment.findNavController(MyCartFragment.this);
                 navController.navigate(R.id.action_Cart_to_StoreList);
 
-                addToOrders(products);
-                Toast.makeText(getActivity(), "Your order is on it's way!", Toast.LENGTH_SHORT).show();
+                if (products.isEmpty()) {
+                    Toast.makeText(getActivity(), "Your cart is empty!", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    addToOrders(products);
+                    Toast.makeText(getActivity(), "Your order is on it's way!", Toast.LENGTH_SHORT).show();
 
-                // go through all cart items, and for each one, delete it from the cart
-                DatabaseReference productRef = FirebaseDatabase.getInstance().getReference()
-                        .child("Users")
-                        .child("Shoppers")
-                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child("Cart");
+                    // go through all cart items, and for each one, delete it from the cart
+                    DatabaseReference productRef = FirebaseDatabase.getInstance().getReference()
+                            .child("Users")
+                            .child("Shoppers")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child("Cart");
 
-                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-                            productSnapshot.getRef().removeValue();
+                    productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot productSnapshot : snapshot.getChildren()) {
+                                productSnapshot.getRef().removeValue();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.d("MyCartAdapter", "onCancelled", error.toException());
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d("MyCartAdapter", "onCancelled", error.toException());
+                        }
+                    });
+                }
+
 
             }
         });
