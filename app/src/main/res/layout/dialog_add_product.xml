@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="20dp"
     android:background="@color/navy_blue"
     android:clipToOutline="true">
 
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Product Name"
-        android:textColor="@color/white"
+        android:textColor="@color/light_gray"
         style="@style/AppTheme"/>
 
     <EditText
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Product Brand"
-        android:textColor="@color/white"
+        android:textColor="@color/light_gray"
         style="@style/AppTheme"/>
 
     <EditText
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:hint="Product Price"
-        android:textColor="@color/white"
+        android:textColor="@color/light_gray"
         style="@style/AppTheme"/>
 
     <EditText
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:hint="Product Quantity"
-        android:textColor="@color/white"
+        android:textColor="@color/light_gray"
         style="@style/AppTheme"/>
 
     <EditText
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
         android:hint="Product Description"
-        android:textColor="@color/white"
+        android:textColor="@color/light_gray"
         style="@style/AppTheme"/>
 
     <EditText
@@ -57,7 +57,7 @@
         android:hint="Image URL"
         android:inputType="text"
         android:layout_marginTop="8dp"
-        android:textColor="@color/white"
+        android:textColor="@color/light_gray"
         style="@style/AppTheme"/>
 
 

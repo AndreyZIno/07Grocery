@@ -20,12 +20,11 @@
         <ImageView
             android:id="@+id/imageViewStoreLogo"
             android:layout_width="40dp"
-            android:layout_height="37dp"
-            android:layout_weight="1"
-            android:scaleType="centerCrop"
+            android:layout_height="40dp"
+            android:scaleType="fitStart"
             android:background="@drawable/rounded_corner_imageview"
             android:clipToOutline="true"
-            android:src="@drawable/sample" />
+            android:src="@drawable/shopeaze" />
 
 
         <!-- Center line separator -->
