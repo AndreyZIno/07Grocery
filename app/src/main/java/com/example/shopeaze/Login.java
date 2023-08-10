@@ -16,9 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends Fragment implements LoginContract.View {
     TextInputEditText editTextEmail, editTextPassword;
@@ -27,17 +24,6 @@ public class Login extends Fragment implements LoginContract.View {
     TextView textView;
 
     private LoginContract.Presenter presenter;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseDatabase db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser != null){
-            NavHostFragment.findNavController(Login.this)
-                    .navigate(R.id.action_Login_to_StoreList);
-        }
-    }
 
     @Nullable
     @Override
