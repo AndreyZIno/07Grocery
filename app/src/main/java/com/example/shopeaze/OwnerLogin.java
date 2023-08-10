@@ -30,7 +30,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ktx.Firebase;
 
-public class OwnerLogin extends Fragment {       //owner login
+public class OwnerLogin extends Fragment {
+    //owner login, is the 'view' part of MVP
 
     TextInputEditText editTextEmail, editTextPassword;
     ImageButton buttonLogin;
@@ -44,13 +45,7 @@ public class OwnerLogin extends Fragment {       //owner login
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance("https://grocery-d4fbb-default-rtdb.firebaseio.com//");
-        // Check if user is already signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        //Check if current user is a shopper or a seller
-        if(currentUser != null){
-            NavHostFragment.findNavController(OwnerLogin.this)
-                    .navigate(R.id.action_ownerLogin_to_ProductList);
-        }
     }
 
     @Nullable
@@ -114,7 +109,6 @@ public class OwnerLogin extends Fragment {       //owner login
                                 if (task.isSuccessful()) {
                                     //Get the current user:
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    // Toast.makeText(getActivity(), "Login Successful", Toast.LENGTH_SHORT).show();
                                     NavHostFragment.findNavController(OwnerLogin.this).navigate(R.id.action_ownerLogin_to_ProductList);
                                 } else {
                                     Toast.makeText(getActivity(), "Authentication failed.",

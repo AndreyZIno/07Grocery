@@ -233,13 +233,7 @@ public class ProductDetailsFragment extends Fragment {
         EditText editTextNewDescription = dialogView.findViewById(R.id.editTextNewDescription);
         editTextNewDescription.setText(initialDescription);
 
-        AlertDialog alertDialog = builder.setView(dialogView).create();
-        alertDialog.show();
-
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.copyFrom(alertDialog.getWindow().getAttributes());
-        layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, getResources().getDisplayMetrics());
-        alertDialog.getWindow().setAttributes(layoutParams);
+        builder.setView(dialogView).show();
     }
 
     private void updateProductPrice(String newPrice) {

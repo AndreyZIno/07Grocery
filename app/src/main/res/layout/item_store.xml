@@ -24,7 +24,7 @@
             android:scaleType="fitStart"
             android:background="@drawable/rounded_corner_imageview"
             android:clipToOutline="true"
-            android:src="@drawable/shopeaze" />
+            android:src="@drawable/logo" />
 
 
         <!-- Center line separator -->
@@ -41,8 +41,9 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:singleLine="true"
             android:textAlignment="center"
-            android:textSize="15sp"
+            android:textSize="18sp"
             android:textColor="@color/light_gray"
             android:fontFamily="@font/red_hat_display"/>
 

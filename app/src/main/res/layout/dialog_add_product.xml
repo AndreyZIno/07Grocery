@@ -26,7 +26,7 @@
     <EditText
         android:id="@+id/editTextProductPrice"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:inputType="numberDecimal"
         android:hint="Product Price"
         android:textColor="@color/light_gray"
@@ -35,7 +35,7 @@
     <EditText
         android:id="@+id/editTextProductQuantity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:inputType="number"
         android:hint="Product Quantity"
         android:textColor="@color/light_gray"
@@ -44,7 +44,7 @@
     <EditText
         android:id="@+id/editTextProductDescription"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:inputType="textMultiLine"
         android:hint="Product Description"
         android:textColor="@color/light_gray"
@@ -53,8 +53,9 @@
     <EditText
         android:id="@+id/editTextProductImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Image URL"
+        android:layout_height="48dp"
+        android:hint="@string/image_url"
+        android:singleLine="true"
         android:inputType="text"
         android:layout_marginTop="8dp"
         android:textColor="@color/light_gray"
