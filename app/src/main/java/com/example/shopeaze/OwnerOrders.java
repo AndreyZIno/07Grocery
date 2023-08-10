@@ -55,7 +55,6 @@ public class OwnerOrders extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
-
     // Declare a ListView to display the orders and a Button for refreshing the orders.
     private ListView ownerordersListView;
     private Button refreshButton;
@@ -121,7 +120,6 @@ public class OwnerOrders extends Fragment {
         refreshButton.setOnClickListener(v -> {
             Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
             refreshButton.startAnimation(animation);
-            loadOrders();
         });
 
         return view;
@@ -149,37 +147,6 @@ public class OwnerOrders extends Fragment {
                         Product product = new Product(name, brand, price, description, quantity, status, userId, productID);
                         productList.add(product);
 
-                /*storeName = snapshot.getValue(String.class);
-                Log.d("StoreName", storeName);
-                com.google.firebase.database.Query ordersRef = storeRef.child("Orders");
-                ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot orderSnapshot : snapshot.getChildren()){
-                            Log.d("OrderID", orderSnapshot.getKey());
-                            String orderID = orderSnapshot.getKey();
-                            String shopperEmail = orderSnapshot.child("Shopper Email").getValue(String.class);
-                            productList = new ArrayList<>();
-                            for(DataSnapshot productSnapshot : orderSnapshot.getChildren()){
-                                String storeId = productSnapshot.child("storeID").getValue(String.class);
-                                String brand = productSnapshot.child("cartProductBrand").getValue(String.class);
-                                String cartproductID = productSnapshot.child("cartProductID").getValue(String.class);
-                                String name = productSnapshot.child("cartProductName").getValue(String.class);
-                                int quantity = productSnapshot.child("cartQuantity").getValue(Integer.class);
-                                String status = productSnapshot.child("status").getValue(String.class);
-                                double price = productSnapshot.child("cartProductPrice").getValue(Double.class);
-                                String image = null;
-                                Product product = new Product(name, brand, price, null, quantity, status, null, storeId, cartproductID);
-                                productList.add(product);
-
-                            }
-                            if(productList.size() > 0){
-                                orderList.add(new Order(shopperEmail, null, productList));
-                            }
-                            printOrderList();
-                        }
-                        displayProducts();*/
-
                     }
                     if (productList.size() > 0) {
                         orderList.add(new Order(orderID, productList));
@@ -202,7 +169,6 @@ public class OwnerOrders extends Fragment {
 
 
     private void displayProducts() {
-        // Create a custom adapter to display the list of orders and their products
         ownerordersAdapter = new ArrayAdapter<Order>(getContext(), R.layout.order_list_view_item, orderList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -229,16 +195,13 @@ public class OwnerOrders extends Fragment {
                         textBuilder.append("•••").append("\n");
                     }
                     orderTextView.setText(textBuilder.toString());
-                    //orderCheckBox.setChecked(order.isComplete());
                 }
                 return convertView;
             }
         };
 
-        // Set the custom adapter to the ListView
         ownerordersListView.setAdapter(ownerordersAdapter);
 
-        // Set item click listener to show detailed product information when an order is clicked
         ownerordersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -329,42 +292,8 @@ public class OwnerOrders extends Fragment {
             }
         });
 
-
-
         dialog.show();
     }
-
-
-    //Create an example  order
-
-    /*private void createExampleOrder(){
-        Log.d("Create Order", "Creating Order");
-        //Go to a specific Shopper and then push to
-        String userID = mAuth.getUid();
-        DatabaseReference shopperRef = ref.child("Users").child("StoreOwner").child(userID);
-        DatabaseReference orderRef = shopperRef.child("Orders");
-        DatabaseReference newOrderRef = orderRef.push();
-        String orderID = newOrderRef.getKey();
-        DatabaseReference statusRef = newOrderRef.child("Status");
-        //User id
-        DatabaseReference shopperEmailRef = newOrderRef.child("User ID");
-        shopperEmailRef.setValue(userID);
-        statusRef.setValue("Pending");
-        DatabaseReference itemsRef = newOrderRef.child("Items");
-        DatabaseReference newItemRef = itemsRef.push();
-        DatabaseReference nameRef = newItemRef.child("Name");
-        nameRef.setValue("Banana");
-        DatabaseReference brandRef = newItemRef.child("Brand");
-        brandRef.setValue("Banana Republic");
-        DatabaseReference priceRef = newItemRef.child("Price");
-        priceRef.setValue(1.99);
-        DatabaseReference descriptionRef = newItemRef.child("Description");
-        descriptionRef.setValue("A delicious banana");
-        DatabaseReference quantityRef = newItemRef.child("Quantity");
-        quantityRef.setValue(1);
-        DatabaseReference storeNameRef = newItemRef.child("Store Name");
-        storeNameRef.setValue("Banana Republic");
-    }*/
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
