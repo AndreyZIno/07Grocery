@@ -6,9 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.annotation.NonNull;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +55,13 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
         holder.cartProductPrice.setText("$ " + String.valueOf(cartItem.getcartProductPrice()));
         holder.cartProductBrand.setText(cartItem.getcartProductBrand());
         holder.cartProductQuantity.setText(String.valueOf(cartItem.getCartQuantity()));
+
+        Log.d("MyCartAdapter", "Image URL: " + cartItem.getImage());
+        Glide.with(context)
+                .load(cartItem.getImage())
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
+                .into(holder.imageView);
 
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +201,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
         Button removeButton;
         Button addButton;
         Button subtractButton;
+
+        ImageView imageView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -199,6 +213,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.MyViewHold
             removeButton = itemView.findViewById(R.id.removeButton);
             addButton = itemView.findViewById(R.id.addButton);
             subtractButton = itemView.findViewById(R.id.subtractButton);
+            imageView = itemView.findViewById(R.id.imageView);
         }
     }
 }
