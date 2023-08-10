@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:layout_marginTop="60dp"
+            android:singleLine="true"
             android:fontFamily="@font/red_hat_display"
             android:text="@string/shopper"
             android:textColor="@color/turquoise"
