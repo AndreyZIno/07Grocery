@@ -72,7 +72,7 @@
             android:clipToOutline="true"
             android:contentDescription="@string/refresh"
             android:scaleType="centerCrop"
-            android:src="@drawable/refresh_button" />
+            android:src="@drawable/refresh" />
 
     </LinearLayout>
 
